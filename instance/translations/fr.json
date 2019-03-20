@@ -1,0 +1,942 @@
+{
+ "#AdminInterfaceNewSessionEditorDiv.NewSessionMenu": {
+  "originalValue": "New session",
+  "value": "Nouvelle session",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceNewSessionEditorDiv.NewSessionMenu2": {
+  "originalValue": "New session",
+  "value": "Nouvelle session",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceScreenTemplateEditor.EditMenu": {
+  "originalValue": "Edit test screen templates",
+  "value": "Modifier les mod\u00e8les d'\u00e9cran de test",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestTemplateEditor.EditMenu": {
+  "originalValue": "Edit test definitions",
+  "value": "Modifier les d\u00e9finitions de test",
+  "valueAsOriginal": "N"
+ },
+ "#ConsultantListerController.ConsultantsMenu": {
+  "originalValue": "Manage consultants",
+  "value": "G\u00e9rer les consultants",
+  "valueAsOriginal": "N"
+ },
+ "#ITSResetPasswordEditor.Menu": {
+  "originalValue": "Reset password",
+  "value": "R\u00e9initialiser le mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "#OrganisationListerController.OrganisationsMenu": {
+  "originalValue": "Manage organisations",
+  "value": "G\u00e9rer les organisations",
+  "valueAsOriginal": "N"
+ },
+ "#PersonListerController.PersonArchivedMenu": {
+  "originalValue": "Show archived candidates",
+  "value": "Afficher les candidats archiv\u00e9s",
+  "valueAsOriginal": "N"
+ },
+ "#PersonListerController.PersonMenu": {
+  "originalValue": "Show active candidates",
+  "value": "Afficher les candidats actifs",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateInterfaceSessionEdit.EditMenu": {
+  "originalValue": "Edit report definitions",
+  "value": "Modifier les d\u00e9finitions de rapport",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateLocalPublisherController.LocalPublisherMenu": {
+  "originalValue": "Publish report templates",
+  "value": "Publier des mod\u00e8les de rapport",
+  "valueAsOriginal": "N"
+ },
+ "#ScreenTemplateLocalPublisherController.LocalPublisherMenu": {
+  "originalValue": "Publish screen templates",
+  "value": "Publier des mod\u00e8les d'\u00e9cran",
+  "valueAsOriginal": "N"
+ },
+ "#ServerSettingsController.Menu": {
+  "originalValue": "Server settings",
+  "value": "Param\u00e8tres du serveur",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerController.SessionArchivedMenu": {
+  "originalValue": "Show archived sessions",
+  "value": "Afficher les sessions archiv\u00e9es",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerController.SessionDoneMenu": {
+  "originalValue": "Show report ready sessions",
+  "value": "Afficher les sessions pr\u00eates pour le rapport",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerController.SessionInProgressMenu": {
+  "originalValue": "Show in progress sessions",
+  "value": "Afficher les sessions en cours",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerController.SessionReadyMenu": {
+  "originalValue": "Show sessions ready for test taking",
+  "value": "Afficher les sessions pr\u00eates pour la prise de test",
+  "valueAsOriginal": "N"
+ },
+ "#TestTemplateLocalPublisherController.LocalPublisherMenu": {
+  "originalValue": "Publish test templates",
+  "value": "Publier des mod\u00e8les de test",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceAdminInterfaceSettingsDropdownButton": {
+  "originalValue": "\n                Select what you want to do\n            ",
+  "value": "\n                S\u00e9lectionnez ce que vous voulez faire\n            ",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceAdminInterfaceSettingsDropdownButtonItemsResetPassword": {
+  "originalValue": "Change my password",
+  "value": "Modifier mon mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceCompanyHailingHeading": {
+  "originalValue": "Welcome to&nbsp;",
+  "value": "Bienvenue \u00e0 &nbsp;",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceCreditManagementBody": {
+  "originalValue": "You have <label class=\"alert-info\" id=\"AdminInterfaceCreditManagementBodyAmount\">-</label>\n\t\t\tcredit units left in your system.<br>",
+  "value": "Vous avez <label class=\"alert-info\" id=\"AdminInterfaceCreditManagementBodyAmount\"></label> des unit\u00e9s de cr\u00e9dit laiss\u00e9es dans votre syst\u00e8me.<br>",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceCreditManagementBodyAmount": {
+  "originalValue": "-",
+  "value": "-",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceCreditManagementHeader": {
+  "originalValue": "Credit\n\t\t\t\tmanagement",
+  "value": "Gestion du cr\u00e9dit",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceCreditManagementOrderButton": {
+  "originalValue": "Order\n\t\t\t\tcredits",
+  "value": "Cr\u00e9dits de commande",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceCreditManagementViewButton": {
+  "originalValue": "View usage",
+  "value": "Afficher l'utilisation",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteNewCandidateButton": {
+  "originalValue": "Start\n            inviting the candidate",
+  "value": "Commencer \u00e0 inviter le candidat",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteNewCandidateExplanation": {
+  "originalValue": "Invite a new candidate to take one or\n            more tests on the ITS. Fill in the e-mail address of the candidate below and press the\n            <b>Start inviting the candidate</b> link below. ",
+  "value": "Invitez un nouveau candidat \u00e0 prendre un ou plusieurs tests sur l'ITS. Remplissez l'adresse e-mail du candidat ci-dessous et appuyez sur le bouton <b>D\u00e9marrer en invitant le lien candidat</b> ci-dessous.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteNewCandidateHeading": {
+  "originalValue": "Invite\n            new candidate",
+  "value": "Inviter un nouveau candidat",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteNewCandidateUserName": {
+  "originalValue": "E-mail address",
+  "value": "Adresse E-mail",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteRRSessionsButton": {
+  "originalValue": "Show sessions ready for reporting",
+  "value": "Afficher les sessions pr\u00eates pour le reporting",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteRRSessionsHeader": {
+  "originalValue": "Report\n            ready sessions",
+  "value": "Sessions pr\u00eates pour le rapport",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteRRSessionsbody": {
+  "originalValue": "The sessions below have completed recently. Is\n            the session still in progress or not on the list below? Then click the link.",
+  "value": "Les sessions ci-dessous ont \u00e9t\u00e9 achev\u00e9es r\u00e9cemment. La session est-elle encore en cours ou pas sur la liste ci-dessous? Cliquez ensuite sur le lien.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteTCatalogBody": {
+  "originalValue": "If you would like to view the list of available\n            tests or read the test manual then select the test or click the link below.",
+  "value": "Si vous souhaitez consulter la liste des tests disponibles ou lire le manuel de test, s\u00e9lectionnez le test ou cliquez sur le lien ci-dessous.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteTCatalogHeader": {
+  "originalValue": "Test\n            catalog",
+  "value": "Catalogue de tests",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteTCatalogdropdownMenu": {
+  "originalValue": "\n                Select your test\n            ",
+  "value": "\n                S\u00e9lectionnez votre test\n            ",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteUserMngtBody": {
+  "originalValue": "The following users have logged in recently. Need a\n            new user or does user access need to be revoked? Click <b>control user access</b>.",
+  "value": "Les utilisateurs suivants se sont connect\u00e9s r\u00e9cemment. Besoin d'un nouvel utilisateur ou l'acc\u00e8s utilisateur doit-il \u00eatre r\u00e9voqu\u00e9? Cliquez sur <b>contr\u00f4ler l'acc\u00e8s utilisateur</b>.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteUserMngtButton": {
+  "originalValue": "Control user\n            access",
+  "value": "Contr\u00f4le de l'acc\u00e8s utilisateur",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceInviteUserMngtHeader": {
+  "originalValue": "User\n            management",
+  "value": "Gestion des utilisateurs",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceScreenTemplate-copyButtonLabel": {
+  "originalValue": "Copy this report",
+  "value": "Copier ce rapport",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceScreenTemplate-deleteButtonLabel": {
+  "originalValue": " Delete this report definition",
+  "value": " Supprimer cette d\u00e9finition de rapport",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceScreenTemplate-downloadButtonLabel": {
+  "originalValue": " Download report definition",
+  "value": " T\u00e9l\u00e9charger la d\u00e9finition du rapport",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceScreenTemplate-saveButtonLabel": {
+  "originalValue": "Save report definition",
+  "value": "Enregistrer la d\u00e9finition de rapport",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceScreenTemplate-uploadButtonLabel": {
+  "originalValue": " Upload report definition",
+  "value": " T\u00e9l\u00e9charger la d\u00e9finition de rapport",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSettingsBody": {
+  "originalValue": "Control your personal or your companies preferences by\n            choosing what you want to do from the list below. Or open the system menu for more\n            options.",
+  "value": "Contr\u00f4lez vos pr\u00e9f\u00e9rences personnelles ou celles de vos entreprises en choisissant ce que vous voulez faire dans la liste ci-dessous. Ou ouvrez le menu syst\u00e8me pour plus d'options.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSettingsHeader": {
+  "originalValue": "Your preferences",
+  "value": "Vos pr\u00e9f\u00e9rences",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceTestTemplateEditorActionHeader": {
+  "originalValue": "Actions",
+  "value": "Actions",
+  "valueAsOriginal": "Y"
+ },
+ "ConsultantEditorEditActionHeader": {
+  "originalValue": "Actions",
+  "value": "Actions",
+  "valueAsOriginal": "Y"
+ },
+ "ConsultantEditorEditButtonBar_ResetPasswordButtonLabel": {
+  "originalValue": "Reset and mail password",
+  "value": "R\u00e9initialiser et mot de passe de messagerie",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorEditButtonBar_SaveButtonLabel": {
+  "originalValue": "Save consultant",
+  "value": "Save consultant",
+  "valueAsOriginal": "Y"
+ },
+ "ConsultantEditorEditButtonBar_ShowSessionsButtonLabel": {
+  "originalValue": "Show consultant sessions",
+  "value": "Afficher les sessions de consultants",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorEditRightsHeader": {
+  "originalValue": "User rights",
+  "value": "Droits d'utilisateur",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceEMailLabel": {
+  "originalValue": "E-mail address / login",
+  "value": "Adresse E-mail/login",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceHeader": {
+  "originalValue": "Edit consultant",
+  "value": "Modifier le consultant",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceInformationAddressLabel": {
+  "originalValue": "Information address",
+  "value": "Adresse d'information",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceInvoiceAddressLabel": {
+  "originalValue": "Invoicing address",
+  "value": "Adresse de facturation",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceIsReportAuthorHeader": {
+  "originalValue": "Report author",
+  "value": "Auteur du rapport",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceIsTestAuthorHeader": {
+  "originalValue": "Test author",
+  "value": "Auteur de test",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceMailAddressLabel": {
+  "originalValue": "Mail address",
+  "value": "Adresse postale",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceMasterUserHeader": {
+  "originalValue": "Master user",
+  "value": "Utilisateur ma\u00eetre",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceMayOrderCreditsHeader": {
+  "originalValue": "May order credits",
+  "value": "Peut commander des cr\u00e9dits",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceMayWorkWithBatteriesOnlyHeader": {
+  "originalValue": "May work with batteries only",
+  "value": "Peut fonctionner avec des batteries seulement",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceMayWorkWithOwnObjectsOnlyHeader": {
+  "originalValue": "May work with own objects only",
+  "value": "Peut fonctionner avec des objets propres uniquement",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceNameLabel": {
+  "originalValue": "Name",
+  "value": "Nom",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceOrganisationSupervisorHeader": {
+  "originalValue": "Organisation supervisor",
+  "value": "Superviseur de l'Organisation",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceRemarksLabel": {
+  "originalValue": "Remarks",
+  "value": "Remarques",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceTestScreenTemplateAuthorHeader": {
+  "originalValue": "Test screen template author",
+  "value": "Auteur de mod\u00e8le d'\u00e9cran de test",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceTranslatorHeader": {
+  "originalValue": "Translator",
+  "value": "Translator",
+  "valueAsOriginal": "Y"
+ },
+ "ConsultantEditorInterfaceVisitingAddressLabel": {
+  "originalValue": "Address",
+  "value": "Adresse",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantListerInterfaceEditSessionEditHeader": {
+  "originalValue": "Edit Consultants",
+  "value": "Modifier les consultants",
+  "valueAsOriginal": "N"
+ },
+ "CreditsUsedPortlet.GraphHeader": {
+  "originalValue": "Credit usage (ticks)",
+  "value": "Utilisation du cr\u00e9dit (Ticks)",
+  "valueAsOriginal": "N"
+ },
+ "ForgotWindowBackButton": {
+  "originalValue": "\n                    Cancel\n                ",
+  "value": "\n                    Annuler\n                ",
+  "valueAsOriginal": "N"
+ },
+ "ForgotWindowInstruction": {
+  "originalValue": "Please enter your email address below and we will send you a link to reset your password.",
+  "value": "S'il vous pla\u00eet entrer votre adresse e-mail ci-dessous et nous vous enverrons un lien pour r\u00e9initialiser votre mot de passe.",
+  "valueAsOriginal": "N"
+ },
+ "ForgotWindowResetButton": {
+  "originalValue": "\n                    Send password reset mail\n                ",
+  "value": "\n                    Envoyer le courrier de r\u00e9initialisation de mot de passe\n                ",
+  "valueAsOriginal": "N"
+ },
+ "GrantCreditsInterfaceEditHeader": {
+  "originalValue": "Grant credits to ",
+  "value": "Accorder des cr\u00e9dits \u00e0 ",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.Costs": {
+  "originalValue": "Costs",
+  "value": "Co\u00fbts",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.Description": {
+  "originalValue": "Description ",
+  "value": "Description ",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTest.Language": {
+  "originalValue": "Language",
+  "value": "Langue",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.AfterNormingScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.AfterScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.BeforeNormingScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.BeforeScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.Per360": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.Post360": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.Pre360": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.ScaleScoreScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Veuillez consulter le manuel d'instructions avant d'utiliser des scripts complexes */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.en": {
+  "originalValue": "English",
+  "value": "Anglais",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.es": {
+  "originalValue": "Spanish",
+  "value": "Espagnol",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.nl": {
+  "originalValue": "Dutch",
+  "value": "N\u00e9erlandais",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowHeading": {
+  "originalValue": "Login",
+  "value": "Connexion",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowIEWarning": {
+  "originalValue": "Internet Explorer is <b>NOT</b> supported for this website. <br>Please use a recent version of Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari or Opera.",
+  "value": "Internet Explorer n'est <b>pas</b> pris en charge pour ce site Web.<br>Veuillez utiliser une version r\u00e9cente de Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari ou Opera.",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowLoginButton": {
+  "originalValue": "\n                    Login\n                ",
+  "value": "\n                    Connexion\n                ",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowPassword": {
+  "originalValue": "Password",
+  "value": "Passe",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowPasswordForgotten": {
+  "originalValue": "Have you forgotten your\n                    password?",
+  "value": "Avez-vous oubli\u00e9 votre mot de passe?",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowSelectCompanyHeader": {
+  "originalValue": "\n                    <img src=\"images\\its.png\" style=\"width:64px;height:64px;vertical-align:text-bottom;\">\n                    Select the company you want to work with ",
+  "value": "\n                    <img src=\"images\\its.png\" style=\"width:64px;height:64px;vertical-align:text-bottom;\">S\u00e9lectionnez l'entreprise avec laquelle vous souhaitez travailler",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowSelectLanguageLabel": {
+  "originalValue": "Select other language",
+  "value": "S\u00e9lectionner une autre langue",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowUnknownBrowserWarning": {
+  "originalValue": "Your browser could not be detected and <br>may not work with this website.<br>Please use a recent version of Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari or Opera.",
+  "value": "Votre navigateur n'a pas pu \u00eatre d\u00e9tect\u00e9 et<br>peut ne pas fonctionner avec ce site Web.<br>Veuillez utiliser une version r\u00e9cente de Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari ou Opera.",
+  "valueAsOriginal": "N"
+ },
+ "LoginWindowUserName": {
+  "originalValue": "User name",
+  "value": "Nom d'utilisateur",
+  "valueAsOriginal": "N"
+ },
+ "NavBarsAdminSidebarCompaniesLabel": {
+  "originalValue": "Organisation",
+  "value": "Organisation",
+  "valueAsOriginal": "Y"
+ },
+ "NavBarsAdminSidebarLogoutLabel": {
+  "originalValue": "Logout",
+  "value": "D\u00e9connexion",
+  "valueAsOriginal": "N"
+ },
+ "NavBarsAdminSidebarSessionsLabel": {
+  "originalValue": "Sessions",
+  "value": "Sessions",
+  "valueAsOriginal": "Y"
+ },
+ "NavBarsAdminSidebarSettingsLabel": {
+  "originalValue": "Settings",
+  "value": "Param\u00e8tres",
+  "valueAsOriginal": "N"
+ },
+ "NavBarsAdminSidebarSwitchboardLabel": {
+  "originalValue": "Switchboard",
+  "value": "Standard",
+  "valueAsOriginal": "N"
+ },
+ "NavBarsAdminSidebarTestAndReportsLabel": {
+  "originalValue": "Tests and Reports",
+  "value": "Tests et rapports",
+  "valueAsOriginal": "N"
+ },
+ "NavBarsAdminSidebarUsersLabel": {
+  "originalValue": "Candidates",
+  "value": "Candidats",
+  "valueAsOriginal": "N"
+ },
+ "NavbarsAdminLogoutButton": {
+  "originalValue": "Logout\n        ",
+  "value": "D\u00e9connexion\n        ",
+  "valueAsOriginal": "N"
+ },
+ "NavbarsLabelHeadingWelcome": {
+  "originalValue": "Welcome",
+  "value": "Bienvenue",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorEditActionHeader": {
+  "originalValue": "Actions",
+  "value": "Actions",
+  "valueAsOriginal": "Y"
+ },
+ "OrganisationEditorEditButtonBar_GrantCreditsButtonLabel": {
+  "originalValue": "Grant credits",
+  "value": "Cr\u00e9dits de subvention",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorEditButtonBar_SaveButtonLabel": {
+  "originalValue": "Save Organisation",
+  "value": "Enregistrer l'Organisation",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorEditButtonBar_SwitchToButtonLabel": {
+  "originalValue": "Switch to company",
+  "value": "Basculer vers l'entreprise",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorEditCreditInfoHeader": {
+  "originalValue": "Credit information",
+  "value": "Renseignements sur le cr\u00e9dit",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorEditKeyInfoHeader": {
+  "originalValue": "Key information",
+  "value": "Informations cl\u00e9s",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceAdministrativeIDLabel": {
+  "originalValue": "Administrative id",
+  "value": "ID d'administration",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceCompanyCountryLabel": {
+  "originalValue": "Organsation country",
+  "value": "Pays d'organsation",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceCompanyLicenseEndDateLabel": {
+  "originalValue": "License end date",
+  "value": "Date de fin de licence",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceContactEMailLabel": {
+  "originalValue": "Contact e-mail",
+  "value": "E-mail de contact",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceContactPersonLabel": {
+  "originalValue": "Contact person name",
+  "value": "Nom de la personne de contact",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceContactPhoneLabel": {
+  "originalValue": "Contact phone number",
+  "value": "Num\u00e9ro de t\u00e9l\u00e9phone de contact",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceCurrentCreditLevelLabel": {
+  "originalValue": "Current credit level",
+  "value": "Niveau de cr\u00e9dit actuel",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceInternationalVATNrLabel": {
+  "originalValue": "(International) VAT number",
+  "value": "International Num\u00e9ro de TVA",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceInvoiceAddressLabel": {
+  "originalValue": "Invoice address",
+  "value": "Adresse de la facture",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceInvoiceCurrencyLabel": {
+  "originalValue": "Invoice currency",
+  "value": "Devise de la facture",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceLowCreditWarningLevelLabel": {
+  "originalValue": "Low credit warning level",
+  "value": "Faible niveau d'avertissement de cr\u00e9dit",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceMailAddressLabel": {
+  "originalValue": "Mail (physical) address",
+  "value": "Adresse postale (physique)",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceOrganisationAllowNegativeCreditsHeader": {
+  "originalValue": "Allow negative credits",
+  "value": "Autoriser les cr\u00e9dits n\u00e9gatifs",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceOrganisationNameLabel": {
+  "originalValue": "Organisation name",
+  "value": "Nom de l'Organisation",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceOrganisationNoPublicTestsHeader": {
+  "originalValue": "No public tests",
+  "value": "Pas de tests publics",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceVATPercentageLabel": {
+  "originalValue": "VAT percentage",
+  "value": "Pourcentage de TVA",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationEditorInterfaceVisitingAddressLabel": {
+  "originalValue": "Visiting address",
+  "value": "Adresse de visite",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationInterfaceEditHeader": {
+  "originalValue": "Edit organisation",
+  "value": "Modifier l'Organisation",
+  "valueAsOriginal": "N"
+ },
+ "OrganisationListerInterfaceHeader": {
+  "originalValue": "Edit organisations",
+  "value": "Modifier les organisations",
+  "valueAsOriginal": "N"
+ },
+ "PasswordResetWindowBackButton": {
+  "originalValue": "\n                Cancel\n            ",
+  "value": "\n                Annuler\n            ",
+  "valueAsOriginal": "N"
+ },
+ "PasswordResetWindowButton": {
+  "originalValue": "\n                Reset password\n            ",
+  "value": "\n                R\u00e9initialiser le mot de passe\n            ",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditActionHeader": {
+  "originalValue": "Actions",
+  "value": "Actions",
+  "valueAsOriginal": "Y"
+ },
+ "PersonInterfaceEditButtonBar_ResetPasswordButtonLabel": {
+  "originalValue": "Reset password",
+  "value": "R\u00e9initialiser le mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditButtonBar_SaveButtonLabel": {
+  "originalValue": "Save person",
+  "value": "Sauver la personne",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditButtonBar_ShowSessionsButtonLabel": {
+  "originalValue": "Show person sessions",
+  "value": "Afficher les sessions des personnes",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSelectHeader": {
+  "originalValue": "Person information",
+  "value": "Informations sur la personne",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateBirthDateLabel": {
+  "originalValue": "Birthdate",
+  "value": "Naissance",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateEMailLabel": {
+  "originalValue": "E-mail address / login",
+  "value": "Adresse E-mail/login",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateFirstNameLabel": {
+  "originalValue": "First\n            name",
+  "value": "Pr\u00e9nom",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateInitialsLabel": {
+  "originalValue": "Initials",
+  "value": "Initiales",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateLastNameLabel": {
+  "originalValue": "Last\n            name",
+  "value": "Nom de famille",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateSexFemaleLabel": {
+  "originalValue": "Female",
+  "value": "Femelle",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateSexLabel": {
+  "originalValue": "Sex",
+  "value": "Sexe",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateSexMaleLabel": {
+  "originalValue": "Male",
+  "value": "M\u00e2le",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionCandidateSexUnknownLabel": {
+  "originalValue": "Unknown or gender neutral",
+  "value": "Inconnu ou neutre entre les sexes",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionEditHeader": {
+  "originalValue": "Edit",
+  "value": "Modifier",
+  "valueAsOriginal": "N"
+ },
+ "PersonInterfaceEditSessionEditHeaderEMail": {
+  "originalValue": "\n    ...",
+  "value": "\n    ...",
+  "valueAsOriginal": "Y"
+ },
+ "PersonListerInterfaceEditSessionEditHeader": {
+  "originalValue": "Overview of candidates",
+  "value": "Aper\u00e7u des candidats",
+  "valueAsOriginal": "N"
+ },
+ "PersonListerInterfaceEditSessionEditHeaderStatus": {
+  "originalValue": "gearchiveerde",
+  "value": "le r\u00e9ducteur",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditGraph_RemarksLabel": {
+  "originalValue": "Remarks (only shown\n                    here)",
+  "value": "Remarques (seulement illustr\u00e9 ici)",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditHeader": {
+  "originalValue": "Report editor",
+  "value": "Editeur de rapports",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectHeader": {
+  "originalValue": "Report definition section",
+  "value": "Section de d\u00e9finition de rapport",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectReportHeader": {
+  "originalValue": "Report editor",
+  "value": "Editeur de rapports",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectReportHeader2": {
+  "originalValue": "Select a report to edit for",
+  "value": "S\u00e9lectionnez un rapport \u00e0 modifier pour",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectReportHeader2Test": {
+  "originalValue": "THBTK",
+  "value": "Le THBTK",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectReportList1": {
+  "originalValue": " list is loading ...",
+  "value": " liste est en cours de chargement...",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectTestHeader": {
+  "originalValue": "Report editor",
+  "value": "Editeur de rapports",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectTestHeader2": {
+  "originalValue": "Select a test to edit the reports for",
+  "value": "S\u00e9lectionnez un test pour modifier les rapports pour",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditSelectTestList1": {
+  "originalValue": " list is loading ...",
+  "value": " liste est en cours de chargement...",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditTabGraphBuilderHeader": {
+  "originalValue": "Select graph",
+  "value": "S\u00e9lectionner un graphique",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEditTabReportWriter_ActionHeader": {
+  "originalValue": "Actions",
+  "value": "Actions",
+  "valueAsOriginal": "Y"
+ },
+ "ReportTemplateInterfaceEditTabReportWriter_PreScriptHeader": {
+  "originalValue": "Script run before the report",
+  "value": "Script ex\u00e9cut\u00e9 avant le rapport",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_ActiveLabel": {
+  "originalValue": "Report can be\n                used",
+  "value": "Le rapport peut \u00eatre utilis\u00e9",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_ExplanationLabel": {
+  "originalValue": "Explanation",
+  "value": "Explication",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_GraphFieldsLabel": {
+  "originalValue": "Usable fields",
+  "value": "Champs utilisables",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_LanguageSelectLabel": {
+  "originalValue": "Report language",
+  "value": "Langue du rapport",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_NameLabel": {
+  "originalValue": "Report name",
+  "value": "Nom du rapport",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_RemarksLabel": {
+  "originalValue": "Remarks (only shown\n                here)",
+  "value": "Remarques (seulement illustr\u00e9 ici)",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_ReportWriterFieldsLabel": {
+  "originalValue": "Usable fields",
+  "value": "Champs utilisables",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_ReportWriterLabel": {
+  "originalValue": "Report text (see below for an explanation on fields that can be used)",
+  "value": "Texte du rapport (voir ci-dessous pour une explication sur les champs qui peuvent \u00eatre utilis\u00e9s)",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_TabGraphs": {
+  "originalValue": "Graph builder",
+  "value": "G\u00e9n\u00e9rateur de graphiques",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_TabReportInformation": {
+  "originalValue": "Report information",
+  "value": "Informations sur le rapport",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceEdit_TabReportWriter": {
+  "originalValue": "Report writer",
+  "value": "R\u00e9dacteur de rapport",
+  "valueAsOriginal": "N"
+ },
+ "ReportTemplateInterfaceGraph_NameLabel": {
+  "originalValue": "Graph name",
+  "value": "Nom du graphique",
+  "valueAsOriginal": "N"
+ },
+ "ResetPasswordInterfaceEditSessionEditHeader": {
+  "originalValue": "Reset password",
+  "value": "R\u00e9initialiser le mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "ResetPasswordInterfaceInformationNew1Label": {
+  "originalValue": "New password",
+  "value": "Nouveau mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "ResetPasswordInterfaceInformationNew2Label": {
+  "originalValue": "Retype new password",
+  "value": "Retapez le nouveau mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "ResetPasswordInterfaceInformationOldLabel": {
+  "originalValue": "Old password",
+  "value": "Ancien mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "SessionListerController.SessionStatusCommon": {
+  "originalValue": "available in the system",
+  "value": "disponible dans le syst\u00e8me",
+  "valueAsOriginal": "N"
+ },
+ "SessionListerController.SessionStatusDone": {
+  "originalValue": "ready for reporting",
+  "value": "pr\u00eat pour le reporting",
+  "valueAsOriginal": "N"
+ },
+ "SessionListerInterfaceEditSessionEditHeader": {
+  "originalValue": "Session overview for sessions that are",
+  "value": "Aper\u00e7u de session pour les sessions qui sont",
+  "valueAsOriginal": "N"
+ },
+ "SessionNewEditor.NoTestsYet": {
+  "originalValue": "No tests added yet",
+  "value": "Aucun test n'a encore \u00e9t\u00e9 ajout\u00e9",
+  "valueAsOriginal": "N"
+ },
+ "SessionNewEditor.SelectATest": {
+  "originalValue": "Select a questionnaire to add to the session",
+  "value": "S\u00e9lectionner un questionnaire \u00e0 ajouter \u00e0 la session",
+  "valueAsOriginal": "N"
+ },
+ "UserName": {
+  "originalValue": "New password",
+  "value": "Nouveau mot de passe",
+  "valueAsOriginal": "N"
+ },
+ "js.MasterTag": {
+  "originalValue": "[centrally managed]",
+  "value": "[gestion centralis\u00e9e]",
+  "valueAsOriginal": "N"
+ }
+}

@@ -1,0 +1,671 @@
+{
+ "#AdminInterface.AdminInterfaceCompanyHailingHeading": {
+  "value": "Welcome to&nbsp;"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-ActionsHeader": {
+  "value": "Actions"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-GenericHeader": {
+  "value": "Generic section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-HTMLHeader": {
+  "value": "HTML and scripting section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeader": {
+  "value": "Preview section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderPnP": {
+  "value": "PnP preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderTE": {
+  "value": "Test Editor preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderTT": {
+  "value": "Test Taking preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-TemplateVarSelectHeader": {
+  "value": "Select template variable"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-VarHeader": {
+  "value": "Template variable section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-addTemplateVar": {
+  "value": "\n                        <i class=\"fa fa-sm fa-plus aria-hidden='true'\"></i> Add new template variable\n                    "
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-copyButton": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i> Copy this template"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-deleteButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i> Delete this template"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-description": {
+  "value": "screen template description as shown in the test editor"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-descriptionHeader": {
+  "value": "Description"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-downloadButton": {
+  "value": "<i class=\"fa fa-fw fa-download\"></i> Download template definition"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-explanationHeader": {
+  "value": "Explanation"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGenerator": {
+  "value": "Generator snippet (id, num_blocks, template_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorGeneratePreviews": {
+  "value": "\n                    <i class=\"fa fa-sm fa-check aria-hidden='true'\"></i> Show previews\n                "
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorGetValue": {
+  "value": "Snippet to get value (id, num_blocks)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorHTML": {
+  "value": "HTML template"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorHTMLPnP": {
+  "value": "HTML template for PnP input (if different from\n                    html template)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorInitScript": {
+  "value": "Initialisation snippet (id, num_blocks, test_mode, template_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorPnP": {
+  "value": "Generator snippet PnP (id, num_blocks, template_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorSetValue": {
+  "value": "Snippet to set value (id, num_blocks, varvalue)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorValidateScript": {
+  "value": "Validation snippet (id, num_blocks, test_mode, template_values, runtime_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelIsAnsweredScript": {
+  "value": "IsAnswered snippet (id, num_blocks, test_mode, template_values, runtime_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-remarksHeader": {
+  "value": "Remarks"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-removeTemplateVar": {
+  "value": "\n                    <i class=\"fa fa-sm fa-minus aria-hidden='true'\"></i> Remove template variable\n                "
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-saveButton": {
+  "value": "<i id=\"AdminInterfaceScreenTemplate-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i> Save screen template"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesPnPButton": {
+  "value": "<i class=\"fa fa-eye\"></i> Show values"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesTEButton": {
+  "value": "<i class=\"fa fa-eye\"></i> Show values"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesTTButton": {
+  "value": "<i class=\"fa fa-eye\"></i> Show values"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-uploadButton": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i> Upload template definition"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardefaultvalue": {
+  "value": "screen template default value"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardefaultvalueheader": {
+  "value": "Default value"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardescription": {
+  "value": "description of the purpose of the variable as shown in the test editor"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardescriptionheader": {
+  "value": "Description"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-varname": {
+  "value": "screen template variable name"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-varnameheader": {
+  "value": "Var name"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartype": {
+  "value": "Type of variable"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeA": {
+  "value": "Text (multiple lines)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeB": {
+  "value": "On/off switch"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeC": {
+  "value": "Color picker"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeE": {
+  "value": "Explanation"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeH": {
+  "value": "HTML Text (multiple lines)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeL": {
+  "value": "List of choices"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeP": {
+  "value": "Placeholder"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeT": {
+  "value": "Text"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateEditHeaderH4": {
+  "value": "Edit and create test screen templates"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectHeader": {
+  "value": "Select a screen template or add a new one"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectList": {
+  "value": "\n            <li id=\"AdminInterfaceScreenTemplateSelectListLoading\"> list is loading ...</li>\n        "
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectListLoading": {
+  "value": " list is loading ..."
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenVarSelectListLoading": {
+  "value": "list is loading ..."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditAccordionLabel": {
+  "value": "Session validity"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditHeader": {
+  "value": "Create new candidate session"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditInformationLabel": {
+  "value": "Information about the candidate"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditMailIncludeResultsLabel": {
+  "value": "Include test results in the mail"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditMailMeLabel": {
+  "value": "Mail me when this session completes at"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditNotificationLabel": {
+  "value": "Session notification settings"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditRemarksLabel": {
+  "value": "Remarks"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionAddMoreButton": {
+  "value": "<i id=\"AdminInterfaceSessionNewSession-newIcon\" class=\"fa fa-fw fa-plus-square\"></i><span id=\"AdminInterfaceSessionNewSessionNewButtonLabel\">Add another session</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateBirthDateLabel": {
+  "value": "Birthdate"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateFirstNameLabel": {
+  "value": "First name"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateFor": {
+  "value": "Enter the e-mail address or login of the candidate"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateForLabel": {
+  "value": "Candidate\n                e-mail address or login"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateInitialsLabel": {
+  "value": "Initials"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateLastNameLabel": {
+  "value": "Last name"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidatePasswordLabel": {
+  "value": "Please enter a password."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexFemaleLabel": {
+  "value": "Female"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexLabel": {
+  "value": "Sex"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexMaleLabel": {
+  "value": "Male"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexUnknownLabel": {
+  "value": "Unknown or gender neutral"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDeleteButton": {
+  "value": "<i class=\"fa fa-fw fa-trash aria-hidden='true'\"></i><span id=\"AdminInterfaceSessionNewSessionDeleteButtonLabel\">Delete session</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDeleteButtonLabel": {
+  "value": "Delete session"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionFor": {
+  "value": "Enter a session description"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionLabel": {
+  "value": "Session\n                description"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionTT": {
+  "value": "Please enter a session description."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionEndDateEnforcedLabel": {
+  "value": "Stop the session when still in progress at this date and time"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionEndDateLabel": {
+  "value": "Session cannot start <b>after</b> this date &amp; time"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionInviteButton": {
+  "value": "<i class=\"fa fa-fw fa-envelope\"></i><span id=\"AdminInterfaceSessionNewSessionInviteButtonLabel\">Invite candidate by e-mail</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionInviteButtonLabel": {
+  "value": "Invite candidate by e-mail"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionNewButtonLabel": {
+  "value": "Add another session"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionSaveButton": {
+  "value": "<i id=\"AdminInterfaceSessionNewSession-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i><span id=\"AdminInterfaceSessionNewSessionSaveButtonLabel\">Save session</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionSaveButtonLabel": {
+  "value": "Save session"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionStartButton": {
+  "value": "<i id=\"AdminInterfaceSessionNewSession-startNowIcon\" class=\"fa fa-fw fa-hourglass-start\"></i><span id=\"AdminInterfaceSessionNewSessionStartButtonLabel\">Start session now</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionStartButtonLabel": {
+  "value": "Start session now"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionStartDateLabel": {
+  "value": "Session cannot start <b>before</b> this date &amp; time"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsIncludeOtherLanguagesLabel": {
+  "value": "Include tests in other languages"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsInputListLabel": {
+  "value": "Tests in this session"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionC1": {
+  "value": "No tests added yet"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH1": {
+  "value": "Test name"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH2": {
+  "value": "Test language"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH3": {
+  "value": "Norm 1"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH4": {
+  "value": "Norm 2"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH5": {
+  "value": "Norm 3"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH6": {
+  "value": "Actions"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionHead": {
+  "value": "\n                    <tr>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH1\">Test name</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH2\">Test language</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH3\">Norm 1</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH4\">Norm 2</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH5\">Norm 3</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH6\">Actions</td>\n                    </tr>\n                    "
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewWarningExistsLabel": {
+  "value": "Please note : The candidate you have selected is already known. The session will be added as usual, the password and other data of the candidate will be updated. "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceScreenTemplate-downloadButton": {
+  "value": "<i class=\"fa fa-fw fa-download\"></i> Download template definition"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceScreenTemplate-uploadButton": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i> Upload template definition"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-LanguageSelectLabel": {
+  "value": "Test language"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-uploadButtonA": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i> Upload file"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-uploadButtonB": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i> Upload PDF file"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonCopy": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i>\n        Copy\n        this test\n    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonDelete": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i> Delete this test definition\n    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonSave": {
+  "value": "<i id=\"AdminInterfaceTestTemplateEditor-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i> Save test definition\n    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonTrial": {
+  "value": "<i class=\"fa fa-fw fa-flask\"></i>\n        Trial lab run\n    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonTrialPnP": {
+  "value": "<i class=\"fa fa-fw fa-flask\"></i>\n        Trial lab run PnP\n    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionHeader": {
+  "value": "Actions"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddNewTest": {
+  "value": "\n            <i class=\"fa fa-sm fa-plus aria-hidden='true'\"></i> Add new test definition\n        "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddNormButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Add\n                new norm\n            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScaleButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Add\n                        new scale\n                    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScoreMatrixButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Add new scoring line\n                "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScreenButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i> Add new screen\n                "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScreenComponentButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i> Add new screen component\n                    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorCatalogMediaHeader": {
+  "value": "Catalog media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorCopyToNewScreenButton": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i> Copy to new screen\n                    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorHeaderH4": {
+  "value": "Edit and create test definitions"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_AvailableCatalogCol": {
+  "value": "Available catalog files"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_AvailableMediaCol": {
+  "value": "Available media files"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_CatFileLinkCol": {
+  "value": "File link"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_CatFileNameCol": {
+  "value": "File name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_FileLink": {
+  "value": "File link"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_FileName": {
+  "value": "File name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormActiveHeader": {
+  "value": "Norm can be used"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormDefaultOrderLabel": {
+  "value": "Default norm order"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormExplanationHeader": {
+  "value": "Norm explanation"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormHeader": {
+  "value": "Select norm"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormNameHeader": {
+  "value": "Norm description"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormPercentilesHeader": {
+  "value": "Percentile values present"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormRemarksHeader": {
+  "value": "Remarks (only shown here)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-D": {
+  "value": "Decile (1-10)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-O": {
+  "value": "Other"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-P": {
+  "value": "Percentile (1-100)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-S": {
+  "value": "Stanine (1-9)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-T": {
+  "value": "Textual"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-V": {
+  "value": "Vigintile (1-20)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormTypeHeader": {
+  "value": "Norm type"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormVarNameHeader": {
+  "value": "Norm variable name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorRemoveNormButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Remove norm\n            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorRemoveScaleButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Remove scale\n                    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleActiveHeader": {
+  "value": "Show scale as test result"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleDefaultHeader": {
+  "value": "Default value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleExplanationHeader": {
+  "value": "Scale explanation"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleHeader": {
+  "value": "Select scale"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleMaxHeader": {
+  "value": "Maximum value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleMinHeader": {
+  "value": "Minimum value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleNameHeader": {
+  "value": "Scale description"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScalePrecisionHeader": {
+  "value": "Scale precision"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleRemarksHeader": {
+  "value": "Remarks (only shown here)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleType-N": {
+  "value": "Numeric"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleType-T": {
+  "value": "Textual"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleTypeHeader": {
+  "value": "Scale type"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleVarNameHeader": {
+  "value": "Scale variable name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenContentsHeaderText": {
+  "value": "Screen contents"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics": {
+  "value": "Screen\n                    dynamics"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_addNewLine": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i> Add new screen dynamics rule\n                    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_source": {
+  "value": "Value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_sourcecomponent": {
+  "value": "Screen\n                                component (source)\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_targetcomponent": {
+  "value": "Screen\n                                component (target)\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_targetvisible": {
+  "value": "Visible\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenHeaderText": {
+  "value": "Screen list"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenVarText": {
+  "value": "Screen item settings"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectHeader": {
+  "value": "Test definition\n        section"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectListLoading": {
+  "value": " list is loading ..."
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectSelectList": {
+  "value": "\n            <li id=\"AdminInterfaceTestTemplateEditorSelectListLoading\"> list is loading ...</li>\n        "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormColumnsHeader": {
+  "value": "Norm columns"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormComplexScoringHeader": {
+  "value": "Complex norming\n                    script"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormsListHeader": {
+  "value": "Norms"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesComplexScoringHeader": {
+  "value": "Complex scoring\n                    script"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesListHeader": {
+  "value": "Scales"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeader": {
+  "value": "Scoring matrix"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderA": {
+  "value": "Answer"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderQ": {
+  "value": "Question"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderScale": {
+  "value": "Scale"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderScore": {
+  "value": "Score"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestActiveLabel": {
+  "value": "Test can be\n                used"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasAdditionalFilesLabel": {
+  "value": "Test uses additional files like images"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasCatalogLabel": {
+  "value": "Test has catalog information"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasMultipleScreensLabel": {
+  "value": "Test has multiple screens"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasNormsLabel": {
+  "value": "Test has norms"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasScoringLabel": {
+  "value": "Test has scoring"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasScreenDynamicsLabel": {
+  "value": "Test has screen dynamics"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapabilities": {
+  "value": "Test capabilities"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCatalogExplanationLabel": {
+  "value": "Catalog information"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCopyrightsLabel": {
+  "value": "Copyrights"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestDescriptionLabel": {
+  "value": "Description"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestExplanationLabel": {
+  "value": "Explanation"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestMediaHeader": {
+  "value": "Test media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestNameLabel": {
+  "value": "Test name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestRemarksLabel": {
+  "value": "Remarks (only shown\n                here)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabCatalog": {
+  "value": "Catalog information"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabCatalog_li": {
+  "value": "\n                <a class=\"nav-link active\" onclick=\"ITSInstance.newITSTestEditorController.showTab('AdminInterfaceTestTemplateEditor_TabCatalog','AdminInterfaceTestTemplateEditorTabCatalog');\">\n                    <label id=\"AdminInterfaceTestTemplateEditor_TabCatalog\">Catalog information</label>\n                </a>\n            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabMedia": {
+  "value": "Media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabMedia_li": {
+  "value": "\n                <a class=\"nav-link active\" onclick=\"ITSInstance.newITSTestEditorController.showTab('AdminInterfaceTestTemplateEditor_TabMedia','AdminInterfaceTestTemplateEditorTabMedia');\">\n                    <label id=\"AdminInterfaceTestTemplateEditor_TabMedia\">Media</label>\n                </a>\n            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabNorms": {
+  "value": "Norms"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabNorms_li": {
+  "value": "\n                <a class=\"nav-link active\" onclick=\"ITSInstance.newITSTestEditorController.showTab('AdminInterfaceTestTemplateEditor_TabNorms','AdminInterfaceTestTemplateEditorTabNorms');\">\n                    <label id=\"AdminInterfaceTestTemplateEditor_TabNorms\">Norms</label>\n                </a>\n            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScoring": {
+  "value": "Scoring"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScoring_li": {
+  "value": "\n                <a class=\"nav-link active\" onclick=\"ITSInstance.newITSTestEditorController.showTab('AdminInterfaceTestTemplateEditor_TabScoring','AdminInterfaceTestTemplateEditorTabScoring');\">\n                    <label id=\"AdminInterfaceTestTemplateEditor_TabScoring\">Scoring</label>\n                </a>\n            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScreens": {
+  "value": "Contents"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScreens_li": {
+  "value": "\n                <a class=\"nav-link active\" onclick=\"ITSInstance.newITSTestEditorController.showTab('AdminInterfaceTestTemplateEditor_TabScreens','AdminInterfaceTestTemplateEditorTabScreens');\">\n                    <label id=\"AdminInterfaceTestTemplateEditor_TabScreens\">Contents</label>\n                </a>\n            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabTestInformation": {
+  "value": "Test information"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabTestInformation_li": {
+  "value": "\n                <a class=\"nav-link active\" onclick=\"ITSInstance.newITSTestEditorController.showTab('AdminInterfaceTestTemplateEditor_TabTestInformation','AdminInterfaceTestTemplateEditorTabTestInformation');\">\n                    <label id=\"AdminInterfaceTestTemplateEditor_TabTestInformation\">Test information</label>\n                </a>\n            "
+ },
+ "#ForgotWindow.ForgotWindowBackButton": {
+  "value": "\n                    Cancel\n                "
+ },
+ "#ForgotWindow.ForgotWindowInstruction": {
+  "value": "Please enter your email address below and we will send you a link to reset your password."
+ },
+ "#ForgotWindow.ForgotWindowResetButton": {
+  "value": "\n                    Send password reset mail\n                "
+ },
+ "#ForgotWindow.UserName": {
+  "value": "E-mail"
+ },
+ "#LoginWindow.LoginWindowHeading": {
+  "value": "Login"
+ },
+ "#LoginWindow.LoginWindowIEWarning": {
+  "value": "Internet Explorer is <b>NOT</b> supported for this website.<br>Please use a recent version of Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari or Opera."
+ },
+ "#LoginWindow.LoginWindowLoginButton": {
+  "value": "\n                    Login\n                "
+ },
+ "#LoginWindow.LoginWindowPassword": {
+  "value": "Password"
+ },
+ "#LoginWindow.LoginWindowPasswordForgotten": {
+  "value": "Have you forgotten your\n                    password?"
+ },
+ "#LoginWindow.LoginWindowSelectLanguageLabel": {
+  "value": "Select other language"
+ },
+ "#LoginWindow.LoginWindowUnknownBrowserWarning": {
+  "value": "Your browser could not be detected and<br>may not work with this website.<br>Please use a recent version of Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari or Opera."
+ },
+ "#LoginWindow.LoginWindowUserName": {
+  "value": "User name"
+ },
+ "#LoginWindowSelectCompany.LoginWindowSelectCompanyHeader": {
+  "value": "\n                    <img src=\"images\\its.png\" style=\"width:64px;height:64px;vertical-align:text-bottom;\">\n                    Select the company you want to work with "
+ },
+ "#NavbarsAdmin.NavbarsAdminLogoutButton": {
+  "value": "Logout\n        "
+ },
+ "#NavbarsAdmin.NavbarsAdminSearchButton": {
+  "value": "Search"
+ },
+ "#NavbarsAdmin.NavbarsLabelHeadingWelcome": {
+  "value": "Welcome"
+ },
+ "#PasswordResetWindow.PasswordResetWindowBackButton": {
+  "value": "\n                Cancel\n            "
+ },
+ "#PasswordResetWindow.PasswordResetWindowButton": {
+  "value": "\n                Reset password\n            "
+ },
+ "#PasswordResetWindow.UserName": {
+  "value": "Confirm new password"
+ }
+}

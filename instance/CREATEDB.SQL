@@ -1,0 +1,6 @@
+CREATE DATABASE "%DBNAME%"
+  WITH encoding='UTF8'
+  TABLESPACE = %TABLESPACE%
+  CONNECTION LIMIT = -1;
+
+// end of file

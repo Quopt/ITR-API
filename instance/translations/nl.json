@@ -1,0 +1,3103 @@
+{
+ "#AdminInterface.AdminInterfaceAdminInterfaceSettingsDropdownButton": {
+  "value": "\n                Selecteer wat u wilt doen\n            "
+ },
+ "#AdminInterface.AdminInterfaceAdminInterfaceSettingsDropdownButtonItemsManageConsultants": {
+  "value": "Consultants beheren"
+ },
+ "#AdminInterface.AdminInterfaceAdminInterfaceSettingsDropdownButtonItemsManageOrganisations": {
+  "value": "Organisaties beheren"
+ },
+ "#AdminInterface.AdminInterfaceAdminInterfaceSettingsDropdownButtonItemsResetPassword": {
+  "value": "Mijn wachtwoord wijzigen"
+ },
+ "#AdminInterface.AdminInterfaceCompanyHailingHeading": {
+  "value": "Welkom bij &nbsp;"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementBody": {
+  "value": "U heeft nog <label class=\"alert-info\" id=\"AdminInterfaceCreditManagementBodyAmount\">-</label> kredieteenheden.<br>"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementBodyAmount": {
+  "value": "-"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementHeader": {
+  "originalValue": "Credit\n\t\t\t\tmanagement",
+  "value": "Credit Management",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementOrderButton": {
+  "value": "Kredieteenheden bestellen"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementViewButton": {
+  "value": "Gebruik weergeven"
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateButton": {
+  "value": "Start het uitnodigen van de kandidaat"
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateExplanation": {
+  "value": "Nodig een nieuwe kandidaat uit om testen af te nemen. Vul het e-mail adres van de kandidaat hieronder in en druk op de <b>Start het uitnodiging van de kandidaat</b> link hieronder."
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateHeading": {
+  "value": "Nieuwe kandidaat uitnodigen"
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateUserName": {
+  "value": "E-mail adres"
+ },
+ "#AdminInterface.AdminInterfaceInviteRRSessionsButton": {
+  "value": "Sessieuitslagen"
+ },
+ "#AdminInterface.AdminInterfaceInviteRRSessionsHeader": {
+  "value": "Sessieuitslagen bekijken"
+ },
+ "#AdminInterface.AdminInterfaceInviteRRSessionsbody": {
+  "value": "De volgende sessies zijn onlangs be&euml;indigd. Klik op de sessie om deze te bekijken of op de knop <b>sessieuitslagen</b> voor de lijst van be&euml;indigde sessies."
+ },
+ "#AdminInterface.AdminInterfaceInviteTCatalogBody": {
+  "value": "Als u de lijst met beschikbare tests wilt bekijken of de test handleiding wilt lezen, selecteert u de test of klikt u op de onderstaande koppeling."
+ },
+ "#AdminInterface.AdminInterfaceInviteTCatalogHeader": {
+  "value": "Test catalogus"
+ },
+ "#AdminInterface.AdminInterfaceInviteTCatalogdropdownMenu": {
+  "value": "\n                Selecteer uw test\n            "
+ },
+ "#AdminInterface.AdminInterfaceInviteUserMngtBody": {
+  "value": "De volgende gebruikers zijn onlangs ingelogd. Wilt U een nieuwe gebruiker aanmaken of toegang intrekken? Klik op <b>gebruikers toegang beheren</b>."
+ },
+ "#AdminInterface.AdminInterfaceInviteUserMngtButton": {
+  "value": "Gebruikers toegang beheren"
+ },
+ "#AdminInterface.AdminInterfaceInviteUserMngtHeader": {
+  "value": "Gebruikersbeheer"
+ },
+ "#AdminInterface.AdminInterfaceSettingsBody": {
+  "value": "Beheer uw persoonlijke of uw bedrijfs voorkeuren door te kiezen wat u wilt doen in de onderstaande lijst. Of open het systeem menu voor meer opties."
+ },
+ "#AdminInterface.AdminInterfaceSettingsHeader": {
+  "value": "Uw voorkeuren"
+ },
+ "#AdminInterfaceNewSessionEditorDiv.NewSessionMenu": {
+  "originalValue": "New session",
+  "value": "Nieuwe sessie",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceNewSessionEditorDiv.NewSessionMenu2": {
+  "originalValue": "New session",
+  "value": "Nieuwe sessie",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-ActionsHeader": {
+  "value": "Acties"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-GenericHeader": {
+  "value": "Algemene sectie"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-HTMLHeader": {
+  "value": "Sectie HTML en scripting"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeader": {
+  "value": "Voorbeeldsectie"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderPnP": {
+  "value": "PnP voorbeeld"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderTE": {
+  "value": "Test editor preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderTT": {
+  "value": "Test nemen preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-TemplateVarSelectHeader": {
+  "value": "Sjabloonvariabele selecteren"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-VarHeader": {
+  "value": "Sectiesjabloon variabele"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-addTemplateVar": {
+  "value": "\n                        <i class=\"fa fa-sm fa-plus aria-hidden='true'\"></i>Nieuwe Sjabloonvariabele toevoegen"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-copyButton": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i>Deze sjabloon kopi\u00ebren"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-deleteButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Deze sjabloon verwijderen"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-description": {
+  "value": "Beschrijving van de scherm sjabloon zoals weergegeven in de test editor"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-descriptionHeader": {
+  "value": "Beschrijving"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-downloadButton": {
+  "value": "<i class=\"fa fa-fw fa-download\"></i>Sjabloon definitie downloaden"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-explanationHeader": {
+  "value": "Uitleg"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGenerator": {
+  "value": "Generator fragment (id, num_blocks, template_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorGeneratePreviews": {
+  "value": "\n                    <i class=\"fa fa-sm fa-check aria-hidden='true'\"></i>VoorVertoningen weergeven"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorGetValue": {
+  "value": "Fragment om waarde te krijgen (id, num_blocks)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorHTML": {
+  "value": "HTML-sjabloon"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorHTMLPnP": {
+  "value": "HTML-sjabloon voor PnP-invoer (indien verschillend van HTML-sjabloon)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorInitScript": {
+  "value": "Initialisatie fragment (id, num_blocks, test_mode, template_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorPnP": {
+  "value": "Generator fragment PnP (id, num_blocks, template_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorSetValue": {
+  "value": "Fragment om waarde in te stellen (id, num_blocks, varvalue)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorValidateScript": {
+  "value": "Validatie fragment (id, num_blocks, test_mode, template_values, runtime_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelIsAnsweredScript": {
+  "value": "IsAnswered fragment (id, num_blocks, test_mode, template_values, runtime_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-remarksHeader": {
+  "value": "Opmerkingen"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-removeTemplateVar": {
+  "value": "\n                    <i class=\"fa fa-sm fa-minus aria-hidden='true'\"></i>Sjabloonvariabele verwijderen"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-saveButton": {
+  "value": "<i id=\"AdminInterfaceScreenTemplate-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i>Scherm sjabloon opslaan"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesPnPButton": {
+  "value": "<i class=\"fa fa-eye\"></i>Waarden weergeven"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesTEButton": {
+  "value": "<i class=\"fa fa-eye\"></i>Waarden weergeven"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesTTButton": {
+  "value": "<i class=\"fa fa-eye\"></i>Waarden weergeven"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-uploadButton": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>Sjabloon definitie uploaden"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardefaultvalue": {
+  "value": "standaardwaarde voor scherm sjabloon"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardefaultvalueheader": {
+  "value": "Standaardwaarde"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardescription": {
+  "value": "Beschrijving van het doel van de variabele zoals weergegeven in de test editor"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardescriptionheader": {
+  "value": "Beschrijving"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-varname": {
+  "value": "variabele naam van scherm sjabloon"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-varnameheader": {
+  "value": "Naam var"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartype": {
+  "value": "Type variabele"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeA": {
+  "value": "Tekst (meerdere regels)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeB": {
+  "value": "Aan/uit schakelaar"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeC": {
+  "value": "Kleurkiezer"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeE": {
+  "value": "Uitleg"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeH": {
+  "value": "HTML-tekst (meerdere regels)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeL": {
+  "value": "Lijst van keuzes"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeP": {
+  "value": "Tijdelijke aanduiding"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeT": {
+  "value": "Tekst"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateEditHeaderH4": {
+  "value": "Sjablonen voor test schermen bewerken en maken"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectHeader": {
+  "value": "Een scherm sjabloon selecteren of een nieuwe toevoegen"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectList": {
+  "value": "\n            <li id=\"AdminInterfaceScreenTemplateSelectListLoading\">lijst wordt geladen...</li>\n        "
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectListLoading": {
+  "value": " lijst wordt geladen..."
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenVarSelectListLoading": {
+  "value": "lijst wordt geladen..."
+ },
+ "#AdminInterfaceScreenTemplateEditor.EditMenu": {
+  "originalValue": "Edit test screen templates",
+  "value": "Test scherm sjablonen bewerken",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditAddTest": {
+  "originalValue": "<i class=\"fa fa-fw fa-plus \"></i><span id=\"AdminInterfaceEditSessionEditAddTestLabel\">Add another test</span>\n    ",
+  "value": "<i class=\"fa fa-fw fa-plus \"></i><span id=\"AdminInterfaceEditSessionEditAddTestLabel\">Een andere test toevoegen</span>\n    ",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditAddTestLabel": {
+  "originalValue": "Add another test",
+  "value": "Een andere test toevoegen",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditArchive": {
+  "originalValue": "Unarchive this session",
+  "value": "Unarchive deze sessie",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditArchiveTest": {
+  "originalValue": "<i id=\"AdminInterfaceEditSessionEditArchiveTestIcon\" class=\"fa fa-fw fa-archive \"></i><span id=\"AdminInterfaceEditSessionEditArchive\">Archive this session</span>",
+  "value": "<i id=\"AdminInterfaceEditSessionEditArchiveTestIcon\" class=\"fa fa-fw fa-archive \"></i><span id=\"AdminInterfaceEditSessionEditArchive\">Deze sessie archiveren</span>",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditCheckAnswers": {
+  "originalValue": "Check answers",
+  "value": "Antwoorden controleren",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditDelete": {
+  "originalValue": "Delete this session",
+  "value": "Deze sessie verwijderen",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditDeleteTest": {
+  "originalValue": "Delete test",
+  "value": "Test verwijderen",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditHeader": {
+  "originalValue": "Candidate session",
+  "value": "Kandidaat-sessie",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditReportTest": {
+  "originalValue": "Test reports",
+  "value": "Test rapporten",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditResendInvitation": {
+  "originalValue": "<i class=\"fa fa-fw fa-envelope \"></i><span id=\"AdminInterfaceEditSessionEditResendInvitationIcon\">Reset password and resend test invitation</span>",
+  "value": "<i class=\"fa fa-fw fa-envelope \"></i><span id=\"AdminInterfaceEditSessionEditResendInvitationIcon\">Wachtwoord opnieuw instellen en test uitnodiging opnieuw verzenden</span>",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditResendInvitationIcon": {
+  "originalValue": "Reset password and resend test invitation",
+  "value": "Wachtwoord opnieuw instellen en test uitnodiging opnieuw verzenden",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditStartNow": {
+  "originalValue": "<i class=\"fa fa-fw fa-envelope \"></i><span id=\"AdminInterfaceEditSessionEditStartNowIcon\">Reset password and start now</span>",
+  "value": "<i class=\"fa fa-fw fa-envelope \"></i><span id=\"AdminInterfaceEditSessionEditStartNowIcon\">Wachtwoord opnieuw instellen en nu starten</span>",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditStartNowIcon": {
+  "originalValue": "Reset password and start now",
+  "value": "Wachtwoord opnieuw instellen en nu starten",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditTestScores": {
+  "originalValue": "Test scores",
+  "value": "Test scores",
+  "valueAsOriginal": "Y"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditUnarchiveTest": {
+  "originalValue": "<i id=\"AdminInterfaceEditSessionEditUnarchiveTestIcon\" class=\"fa fa-fw fa-archive \"></i><span id=\"AdminInterfaceEditSessionEditArchive\">Unarchive this session</span>",
+  "value": "<i id=\"AdminInterfaceEditSessionEditUnarchiveTestIcon\" class=\"fa fa-fw fa-archive \"></i><span id=\"AdminInterfaceEditSessionEditArchive\">Unarchive deze sessie</span>",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceEditSessionEditViewResults": {
+  "originalValue": "View answers",
+  "value": "Antwoorden weergeven",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_PercentileHeader1_0": {
+  "originalValue": "Percentile 1",
+  "value": "Percentiel 1",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_PercentileHeader1_1": {
+  "originalValue": "Percentile 1",
+  "value": "Percentiel 1",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_PercentileHeader2_0": {
+  "originalValue": "Percentile 2",
+  "value": "Percentiel 2",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_PercentileHeader2_1": {
+  "originalValue": "Percentile 2",
+  "value": "Percentiel 2",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_PercentileHeader3_0": {
+  "originalValue": "Percentile 3",
+  "value": "Percentiel 3",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_PercentileHeader3_1": {
+  "originalValue": "Percentile 3",
+  "value": "Percentiel 3",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_RawHeader_0": {
+  "originalValue": "Score",
+  "value": "Score",
+  "valueAsOriginal": "Y"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_RawHeader_1": {
+  "originalValue": "Score",
+  "value": "Score",
+  "valueAsOriginal": "Y"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_ScaleHeader_0": {
+  "originalValue": "Scale",
+  "value": "Schaal",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEdit.AdminInterfaceTestTemplateEditorNorm_ScaleHeader_1": {
+  "originalValue": "Scale",
+  "value": "Schaal",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditAccordionLabel": {
+  "value": "Geldigheid van sessies"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditHeader": {
+  "value": "Nieuwe kandidaat-sessie maken"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditInformationLabel": {
+  "value": "Informatie over de kandidaat"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditMailMeLabel": {
+  "value": "Mail me wanneer deze sessie is voltooid op"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditNotificationLabel": {
+  "value": "Instellingen voor sessie meldingen"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditRemarksLabel": {
+  "value": "Opmerkingen"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionAddMoreButton": {
+  "value": "<i id=\"AdminInterfaceSessionNewSession-newIcon\" class=\"fa fa-fw fa-plus-square\"></i><span id=\"AdminInterfaceSessionNewSessionNewButtonLabel\">Een andere sessie toevoegen</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateBirthDateLabel": {
+  "value": "Geboortedatum"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateFirstNameLabel": {
+  "value": "Voornaam"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateFor": {
+  "value": "Voer het e-mail adres of de login van de kandidaat in"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateForLabel": {
+  "value": "Kandidaat e-mail adres of login"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateInitialsLabel": {
+  "value": "Initialen"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateLastNameLabel": {
+  "value": "Laatste naam"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidatePasswordLabel": {
+  "value": "Geef een wachtwoord op."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexFemaleLabel": {
+  "value": "Vrouwelijke"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexLabel": {
+  "value": "Sex"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexMaleLabel": {
+  "value": "Mannelijke"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexUnknownLabel": {
+  "value": "Onbekend of genderneutraal"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDeleteButton": {
+  "value": "<i class=\"fa fa-fw fa-trash aria-hidden='true'\"></i><span id=\"AdminInterfaceSessionNewSessionDeleteButtonLabel\">Sessie verwijderen</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDeleteButtonLabel": {
+  "value": "Sessie verwijderen"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionFor": {
+  "value": "Een sessie beschrijving invoeren"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionLabel": {
+  "value": "Sessie beschrijving"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionTT": {
+  "value": "Geef een beschrijving van de sessie op."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionEndDateEnforcedLabel": {
+  "value": "De sessie stoppen wanneer u nog bezig bent op deze datum en tijd"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionEndDateLabel": {
+  "value": "De sessie kan niet worden gestart <b>na</b> deze datum &amp; tijd"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionInviteButton": {
+  "value": "<i class=\"fa fa-fw fa-envelope\"></i><span id=\"AdminInterfaceSessionNewSessionInviteButtonLabel\">Kandidaat uitnodigen via e-mail</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionInviteButtonLabel": {
+  "value": "Kandidaat uitnodigen via e-mail"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionNewButtonLabel": {
+  "value": "Een andere sessie toevoegen"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionSaveButton": {
+  "value": "<i id=\"AdminInterfaceSessionNewSession-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i><span id=\"AdminInterfaceSessionNewSessionSaveButtonLabel\">Sessie opslaan</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionSaveButtonLabel": {
+  "value": "Sessie opslaan"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionStartButton": {
+  "value": "<i id=\"AdminInterfaceSessionNewSession-startNowIcon\" class=\"fa fa-fw fa-hourglass-start\"></i><span id=\"AdminInterfaceSessionNewSessionStartButtonLabel\">Start sessie nu</span>\n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionStartButtonLabel": {
+  "value": "Start sessie nu"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionStartDateLabel": {
+  "value": "Sessie kan niet worden gestart <b>v\u00f3\u00f3r</b> deze datum &amp; tijd"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsIncludeOtherLanguagesLabel": {
+  "value": "Tests opnemen in andere talen"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsInputList": {
+  "value": "\n                        <option selected=\"selected\" value=\"\">W\u00e4hlen Sie einen Fragebogen Aus"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsInputListLabel": {
+  "value": "Tests in deze sessie"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionC1": {
+  "value": "Nog geen tests toegevoegd"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH1": {
+  "value": "Test naam"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH2": {
+  "value": "Test taal"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH3": {
+  "value": "Norm 1"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH4": {
+  "value": "Norm 2"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH5": {
+  "value": "Norm 3"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH6": {
+  "value": "Acties"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewWarningExistsLabel": {
+  "value": "Let op: de kandidaat die je hebt geselecteerd is al bekend. De sessie zal worden toegevoegd zoals gebruikelijk, zal het wachtwoord en andere gegevens van de kandidaat worden bijgewerkt. "
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogDropdownButton": {
+  "originalValue": "\n        Select your test\n    ",
+  "value": "\n        Selecteer uw test\n    ",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogHeader": {
+  "originalValue": "View test catalog information",
+  "value": "Informatie over test catalogi weergeven",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogTestCostsLabel": {
+  "originalValue": "Costs",
+  "value": "Kosten",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogTestDescriptionLabel": {
+  "originalValue": "Description",
+  "value": "Beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogTestExplanationLabel": {
+  "originalValue": "Explanation",
+  "value": "Uitleg",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogTestInfoHeader": {
+  "originalValue": "Test information",
+  "value": "Test informatie",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogTestNameLabel": {
+  "originalValue": "Test name",
+  "value": "Test naam",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestCatalogView.AdminInterfaceViewTestCatalogTestSelectHeader": {
+  "originalValue": "Available tests",
+  "value": "BeSchikbare tests",
+  "valueAsOriginal": "N"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceScreenTemplate-downloadButton": {
+  "value": "<i class=\"fa fa-fw fa-download\"></i>Sjabloon definitie downloaden"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceScreenTemplate-uploadButton": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>Sjabloon definitie uploaden"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-LanguageSelectLabel": {
+  "value": "Test taal"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-uploadButtonA": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>Bestand uploaden"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-uploadButtonB": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>PDF-bestand uploaden"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonCopy": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i>Kopieer deze test"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonDelete": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Deze test definitie verwijderen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonSave": {
+  "value": "<i id=\"AdminInterfaceTestTemplateEditor-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i>Test definitie opslaan"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonTrial": {
+  "value": "<i class=\"fa fa-fw fa-flask\"></i>Proef Lab run"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonTrialPnP": {
+  "value": "<i class=\"fa fa-fw fa-flask\"></i>Proef Lab uitvoeren PnP"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionHeader": {
+  "value": "Acties"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddNewTest": {
+  "value": "\n            <i class=\"fa fa-sm fa-plus aria-hidden='true'\"></i>Nieuwe test definitie toevoegen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddNormButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe norm toevoegen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScaleButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe schaal toevoegen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScoreMatrixButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe scorings regel toevoegen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScreenButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuw scherm toevoegen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScreenComponentButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe scherm component toevoegen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorCatalogMediaHeader": {
+  "value": "Catalogus media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorCopyToNewScreenButton": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i>Kopi\u00ebren naar nieuw scherm"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorHeaderH4": {
+  "value": "Test definities bewerken en maken"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_AvailableCatalogCol": {
+  "value": "BeSchikbare catalogusbestanden"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_AvailableMediaCol": {
+  "value": "BeSchikbare mediabestanden"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_CatFileLinkCol": {
+  "value": "Bestand link"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_CatFileNameCol": {
+  "value": "Bestandsnaam"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_FileLink": {
+  "value": "Bestand link"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_FileName": {
+  "value": "Bestandsnaam"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormActiveHeader": {
+  "value": "Norm kan worden gebruikt"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormDefaultOrderLabel": {
+  "value": "Standaardnorm order"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormExplanationHeader": {
+  "value": "Norm verklaring"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormHeader": {
+  "value": "Selecteer norm"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormNameHeader": {
+  "value": "Norm beschrijving"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormPercentilesHeader": {
+  "value": "Percentielwaarden aanwezig"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormRemarksHeader": {
+  "value": "Opmerkingen (alleen hier weergegeven)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-D": {
+  "value": "Deciel (1-10)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-O": {
+  "value": "Andere"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-P": {
+  "value": "Percentiel (1-100)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-S": {
+  "value": "Stanine (1-9)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-T": {
+  "value": "Tekstuele"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-V": {
+  "value": "Vigintile (1-20)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormTypeHeader": {
+  "value": "Norm type"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormVarNameHeader": {
+  "value": "Naam van de norm variabele"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNorm_NormHeader": {
+  "value": "Norm waarde"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNorm_PercentileHeader": {
+  "value": "Percentielwaarde"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNorm_RawHeader": {
+  "value": "Ruwe score"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorRemoveNormButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Verwijder norm"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorRemoveScaleButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Schaal verwijderen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleActiveHeader": {
+  "value": "Toonschaal als testresultaat"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleDefaultHeader": {
+  "value": "Standaardwaarde"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleExplanationHeader": {
+  "value": "Schaal uitleg"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleHeader": {
+  "value": "Selecteer schaal"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleMaxHeader": {
+  "value": "Maximum waarde"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleMinHeader": {
+  "value": "Minimum waarde"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleNameHeader": {
+  "value": "Schaal beschrijving"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScalePrecisionHeader": {
+  "value": "Schaal precisie"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleRemarksHeader": {
+  "value": "Opmerkingen (alleen hier weergegeven)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleType-N": {
+  "value": "Numerieke"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleType-T": {
+  "value": "Tekstuele"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleTypeHeader": {
+  "value": "Type schaal"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleVarNameHeader": {
+  "value": "Schaal variabele naam"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenContentsHeaderText": {
+  "value": "Scherminhoud"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics": {
+  "value": "Scherm dynamiek"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_addNewLine": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe regel voor scherm dynamica toevoegen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_source": {
+  "value": "Waarde"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_sourcecomponent": {
+  "value": "Scherm component (bron)\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_targetcomponent": {
+  "value": "Scherm component (doel)\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_targetvisible": {
+  "value": "Zichtbaar\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenHeaderText": {
+  "value": "Scherm lijst"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenVarText": {
+  "value": "Instellingen voor scherm items"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectHeader": {
+  "value": "Sectie test definitie"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectListLoading": {
+  "value": " lijst wordt geladen..."
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectSelectList": {
+  "value": "\n            <li id=\"AdminInterfaceTestTemplateEditorSelectListLoading\">lijst wordt geladen...</li>\n        "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormColumnsHeader": {
+  "value": "Norm kolommen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormComplexScoringHeader": {
+  "value": "Complexe norming script"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormsListHeader": {
+  "value": "Normen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesComplexScoringHeader": {
+  "value": "Complex scoren script"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesListHeader": {
+  "value": "Schalen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeader": {
+  "value": "Scoren matrix"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderA": {
+  "value": "Antwoord"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderQ": {
+  "value": "Vraag"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderScale": {
+  "value": "Schaal"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderScore": {
+  "value": "Score"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestActiveLabel": {
+  "value": "Test kan worden gebruikt"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasAdditionalFilesLabel": {
+  "value": "Test maakt gebruik van extra bestanden zoals afbeeldingen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasCatalogLabel": {
+  "value": "Test heeft catalogus informatie"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasMultipleScreensLabel": {
+  "value": "Test heeft meerdere schermen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasNormsLabel": {
+  "value": "Test heeft normen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasScoringLabel": {
+  "value": "Test heeft scoren"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapHasScreenDynamicsLabel": {
+  "value": "Test heeft scherm dynamiek"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCapabilities": {
+  "value": "Test mogelijkheden"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCatalogExplanationLabel": {
+  "value": "Catalogus informatie"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCopyrightsLabel": {
+  "value": "Auteursrechten"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestDescriptionLabel": {
+  "value": "Beschrijving"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestExplanationLabel": {
+  "value": "Uitleg"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestMediaHeader": {
+  "value": "Test media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestNameLabel": {
+  "value": "Test naam"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestRemarksLabel": {
+  "value": "Opmerkingen (alleen hier weergegeven)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabCatalog": {
+  "value": "Catalogus informatie"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabMedia": {
+  "value": "Media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabNorms": {
+  "value": "Normen"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScoring": {
+  "value": "Scoren"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScreens": {
+  "value": "Inhoud"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabTestInformation": {
+  "value": "Test informatie"
+ },
+ "#AdminInterfaceTestTemplateEditor.EditMenu": {
+  "value": "Test definities bewerken"
+ },
+ "#BatteryListerController.ListMenu": {
+  "originalValue": "Edit test batteries",
+  "value": "Test batterijen bewerken",
+  "valueAsOriginal": "N"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorEditActionHeader": {
+  "value": "Acties"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorEditButtonBar_Delete": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Deze consultant verwijderen"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorEditButtonBar_ResetPasswordButtonLabel": {
+  "value": "Wachtwoord opnieuw instellen en mailen"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorEditButtonBar_SaveButtonLabel": {
+  "value": "Consultant opslaan"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorEditButtonBar_ShowSessionsButtonLabel": {
+  "value": "Toon consultant sessies"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorEditRightsHeader": {
+  "value": "Gebruikersrechten"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceEMailLabel": {
+  "value": "E-mail adres/login"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceHeader": {
+  "value": "Consultant bewerken"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceInformationAddressLabel": {
+  "value": "Informatie adres"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceInvoiceAddressLabel": {
+  "value": "Factuuradres"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceIsReportAuthorHeader": {
+  "value": "Verslag Auteur"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceIsTestAuthorHeader": {
+  "value": "Test Auteur"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceMailAddressLabel": {
+  "value": "Mail adres"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceMasterUserHeader": {
+  "value": "Hoofdgebruiker"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceMayOrderCreditsHeader": {
+  "value": "Kan credits bestellen"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceMayWorkWithBatteriesOnlyHeader": {
+  "value": "Kan alleen met batterijen werken"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceMayWorkWithOwnObjectsOnlyHeader": {
+  "value": "Kan alleen met eigen objecten werken"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceNameLabel": {
+  "value": "Naam"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceOrganisationSupervisorHeader": {
+  "value": "Organisatie promotor"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceRemarksLabel": {
+  "value": "Opmerkingen"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceTestScreenTemplateAuthorHeader": {
+  "value": "Auteur van test scherm sjabloon"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceTranslatorHeader": {
+  "value": "Vertaler"
+ },
+ "#ConsultantEditorInterfaceSessionEdit.ConsultantEditorInterfaceVisitingAddressLabel": {
+  "value": "Adres"
+ },
+ "#ConsultantListerController.ConsultantsMenu": {
+  "originalValue": "Manage consultants",
+  "value": "Consultants beheren",
+  "valueAsOriginal": "N"
+ },
+ "#ConsultantListerInterfaceSessionEdit.ConsultantListerInterfaceEditSessionEditHeader": {
+  "value": "Consultants bewerken"
+ },
+ "#ConsultantListerInterfaceSessionEdit.ConsultantListerTableAddButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe consultant toevoegen"
+ },
+ "#ConsultantListerInterfaceSessionEdit.ConsultantListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "#ConsultantListerInterfaceSessionEdit.ITSConsultantListerEditor_DescriptionLastLogin": {
+  "originalValue": "Last login date and time",
+  "value": "Laatste login datum en tijd",
+  "valueAsOriginal": "N"
+ },
+ "#ConsultantListerInterfaceSessionEdit.ITSConsultantListerEditor_DescriptionLogin": {
+  "value": "Login"
+ },
+ "#ConsultantListerInterfaceSessionEdit.ITSConsultantListerEditor_DescriptionName": {
+  "value": "Naam"
+ },
+ "#ConsultantListerInterfaceSessionEdit.ITSConsultantListerEditor_DescriptionPasswordExpiration": {
+  "originalValue": "Password expiration date",
+  "value": "Vervaldatum wachtwoord",
+  "valueAsOriginal": "N"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailAmountLabel": {
+  "value": "Hoeveelheid kredieteenheden om x 1,000 eenheden te bestellen"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailButtonLabel": {
+  "value": "Mail nu verzenden"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailInterfaceEditHeader": {
+  "value": "Nieuwe kredieteenheden per e-mail bestellen"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailMailBodyLabel": {
+  "value": "Aanvullende opmerkingen voor deze bestelling"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailMailCc": {
+  "value": "Voer een mail adres in om een kopie van deze mail te sturen naar"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailMailCcLabel": {
+  "value": "Stuur een kopie van deze mail naar"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailMailToLabel": {
+  "value": "E-mail verzenden naar"
+ },
+ "#CreditsOrderByMailInterfaceSessionEdit.CreditsOrderByMailSendButton": {
+  "value": "<i id=\"CreditsOrderByMail-mailIcon\" class=\"fa fa-fw fa-envelope\"></i><span id=\"CreditsOrderByMailButtonLabel\">Mail nu verzenden</span>\n    "
+ },
+ "#CreditsUsedListerInterfaceSessionEdit.CreditsUsedListerInterfaceEditSessionEditHeader": {
+  "value": "Krediet gebruik weergeven"
+ },
+ "#CreditsUsedListerInterfaceSessionEdit.CreditsUsedListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "#CustomerSettingsController.Menu": {
+  "originalValue": "Customer settings",
+  "value": "Klantinstellingen",
+  "valueAsOriginal": "N"
+ },
+ "#ForgotWindow.ForgotWindowBackButton": {
+  "value": "\n                    Annuleren\n                "
+ },
+ "#ForgotWindow.ForgotWindowInstruction": {
+  "value": "Vul hieronder uw e-mail adres in en wij sturen u een link naar uw wachtwoord opnieuw in te stellen."
+ },
+ "#ForgotWindow.ForgotWindowResetButton": {
+  "value": "\n                    Stuur password reset mail\n                "
+ },
+ "#ForgotWindow.UserName": {
+  "value": "E-mail"
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsEditorInterfaceCreditsToGrantLabel": {
+  "value": "Kredieten aan toelage"
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsEditorInterfaceRemarksLabel": {
+  "value": "Opmerkingen"
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsInterfaceCreditActionsHeader": {
+  "value": "Acties"
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsInterfaceCreditHistoryHeader": {
+  "value": "Credit Grant geschiedenis"
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsInterfaceCreditInfoHeader": {
+  "value": "Kredieten aan toelage"
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsInterfaceEditHeader": {
+  "value": "Kredieten toekennen aan "
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsInterfaceSave": {
+  "value": "<i class=\"fa fa-fw fa-credit-card\"></i><span id=\"GrantCreditsInterfaceSaveLabel\">Credits nu toekennen</span>\n    "
+ },
+ "#GrantCreditsInterfaceSessionEdit.GrantCreditsInterfaceSaveLabel": {
+  "value": "Credits nu toekennen"
+ },
+ "#ITSResetPasswordEditor.Menu": {
+  "originalValue": "Reset password",
+  "value": "Wachtwoord opnieuw instellen",
+  "valueAsOriginal": "N"
+ },
+ "#LoginWindow.LoginWindowHeading": {
+  "value": "Login"
+ },
+ "#LoginWindow.LoginWindowIEWarning": {
+  "value": "Internet Explorer wordt <b>niet</b> ondersteund voor deze website.<br>Gebruik een recente versie van Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari of Opera."
+ },
+ "#LoginWindow.LoginWindowLoginButton": {
+  "value": "\n                    Login\n                "
+ },
+ "#LoginWindow.LoginWindowPassword": {
+  "value": "Wachtwoord"
+ },
+ "#LoginWindow.LoginWindowPasswordForgotten": {
+  "value": "Bent u uw wachtwoord vergeten?"
+ },
+ "#LoginWindow.LoginWindowSelectLanguageLabel": {
+  "value": "Selecteer een andere taal"
+ },
+ "#LoginWindow.LoginWindowUnknownBrowserWarning": {
+  "value": "Uw browser kan niet worden gedetecteerd en<br>zal mogelijk niet goed werken met deze website.<br>Gebruik een recente versie van Microsoft Edge,<br>Google Chrome, Mozilla Firefox, Apple Safari of Opera."
+ },
+ "#LoginWindow.LoginWindowUserName": {
+  "value": "Gebruikersnaam"
+ },
+ "#LoginWindowSelectCompany.LoginWindowSelectCompanyHeader": {
+  "value": "\n                    <img src=\"images\\its.png\" style=\"width:64px;height:64px;vertical-align:text-bottom;\">Selecteer het bedrijf waarmee u wilt werken"
+ },
+ "#MailTemplateEditorController.MyMailTemplatesMenu": {
+  "originalValue": "My e-mail templates",
+  "value": "Mijn e-mail sjablonen",
+  "valueAsOriginal": "N"
+ },
+ "#MailTemplateEditorController.OrganisationMailTemplatesMenu": {
+  "originalValue": "Manage e-mail templates",
+  "value": "E-mail sjablonen beheren",
+  "valueAsOriginal": "N"
+ },
+ "#MailTemplateEditorController.ServerMailTemplatesMenu": {
+  "originalValue": "Manage server e-mail templates",
+  "value": "Server-e-mail sjablonen beheren",
+  "valueAsOriginal": "N"
+ },
+ "#NavBarsAdminSidebar.NavBarsAdminSidebarCompaniesLabel": {
+  "value": "Organisatie"
+ },
+ "#NavBarsAdminSidebar.NavBarsAdminSidebarLogoutLabel": {
+  "value": "Logout"
+ },
+ "#NavBarsAdminSidebar.NavBarsAdminSidebarSessionsLabel": {
+  "value": "Sessies"
+ },
+ "#NavBarsAdminSidebar.NavBarsAdminSidebarSettingsLabel": {
+  "value": "Instellingen"
+ },
+ "#NavBarsAdminSidebar.NavBarsAdminSidebarSwitchboardLabel": {
+  "value": "Schakelbord"
+ },
+ "#NavBarsAdminSidebar.NavBarsAdminSidebarTestAndReportsLabel": {
+  "value": "Tests en rapporten"
+ },
+ "#NavBarsAdminSidebar.NavBarsAdminSidebarUsersLabel": {
+  "value": "Kandidaten"
+ },
+ "#NavbarsAdmin.NavbarsAdminLogoutButton": {
+  "value": "Logout\n        "
+ },
+ "#NavbarsAdmin.NavbarsLabelHeadingWelcome": {
+  "value": "Welkom"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorEditActionHeader": {
+  "value": "Acties"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorEditButtonBar_Delete": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Deze organisatie verwijderen"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorEditButtonBar_GrantCreditsButtonLabel": {
+  "value": "Credits toekennen"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorEditButtonBar_SaveButtonLabel": {
+  "value": "Organisatie opslaan"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorEditButtonBar_SwitchToButtonLabel": {
+  "value": "Overschakelen naar bedrijf"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorEditCreditInfoHeader": {
+  "value": "Kredietinformatie"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorEditKeyInfoHeader": {
+  "value": "Overige informatie"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceAdministrativeIDLabel": {
+  "value": "Administratieve id"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceCompanyCountryLabel": {
+  "value": "Het land van organen"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceCompanyLicenseEndDateLabel": {
+  "value": "Einddatum licentie"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceContactEMailLabel": {
+  "value": "Contact e-mail"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceContactPersonLabel": {
+  "value": "Naam contact persoon"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceContactPhoneLabel": {
+  "value": "Contact telefoonnummer"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceCurrentCreditLevelLabel": {
+  "value": "Huidig krediet niveau"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceInternationalVATNrLabel": {
+  "value": "Internationale BTW-nummer"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceInvoiceAddressLabel": {
+  "value": "Factuuradres"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceInvoiceCurrencyLabel": {
+  "value": "Valuta van factuur"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceLowCreditWarningLevelLabel": {
+  "value": "Laag krediet waarschuwingsniveau"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceMailAddressLabel": {
+  "value": "Post (fysiek) adres"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceOrganisationAllowNegativeCreditsHeader": {
+  "value": "Negatieve credits toestaan"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceOrganisationNameLabel": {
+  "value": "Naam van de organisatie"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceOrganisationNoPublicTestsHeader": {
+  "value": "Geen publieke tests"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceVATPercentageLabel": {
+  "value": "BTW-percentage"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationEditorInterfaceVisitingAddressLabel": {
+  "value": "Bezoekadres"
+ },
+ "#OrganisationInterfaceSessionEdit.OrganisationInterfaceEditHeader": {
+  "value": "Organisatie bewerken"
+ },
+ "#OrganisationListerController.OrganisationsMenu": {
+  "originalValue": "Manage organisations",
+  "value": "Organisaties beheren",
+  "valueAsOriginal": "N"
+ },
+ "#OrganisationListerInterfaceSessionEdit.ITSOrganisationListerEditor_DescriptionLogin": {
+  "originalValue": "Organisation name",
+  "value": "Naam van de organisatie",
+  "valueAsOriginal": "N"
+ },
+ "#OrganisationListerInterfaceSessionEdit.ITSOrganisationListerEditor_DescriptionName": {
+  "originalValue": "Organisation Name",
+  "value": "Naam organisatie",
+  "valueAsOriginal": "N"
+ },
+ "#OrganisationListerInterfaceSessionEdit.OrganisationListerInterfaceHeader": {
+  "value": "Organisaties bewerken"
+ },
+ "#OrganisationListerInterfaceSessionEdit.OrganisationListerTableAddButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe organisatie toevoegen"
+ },
+ "#OrganisationListerInterfaceSessionEdit.OrganisationListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "#PasswordResetWindow.PasswordResetWindowBackButton": {
+  "value": "\n                Annuleren\n            "
+ },
+ "#PasswordResetWindow.PasswordResetWindowButton": {
+  "value": "\n                Wachtwoord opnieuw instellen\n            "
+ },
+ "#PasswordResetWindow.UserName": {
+  "value": "Bevestig nieuw wachtwoord"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditActionHeader": {
+  "value": "Acties"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditButtonBar_Delete": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Deze persoon verwijderen"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditButtonBar_ResetPasswordButtonLabel": {
+  "value": "Wachtwoord opnieuw instellen"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditButtonBar_SaveButtonLabel": {
+  "value": "Persoon opslaan"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditButtonBar_ShowSessionsButtonLabel": {
+  "value": "Persoons sessies weergeven"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSelectHeader": {
+  "value": "Persoonsgegevens"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateBirthDateLabel": {
+  "value": "Geboortedatum"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateEMailLabel": {
+  "value": "E-mail adres/login"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateFirstNameLabel": {
+  "value": "Voornaam"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateInitialsLabel": {
+  "value": "Initialen"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateLastNameLabel": {
+  "value": "Laatste naam"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateSexFemaleLabel": {
+  "value": "Vrouwelijke"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateSexLabel": {
+  "value": "Sex"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateSexMaleLabel": {
+  "value": "Mannelijke"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionCandidateSexUnknownLabel": {
+  "value": "Onbekend of genderneutraal"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionEditHeader": {
+  "value": "Bewerken"
+ },
+ "#PersonInterfaceSessionEdit.PersonInterfaceEditSessionEditHeaderEMail": {
+  "value": "\n    ..."
+ },
+ "#PersonListerController.PersonArchivedMenu": {
+  "originalValue": "Show archived candidates",
+  "value": "Gearchiveerde kandidaten weergeven",
+  "valueAsOriginal": "N"
+ },
+ "#PersonListerController.PersonMenu": {
+  "originalValue": "Show active candidates",
+  "value": "Actieve kandidaten weergeven",
+  "valueAsOriginal": "N"
+ },
+ "#PersonListerInterfaceSessionEdit.ITSPersonListerEditor_ArchivedHeader": {
+  "originalValue": "Archived",
+  "value": "Gearchiveerde",
+  "valueAsOriginal": "N"
+ },
+ "#PersonListerInterfaceSessionEdit.ITSPersonListerEditor_DescriptionLogin": {
+  "originalValue": "Login",
+  "value": "Login",
+  "valueAsOriginal": "Y"
+ },
+ "#PersonListerInterfaceSessionEdit.ITSPersonListerEditor_DescriptionName": {
+  "originalValue": "Name",
+  "value": "Naam",
+  "valueAsOriginal": "N"
+ },
+ "#PersonListerInterfaceSessionEdit.PersonListerInterfaceEditSessionEditHeader": {
+  "value": "Overzicht kandidaten"
+ },
+ "#PersonListerInterfaceSessionEdit.PersonListerInterfaceEditSessionEditHeaderStatus": {
+  "originalValue": "(archived)",
+  "value": "gearchiveerde",
+  "valueAsOriginal": "N"
+ },
+ "#PersonListerInterfaceSessionEdit.PersonListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "#ReportTemplateInterfaceSessionEdit.AdminInterfaceScreenTemplate-copyButtonLabel": {
+  "value": "Dit rapport kopi\u00ebren"
+ },
+ "#ReportTemplateInterfaceSessionEdit.AdminInterfaceScreenTemplate-deleteButtonLabel": {
+  "value": " Deze rapportdefinitie verwijderen"
+ },
+ "#ReportTemplateInterfaceSessionEdit.AdminInterfaceScreenTemplate-downloadButtonLabel": {
+  "value": " Rapportdefinitie downloaden"
+ },
+ "#ReportTemplateInterfaceSessionEdit.AdminInterfaceScreenTemplate-saveButtonLabel": {
+  "value": "Rapportdefinitie opslaan"
+ },
+ "#ReportTemplateInterfaceSessionEdit.AdminInterfaceScreenTemplate-uploadButtonLabel": {
+  "value": " Rapportdefinitie uploaden"
+ },
+ "#ReportTemplateInterfaceSessionEdit.EditMenu": {
+  "originalValue": "Edit report definitions",
+  "value": "Rapportdefinities bewerken",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditGraph_RemarksLabel": {
+  "value": "Opmerkingen (alleen hier weergegeven)"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditHeader": {
+  "value": "Rapport editor"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectHeader": {
+  "value": "Sectie rapportdefinitie"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectReportAddNew": {
+  "value": "\n            <i class=\"fa fa-sm fa-plus aria-hidden='true'\"></i>Nieuwe rapportdefinitie toevoegen"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectReportHeader": {
+  "value": "Rapport editor"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectReportHeader2": {
+  "value": "Selecteer een rapport dat u wilt bewerken voor"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectReportHeader2Test": {
+  "value": "THBTK"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectReportList1": {
+  "value": " lijst wordt geladen..."
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectTestHeader": {
+  "value": "Rapport editor"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectTestHeader2": {
+  "value": "Selecteer een test om de rapporten te bewerken voor"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditSelectTestList1": {
+  "value": " lijst wordt geladen..."
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditTabGraphBuilderAddButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Nieuwe grafiek toevoegen"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditTabGraphBuilderHeader": {
+  "value": "Grafiek selecteren"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditTabGraphBuilderRemove": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Grafiek verwijderen"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditTabReportWriter_ActionHeader": {
+  "value": "Acties"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEditTabReportWriter_PreScriptHeader": {
+  "value": "Script dat voor het rapport wordt uitgevoerd"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_ActiveLabel": {
+  "value": "Rapport kan worden gebruikt"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_ExplanationLabel": {
+  "value": "Uitleg"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_GraphFieldsLabel": {
+  "value": "Bruikbare velden"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_LanguageSelectLabel": {
+  "value": "Rapport taal"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_NameLabel": {
+  "value": "Naam van rapport"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_RemarksLabel": {
+  "value": "Opmerkingen (alleen hier weergegeven)"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_ReportWriterFieldsLabel": {
+  "value": "Bruikbare velden"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_ReportWriterLabel": {
+  "value": "Rapport tekst (zie hieronder voor een uitleg over de velden die gebruikt kunnen worden)"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_TabGraphs": {
+  "value": "Grafiek Builder"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_TabReportInformation": {
+  "value": "Informatie over het rapport"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceEdit_TabReportWriter": {
+  "value": "Verslag schrijver"
+ },
+ "#ReportTemplateInterfaceSessionEdit.ReportTemplateInterfaceGraph_NameLabel": {
+  "value": "Naam van grafiek"
+ },
+ "#ReportTemplateLocalPublisherController.LocalPublisherMenu": {
+  "originalValue": "Publish report templates",
+  "value": "Rapportsjablonen publiceren",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateLocalPublisherInterfaceSessionEdit.ITSReportTemplateLocalPublisherEditor_DescriptionLogin": {
+  "originalValue": "Report name",
+  "value": "Naam van rapport",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateLocalPublisherInterfaceSessionEdit.ITSReportTemplateLocalPublisherEditor_DescriptionName": {
+  "originalValue": "Test description",
+  "value": "Test beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateLocalPublisherInterfaceSessionEdit.ITSReportTemplateLocalPublisherEditor_Publish": {
+  "originalValue": "Publish",
+  "value": "Publiceren",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateLocalPublisherInterfaceSessionEdit.ITSReportTemplateLocalPublisherEditor_Revoke": {
+  "originalValue": "Revoke",
+  "value": "Intrekken",
+  "valueAsOriginal": "N"
+ },
+ "#ReportTemplateLocalPublisherInterfaceSessionEdit.ReportTemplateLocalPublisherInterfaceEditHeader": {
+  "value": "Rapporten publiceren voor gebruik door andere organisaties op deze server"
+ },
+ "#ReportTemplateLocalPublisherInterfaceSessionEdit.ReportTemplateLocalPublisherListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "#ResetPasswordInterfaceSessionEdit.AdminInterfaceTestTemplateEditorActionHeader": {
+  "value": "Acties"
+ },
+ "#ResetPasswordInterfaceSessionEdit.ResetPasswordInterfaceEditSessionEditHeader": {
+  "value": "Wachtwoord opnieuw instellen"
+ },
+ "#ResetPasswordInterfaceSessionEdit.ResetPasswordInterfaceInformationButtonSave": {
+  "value": "<i id=\"ResetPasswordInterfaceInformationButtonSaveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i>Wachtwoord wijzigen"
+ },
+ "#ResetPasswordInterfaceSessionEdit.ResetPasswordInterfaceInformationNew1Label": {
+  "value": "Nieuw wachtwoord"
+ },
+ "#ResetPasswordInterfaceSessionEdit.ResetPasswordInterfaceInformationNew2Label": {
+  "value": "Typ nieuw wachtwoord opnieuw"
+ },
+ "#ResetPasswordInterfaceSessionEdit.ResetPasswordInterfaceInformationOldLabel": {
+  "value": "Oud wachtwoord"
+ },
+ "#ScreenTemplateLocalPublisherController.LocalPublisherMenu": {
+  "originalValue": "Publish screen templates",
+  "value": "Scherm sjablonen publiceren",
+  "valueAsOriginal": "N"
+ },
+ "#ScreenTemplateLocalPublisherInterfaceSessionEdit.ITSScreenTemplateLocalPublisherEditor_DescriptionLogin": {
+  "originalValue": "Description",
+  "value": "Beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "#ScreenTemplateLocalPublisherInterfaceSessionEdit.ITSScreenTemplateLocalPublisherEditor_DescriptionName": {
+  "originalValue": "Explanation",
+  "value": "Uitleg",
+  "valueAsOriginal": "N"
+ },
+ "#ScreenTemplateLocalPublisherInterfaceSessionEdit.ITSScreenTemplateLocalPublisherEditor_Publish": {
+  "originalValue": "Publish",
+  "value": "Publiceren",
+  "valueAsOriginal": "N"
+ },
+ "#ScreenTemplateLocalPublisherInterfaceSessionEdit.ITSScreenTemplateLocalPublisherEditor_Revoke": {
+  "originalValue": "Revoke",
+  "value": "Intrekken",
+  "valueAsOriginal": "N"
+ },
+ "#ScreenTemplateLocalPublisherInterfaceSessionEdit.ScreenTemplateLocalPublisherInterfaceEditHeader": {
+  "value": "Scherm sjablonen publiceren voor gebruik door andere organisaties op deze server"
+ },
+ "#ScreenTemplateLocalPublisherInterfaceSessionEdit.ScreenTemplateLocalPublisherListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "#ServerSettingsController.Menu": {
+  "originalValue": "Server settings",
+  "value": "Server instellingen",
+  "valueAsOriginal": "N"
+ },
+ "#ServerSettingsInterfaceSessionEdit.ServerSettingsInterfaceEditHeader": {
+  "value": "Serverinstellingen bewerken"
+ },
+ "#ServerSettingsInterfaceSessionEdit.ServerSettingsOrderByMailAddress": {
+  "value": "Voer een e-mail adres in"
+ },
+ "#ServerSettingsInterfaceSessionEdit.ServerSettingsOrderByMailAddressLabel": {
+  "value": "Stuur credit order per e-mail naar"
+ },
+ "#SessionListerController.SessionArchivedMenu": {
+  "originalValue": "Show archived sessions",
+  "value": "Gearchiveerde sessies weergeven",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerController.SessionDoneMenu": {
+  "originalValue": "Show report ready sessions",
+  "value": "Rapport gereed sessies weergeven",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerController.SessionInProgressMenu": {
+  "originalValue": "Show in progress sessions",
+  "value": "Weergeven in voortgangs sessies",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerController.SessionReadyMenu": {
+  "originalValue": "Show sessions ready for test taking",
+  "value": "Sessies weergeven die klaar zijn voor testen",
+  "valueAsOriginal": "N"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_AllowedEndDateTimeHeader": {
+  "value": "Toegestane einddatum &amp; tijd"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_AllowedStartDateTimeHeader": {
+  "value": "Toegestane begindatum &amp; tijd"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_ArchivedHeader": {
+  "value": "Gearchiveerde"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_DescriptionHeader": {
+  "value": "Sessie beschrijving"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_DescriptionLogin": {
+  "value": "Login"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_DescriptionName": {
+  "value": "Naam"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_EndedAtHeader": {
+  "value": "Eindigde op"
+ },
+ "#SessionListerInterfaceSessionEdit.ITSSessionListerEditor_StartedAtHeader": {
+  "value": "Begon op"
+ },
+ "#SessionListerInterfaceSessionEdit.SessionListerInterfaceEditSessionEditHeader": {
+  "value": "Sessie overzicht voor sessies die"
+ },
+ "#SessionListerInterfaceSessionEdit.SessionListerInterfaceEditSessionEditHeaderStatus": {
+  "value": "..."
+ },
+ "#SessionListerInterfaceSessionEdit.SessionListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSendButton": {
+  "originalValue": "<i id=\"SessionMailerInterfaceSession-mailIcon\" class=\"fa fa-fw fa-thumbs-up\"></i> <span id=\"SessionMailerInterfaceSessionSendButtonLabel\">Send mail now</span>\n    ",
+  "value": "<i id=\"SessionMailerInterfaceSession-mailIcon\" class=\"fa fa-fw fa-thumbs-up\"></i><span id=\"SessionMailerInterfaceSessionSendButtonLabel\">Mail nu verzenden</span>\n    ",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditHeader": {
+  "originalValue": "Send mail for this session",
+  "value": "E-mail verzenden voor deze sessie",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailBodyLabel": {
+  "originalValue": "Body of this mail",
+  "value": "Hoofdtekst van deze mail",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailCc": {
+  "originalValue": "Enter a mail address to send a copy of this mail to",
+  "value": "Voer een mail adres in om een kopie van deze mail te sturen naar",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailCcLabel": {
+  "originalValue": "Send a copy of this mail to",
+  "value": "Stuur een kopie van deze mail naar",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailCopyMeLabel": {
+  "originalValue": "Send me a copy of this mail",
+  "value": "Stuur mij een kopie van deze mail",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailFrom": {
+  "originalValue": "The email address that will receive replies from the person receiving the e-mail",
+  "value": "Het e-mail adres dat antwoorden ontvangt van de persoon die de e-mail ontvangt",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailFromLabel": {
+  "originalValue": "Reply address",
+  "value": "Antwoordadres",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailSubject": {
+  "originalValue": "Enter a subject for this mail",
+  "value": "Voer een onderwerp in voor deze mail",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailSubjectLabel": {
+  "originalValue": "Subject of this mail",
+  "value": "Onderwerp van deze mail",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailTo": {
+  "originalValue": "Enter a mail address to send this mail to",
+  "value": "Voer een e-mail adres in om deze e-mail te verzenden naar",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionEditMailToLabel": {
+  "originalValue": "Send mail to",
+  "value": "E-mail verzenden naar",
+  "valueAsOriginal": "N"
+ },
+ "#SessionMailerInterfaceSessionEdit.SessionMailerInterfaceSessionSendButtonLabel": {
+  "originalValue": "Send mail now",
+  "value": "Mail nu verzenden",
+  "valueAsOriginal": "N"
+ },
+ "#SessionViewAnswersInterfaceSessionEdit.SessionViewAnswersInterfaceSessionEditHeader": {
+  "originalValue": "Check session test answers",
+  "value": "Check sessie test antwoorden",
+  "valueAsOriginal": "N"
+ },
+ "#SessionViewReportsInterfaceSessionEdit.SessionViewReportsInterfaceSessionEditHeader": {
+  "originalValue": "View test reports",
+  "value": "Testrapporten weergeven",
+  "valueAsOriginal": "N"
+ },
+ "#SessionViewReportsInterfaceSessionEdit.SessionViewReportsReportHeader": {
+  "originalValue": "Report",
+  "value": "Verslag",
+  "valueAsOriginal": "N"
+ },
+ "#SessionViewReportsInterfaceSessionEdit.SessionViewReportsSelectHeader": {
+  "originalValue": "Available reports",
+  "value": "BeSchikbare rapporten",
+  "valueAsOriginal": "N"
+ },
+ "#SessionViewReportsInterfaceSessionEdit.SessionViewReportsSelectHeaderDropdownButton": {
+  "originalValue": "\n        Select your report\n    ",
+  "value": "\n        Selecteer uw rapport\n    ",
+  "valueAsOriginal": "N"
+ },
+ "#TestTemplateLocalPublisherController.LocalPublisherMenu": {
+  "originalValue": "Publish test templates",
+  "value": "Test sjablonen publiceren",
+  "valueAsOriginal": "N"
+ },
+ "#TestTemplateLocalPublisherInterfaceSessionEdit.ITSTestTemplateLocalPublisherEditor_DescriptionLogin": {
+  "value": "Test naam"
+ },
+ "#TestTemplateLocalPublisherInterfaceSessionEdit.ITSTestTemplateLocalPublisherEditor_DescriptionName": {
+  "value": "Beschrijving"
+ },
+ "#TestTemplateLocalPublisherInterfaceSessionEdit.ITSTestTemplateLocalPublisherEditor_Publish": {
+  "value": "Publiceren"
+ },
+ "#TestTemplateLocalPublisherInterfaceSessionEdit.ITSTestTemplateLocalPublisherEditor_Revoke": {
+  "value": "Intrekken"
+ },
+ "#TestTemplateLocalPublisherInterfaceSessionEdit.TestTemplateLocalPublisherInterfaceEditHeader": {
+  "value": "Publiceer tests voor gebruik door andere organisaties op deze server"
+ },
+ "#TestTemplateLocalPublisherInterfaceSessionEdit.TestTemplateLocalPublisherListerTableFindMoreButton": {
+  "value": "<i class=\"fa fa-fw fa-layer-group\"></i>Meer informatie weergeven"
+ },
+ "AdminInterfaceChangeSessionCandidateBirthDateLabel": {
+  "originalValue": "Birthdate",
+  "value": "Geboortedatum",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateFirstNameLabel": {
+  "originalValue": "First name",
+  "value": "Voornaam",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateFor": {
+  "originalValue": "Enter the e-mail address or login of the candidate",
+  "value": "Voer het e-mail adres of de login van de kandidaat in",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateForLabel": {
+  "originalValue": "Candidate\n                e-mail address or login",
+  "value": "Kandidaat e-mail adres of login",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateInitialsLabel": {
+  "originalValue": "Initials",
+  "value": "Initialen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateLastNameLabel": {
+  "originalValue": "Last name",
+  "value": "Laatste naam",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidatePasswordLabel": {
+  "originalValue": "Please enter a password.",
+  "value": "Geef een wachtwoord op.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateSexFemaleLabel": {
+  "originalValue": "Female",
+  "value": "Vrouwelijke",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateSexLabel": {
+  "originalValue": "Sex",
+  "value": "Sex",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceChangeSessionCandidateSexMaleLabel": {
+  "originalValue": "Male",
+  "value": "Mannelijke",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionCandidateSexUnknownLabel": {
+  "originalValue": "Unknown or gender neutral",
+  "value": "Onbekend of genderneutraal",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionDeleteButtonLabel": {
+  "originalValue": "Delete session",
+  "value": "Sessie verwijderen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionDescriptionFor": {
+  "originalValue": "Enter a session description",
+  "value": "Een sessie beschrijving invoeren",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionDescriptionLabel": {
+  "originalValue": "Session\n                description",
+  "value": "Sessie beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionDescriptionTT": {
+  "originalValue": "Please enter a session description.",
+  "value": "Geef een beschrijving van de sessie op.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionEndDateEnforcedLabel": {
+  "originalValue": "Stop the session when still in progress at this date and time",
+  "value": "De sessie stoppen wanneer u nog bezig bent op deze datum en tijd",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionEndDateLabel": {
+  "originalValue": "Session cannot start <b>after</b> this date &amp; time",
+  "value": "Sessie kan niet worden gestart <b> na </b> deze datum &amp; tijd",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionHeader": {
+  "originalValue": "Change candidate session",
+  "value": "Wijzig de kandidaat-sessie",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionInviteButtonLabel": {
+  "originalValue": "Invite candidate by e-mail",
+  "value": "Kandidaat uitnodigen via e-mail",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionNewButtonLabel": {
+  "originalValue": "Add another session",
+  "value": "Een andere sessie toevoegen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionSaveButtonLabel": {
+  "originalValue": "Save session",
+  "value": "Sessie opslaan",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionStartButtonLabel": {
+  "originalValue": "Start session now",
+  "value": "Start sessie nu",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionStartDateLabel": {
+  "originalValue": "Session cannot start <b>before</b> this date &amp; time",
+  "value": "Sessie kan niet worden gestart <b> voordat </b> deze datum &amp; tijd",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionTestsIncludeOtherLanguagesLabel": {
+  "originalValue": "Include tests in other languages",
+  "value": "Tests opnemen in andere talen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionTestsInputListLabel": {
+  "originalValue": "Tests in this session",
+  "value": "Tests in deze sessie",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionTestsSelectionC1": {
+  "originalValue": "No tests added yet",
+  "value": "Nog geen tests toegevoegd",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionTestsSelectionH1": {
+  "originalValue": "Test name",
+  "value": "Test naam",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionTestsSelectionH2": {
+  "originalValue": "Test language",
+  "value": "Test taal",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionTestsSelectionH3": {
+  "originalValue": "Norm 1",
+  "value": "Norm 1",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceChangeSessionTestsSelectionH4": {
+  "originalValue": "Norm 2",
+  "value": "Norm 2",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceChangeSessionTestsSelectionH5": {
+  "originalValue": "Norm 3",
+  "value": "Norm 3",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceChangeSessionTestsSelectionH6": {
+  "originalValue": "Actions",
+  "value": "Acties",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceChangeSessionWarningExistsLabel": {
+  "originalValue": "Please note : The candidate you have selected is already known. The session will be added as usual, the password and other data of the candidate will be updated. ",
+  "value": "Let op: de kandidaat die je hebt geselecteerd is al bekend. De sessie zal worden toegevoegd zoals gebruikelijk, zal het wachtwoord en andere gegevens van de kandidaat worden bijgewerkt. ",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceEditSessionChangeLabel": {
+  "originalValue": "Change session",
+  "value": "Sessie wijzigen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceEditSessionEditDeleteUnstarted": {
+  "originalValue": "Delete test",
+  "value": "Test verwijderen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceEditSessionEditEndTest": {
+  "originalValue": "End test",
+  "value": "Eindtest",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceEditSessionEditResendInvitationIconNoReset": {
+  "originalValue": "Resend invitation",
+  "value": "Uitnodiging opnieuw verzenden",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceEditSessionEditRestartTest": {
+  "originalValue": "Restart test",
+  "value": "Test opnieuw starten",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceEditSessionEditTestCardsTestStarted": {
+  "originalValue": "Test started : ",
+  "value": "Test gestart: ",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceEditSessionEditTestCardsTestStarted0": {
+  "originalValue": "20/2/2019",
+  "value": "20/2/2019",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceEditSessionEditTestCardsTestStarted1": {
+  "originalValue": "17/2/2019",
+  "value": "17/2/2019",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceEditSessionEditTestCardsTestStarted3": {
+  "originalValue": "3/8/2019",
+  "value": "3/8/2019",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceEditSessionEditTestCardsTestWaiting": {
+  "originalValue": "Test waiting to be started.",
+  "value": "Test wachten om te worden gestart.",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSessionEditAccordionLabel": {
+  "originalValue": "Session validity",
+  "value": "Geldigheid van sessies",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSessionEditHeader": {
+  "originalValue": "Create new candidate session",
+  "value": "Nieuwe kandidaat-sessie maken",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSessionEditInformationLabel": {
+  "originalValue": "Information about the candidate",
+  "value": "Informatie over de kandidaat",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSessionEditMailMeLabel": {
+  "originalValue": "Mail me when this session completes at",
+  "value": "Mail me wanneer deze sessie is voltooid op",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSessionEditNotificationLabel": {
+  "originalValue": "Session notification settings",
+  "value": "Instellingen voor sessie meldingen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceSessionEditRemarksLabel": {
+  "originalValue": "Remarks",
+  "value": "Opmerkingen",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceTestTemplateEditorNorm_PercentileHeader1_2": {
+  "originalValue": "Percentile 1",
+  "value": "Percentiel 1",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceTestTemplateEditorNorm_PercentileHeader2_2": {
+  "originalValue": "Percentile 2",
+  "value": "Percentiel 2",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceTestTemplateEditorNorm_PercentileHeader3_2": {
+  "originalValue": "Percentile 3",
+  "value": "Percentiel 3",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceTestTemplateEditorNorm_RawHeader_2": {
+  "originalValue": "Score",
+  "value": "Score",
+  "valueAsOriginal": "Y"
+ },
+ "AdminInterfaceTestTemplateEditorNorm_ScaleHeader_2": {
+  "originalValue": "Scale",
+  "value": "Schaal",
+  "valueAsOriginal": "N"
+ },
+ "AdminInterfaceTestTemplateEditorTestCapShowTestClosureScreenLabel": {
+  "originalValue": "Show the test closure screen after the test",
+  "value": "Het scherm test afsluiting weergeven na de test",
+  "valueAsOriginal": "N"
+ },
+ "BatteryChangeEditor.NoTestsYet": {
+  "originalValue": "No tests added yet",
+  "value": "Nog geen tests toegevoegd",
+  "valueAsOriginal": "N"
+ },
+ "BatteryChangeEditor.SelectATest": {
+  "originalValue": "Select a test to add to the battery",
+  "value": "Selecteer een test om aan de batterij toe te voegen",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorButtonBar": {
+  "originalValue": "Actions",
+  "value": "Acties",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorDeleteButtonLabel": {
+  "originalValue": "Delete battery",
+  "value": "Batterij verwijderen",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorDescriptionFor": {
+  "originalValue": "Enter a description",
+  "value": "Voer een omschrijving in",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorDescriptionLabel": {
+  "originalValue": "Battery\n                description",
+  "value": "Batterij beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorDescriptionTT": {
+  "originalValue": "Please enter a description.",
+  "value": "Geef een omschrijving op.",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorHeader": {
+  "originalValue": "Edit battery",
+  "value": "Batterij bewerken",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorRemarksLabel": {
+  "originalValue": "Remarks",
+  "value": "Opmerkingen",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorSaveButtonLabel": {
+  "originalValue": "Save battery",
+  "value": "Batterij opslaan",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorTestActiveLabel": {
+  "originalValue": "Battery can be used",
+  "value": "Batterij kan worden gebruikt",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorTestsIncludeOtherLanguagesLabel": {
+  "originalValue": "Include tests in other languages",
+  "value": "Tests opnemen in andere talen",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorTestsInputListLabel": {
+  "originalValue": "Tests in this battery",
+  "value": "Tests in deze batterij",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorTestsSelectionC1": {
+  "originalValue": "No tests added yet",
+  "value": "Nog geen tests toegevoegd",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorTestsSelectionH1": {
+  "originalValue": "Test name",
+  "value": "Test naam",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorTestsSelectionH2": {
+  "originalValue": "Test language",
+  "value": "Test taal",
+  "valueAsOriginal": "N"
+ },
+ "BatteryEditorTestsSelectionH3": {
+  "originalValue": "Norm 1",
+  "value": "Norm 1",
+  "valueAsOriginal": "Y"
+ },
+ "BatteryEditorTestsSelectionH4": {
+  "originalValue": "Norm 2",
+  "value": "Norm 2",
+  "valueAsOriginal": "Y"
+ },
+ "BatteryEditorTestsSelectionH5": {
+  "originalValue": "Norm 3",
+  "value": "Norm 3",
+  "valueAsOriginal": "Y"
+ },
+ "BatteryEditorTestsSelectionH6": {
+  "originalValue": "Actions",
+  "value": "Acties",
+  "valueAsOriginal": "N"
+ },
+ "BatteryListerInterfaceEditSessionEditHeader": {
+  "originalValue": "Overview of available batteries",
+  "value": "Overzicht van de beschikbare batterijen",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorEditAPIKeyHeader": {
+  "originalValue": "External API key",
+  "value": "Externe API-sleutel",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorEditAccordionLabel": {
+  "originalValue": "External API key (DO NOT SHARE OR SHOW TO ANYONE!)",
+  "value": "Externe API-sleutel (niet te delen of te laten zien aan iedereen!)",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorEditButtonBar_GenerateAPIKeyLabel": {
+  "originalValue": "Generate (new) API key",
+  "value": "Genereer (nieuwe) API sleutel",
+  "valueAsOriginal": "N"
+ },
+ "ConsultantEditorInterfaceExternalAPIKeyLabel": {
+  "originalValue": "External API Key",
+  "value": "Externe API-sleutel",
+  "valueAsOriginal": "N"
+ },
+ "CreditsUsedPortlet.GraphHeader": {
+  "originalValue": "Credit usage (ticks)",
+  "value": "Het gebruik van het krediet (tikken)",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-ITSLimitations": {
+  "originalValue": "ITS consultant limitation settings",
+  "value": "DE consultant beperking instellingen",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-MailServer": {
+  "originalValue": "Mail server settings",
+  "value": "Mail serverinstellingen",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-MaxNumberOfConsulants-lbl": {
+  "originalValue": "Max number of consultants",
+  "value": "Max aantal consultants",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-MaxNumberOfConsulants-val": {
+  "originalValue": "Maximum number of consultant accounts per customer (enter a number or leave empty for unlimited)",
+  "value": "Maximum aantal consultant accounts per klant (Voer een nummer in of laat leeg voor onbeperkt)",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPPassword-lbl": {
+  "originalValue": "SMTP Password",
+  "value": "SMTP-wachtwoord",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPPassword-val": {
+  "originalValue": "Enter the SMTP user password to login to the SMTP server",
+  "value": "Voer het SMTP-gebruikerswachtwoord in om in te loggen op de SMTP-server",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPPort-lbl": {
+  "originalValue": "SMTP Port",
+  "value": "SMTP-poort",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPPort-val": {
+  "originalValue": "Enter the SMTP Port name",
+  "value": "Voer de naam van de SMTP-poort in",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPSender-lbl": {
+  "originalValue": "SMTP sender",
+  "value": "SMTP-afzender",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPSender-val": {
+  "originalValue": "Enter a mail address as the default senders address",
+  "value": "Voer een e-mail adres in als het standaardadres voor afzenders",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPServer-lbl": {
+  "originalValue": "SMTP Server",
+  "value": "SMTP-server",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPServer-val": {
+  "originalValue": "Enter the SMTP server name",
+  "value": "Voer de naam van de SMTP-server in",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPUseTLS-lbl": {
+  "originalValue": "SMTP UseTLS",
+  "value": "SMTP UseTLS",
+  "valueAsOriginal": "Y"
+ },
+ "CustomerSettingsDiv-SMTPUseTLS-val": {
+  "originalValue": "Enter the SMTP UseTLS flag value (T or F)",
+  "value": "Voer de SMTP UseTLS Flag waarde (T of F)",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPUser-lbl": {
+  "originalValue": "SMTP User",
+  "value": "SMTP-gebruiker",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsDiv-SMTPUser-val": {
+  "originalValue": "Enter the SMTP User name to login to the SMTP server",
+  "value": "Voer de SMTP-gebruikersnaam in om in te loggen op de SMTP-server",
+  "valueAsOriginal": "N"
+ },
+ "CustomerSettingsInterfaceEditHeader": {
+  "originalValue": "Edit customer settings",
+  "value": "Klantinstellingen bewerken",
+  "valueAsOriginal": "N"
+ },
+ "ITSBattery.js.AfterBattery": {
+  "originalValue": "/* please see manual for instructions before using battery scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van de batterij scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSBattery.js.BeforeBattery": {
+  "originalValue": "/* please see manual for instructions before using battery scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van de batterij scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSBatteryListerEditor_ArchivedHeader": {
+  "originalValue": "Archived",
+  "value": "Gearchiveerde",
+  "valueAsOriginal": "N"
+ },
+ "ITSBatteryListerEditor_Description": {
+  "originalValue": "Description",
+  "value": "Beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "ITSCreditsOrderByMailEditor.CreditMailBody": {
+  "originalValue": "Order for {0}.000 credit units, ordered by {1} for organisation {2} with id {3}.",
+  "value": "Order voor {0} .000 credit eenheden, gerangschikt door {1} voor organisatie {2} met id {3}.",
+  "valueAsOriginal": "N"
+ },
+ "ITSCreditsOrderByMailEditor.CreditMailSubject": {
+  "originalValue": "Order for {0}.000 credit units",
+  "value": "Order voor {0}. 000 kredieteenheden",
+  "valueAsOriginal": "N"
+ },
+ "ITSCreditsUsedListerEditor_InvoiceCode": {
+  "originalValue": "Invoice code",
+  "value": "Factuur code",
+  "valueAsOriginal": "N"
+ },
+ "ITSCreditsUsedListerEditor_SessionName": {
+  "originalValue": "Used for session",
+  "value": "Gebruikt voor sessie",
+  "valueAsOriginal": "N"
+ },
+ "ITSCreditsUsedListerEditor_TotalTicks": {
+  "originalValue": "Ticks used",
+  "value": "Teken gebruikt",
+  "valueAsOriginal": "N"
+ },
+ "ITSCreditsUsedListerEditor_UsageDateTime": {
+  "originalValue": "Usage date and time",
+  "value": "Gebruik datum en tijd",
+  "valueAsOriginal": "N"
+ },
+ "ITSCreditsUsedListerEditor_UserName": {
+  "originalValue": "Used for candidate",
+  "value": "Gebruikt voor kandidaat",
+  "valueAsOriginal": "N"
+ },
+ "ITSHelpers.js.saveFileLocally.FileNameToSave": {
+  "value": "Geef bestandsnaam op om op te slaan"
+ },
+ "ITSOrganisationListerEditor_DescriptionContactMail": {
+  "originalValue": "Contact e-mail",
+  "value": "Contact e-mail",
+  "valueAsOriginal": "Y"
+ },
+ "ITSOrganisationListerEditor_DescriptionContactPerson": {
+  "originalValue": "Contact person",
+  "value": "Contact persoon",
+  "valueAsOriginal": "N"
+ },
+ "ITSOrganisationListerEditor_DescriptionContactPhone": {
+  "originalValue": "Contact phone",
+  "value": "Contact telefoon",
+  "valueAsOriginal": "N"
+ },
+ "ITSOrganisationListerEditor_DescriptionCountry": {
+  "originalValue": "Country",
+  "value": "Land",
+  "valueAsOriginal": "N"
+ },
+ "ITSOrganisationListerEditor_DescriptionLicenseEndDate": {
+  "originalValue": "License end date",
+  "value": "Einddatum licentie",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.Costs": {
+  "originalValue": "Costs",
+  "value": "Kosten",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.Description": {
+  "originalValue": "Description ",
+  "value": "Beschrijving ",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.Language": {
+  "originalValue": "Language",
+  "value": "Language",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTest.js.AfterNormingScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.AfterScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.BeforeNormingScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.BeforeScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.Per360": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.Post360": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.Pre360": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTest.js.ScaleScoreScript": {
+  "originalValue": "/* please see manual for instructions before using complex scripting */",
+  "value": "/* Raadpleeg de handleiding voor instructies voor het gebruik van complexe scripting */",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.af": {
+  "originalValue": "Afrikaans",
+  "value": "Afrikaans",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.ar": {
+  "originalValue": "Arabic",
+  "value": "Arabisch",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.bg": {
+  "originalValue": "Bulgarian",
+  "value": "Bulgaars",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.bn": {
+  "originalValue": "Bangla",
+  "value": "Bangla",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.bs": {
+  "originalValue": "Bosnian (Latin)",
+  "value": "Bosnisch (Latijn)",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ca": {
+  "originalValue": "Catalan",
+  "value": "Catalaans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.cs": {
+  "originalValue": "Czech",
+  "value": "Tsjechisch",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.cy": {
+  "originalValue": "Welsh",
+  "value": "Welsh",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.da": {
+  "originalValue": "Danish",
+  "value": "Deens",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.de": {
+  "originalValue": "German",
+  "value": "Duits",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.el": {
+  "originalValue": "Greek",
+  "value": "Grieks",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.en": {
+  "originalValue": "English",
+  "value": "Engels",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.es": {
+  "originalValue": "Spanish",
+  "value": "Spaans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.et": {
+  "originalValue": "Estonian",
+  "value": "Estisch",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.fa": {
+  "originalValue": "Persian",
+  "value": "Perzisch",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.fi": {
+  "originalValue": "Finnish",
+  "value": "Fins",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.fil": {
+  "originalValue": "Filipino",
+  "value": "Filipijns",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.fj": {
+  "originalValue": "Fijian",
+  "value": "Fijian",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.fr": {
+  "originalValue": "French",
+  "value": "Frans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.he": {
+  "originalValue": "Hebrew",
+  "value": "Hebreeuws",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.hi": {
+  "originalValue": "Hindi",
+  "value": "Hindi",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.hr": {
+  "originalValue": "Croatian",
+  "value": "Kroatisch",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ht": {
+  "originalValue": "Haitian Creole",
+  "value": "Ha\u00eftiaans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.hu": {
+  "originalValue": "Hungarian",
+  "value": "Hongaars",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.id": {
+  "originalValue": "Indonesian",
+  "value": "Indonesisch",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.it": {
+  "originalValue": "Italian",
+  "value": "Italiaans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ja": {
+  "originalValue": "Japanese",
+  "value": "Japans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ko": {
+  "originalValue": "Korean",
+  "value": "Koreaans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.lt": {
+  "originalValue": "Lithuanian",
+  "value": "Litouws",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.lv": {
+  "originalValue": "Latvian",
+  "value": "Lets",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.mg": {
+  "originalValue": "Malagasy",
+  "value": "Malagasi",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ms": {
+  "originalValue": "Malay",
+  "value": "Maleis",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.mt": {
+  "originalValue": "Maltese",
+  "value": "Maltees",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.mww": {
+  "originalValue": "Hmong Daw",
+  "value": "(Opmeer)",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.nb": {
+  "originalValue": "Norwegian",
+  "value": "Noors",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.nl": {
+  "originalValue": "Dutch",
+  "value": "Nederlands",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.otq": {
+  "originalValue": "Queretaro Otomi",
+  "value": "Queretaro Otom\u00ed",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.pl": {
+  "originalValue": "Polish",
+  "value": "Pools",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.pt": {
+  "originalValue": "Portuguese",
+  "value": "Portugees",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ro": {
+  "originalValue": "Romanian",
+  "value": "Roemeens",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ru": {
+  "originalValue": "Russian",
+  "value": "Russisch",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.sk": {
+  "originalValue": "Slovak",
+  "value": "Slowaaks",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.sl": {
+  "originalValue": "Slovenian",
+  "value": "Sloveens",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.sm": {
+  "originalValue": "Samoan",
+  "value": "Samoan",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.sr-cyrl": {
+  "originalValue": "Serbian (Cyrillic)",
+  "value": "Servisch (Cyrillisch)",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.sr-latn": {
+  "originalValue": "Serbian (Latin)",
+  "value": "Servisch (Latijn)",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.sv": {
+  "originalValue": "Swedish",
+  "value": "Zweeds",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.sw": {
+  "originalValue": "Kiswahili",
+  "value": "Kiswahili",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.ta": {
+  "originalValue": "Tamil",
+  "value": "Tamil",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.th": {
+  "originalValue": "Thai",
+  "value": "Thais",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.tlh": {
+  "originalValue": "Klingon",
+  "value": "Klingon",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.to": {
+  "originalValue": "Tongan",
+  "value": "Tongaans",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.tr": {
+  "originalValue": "Turkish",
+  "value": "Turks",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ty": {
+  "originalValue": "Tahitian",
+  "value": "Tahitian",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.uk": {
+  "originalValue": "Ukrainian",
+  "value": "Oekra\u00efens",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.ur": {
+  "originalValue": "Urdu",
+  "value": "Urdu",
+  "valueAsOriginal": "Y"
+ },
+ "ITSTranslate.vi": {
+  "originalValue": "Vietnamese",
+  "value": "Vietnamees",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.yua": {
+  "originalValue": "Yucatec Maya",
+  "value": "Yucateeks Maya",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.yue": {
+  "originalValue": "Cantonese (Traditional)",
+  "value": "Kantonees (traditioneel)",
+  "valueAsOriginal": "N"
+ },
+ "ITSTranslate.zh-hans": {
+  "originalValue": "Chinese Simplified",
+  "value": "Vereenvoudigd Chinees",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditor-LanguageSelectLabel": {
+  "originalValue": "Mail template language",
+  "value": "E-mail sjabloontaal",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorInterfaceEditHeader": {
+  "originalValue": "Edit e-mail templates",
+  "value": "E-mail sjablonen bewerken",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorLabel": {
+  "originalValue": "Body of this mail",
+  "value": "Hoofdtekst van deze mail",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTemplateDescriptionHeaderMS": {
+  "originalValue": "Description",
+  "value": "Beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTemplateType-O": {
+  "originalValue": "Other",
+  "value": "Andere",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTemplateType-PC": {
+  "originalValue": "Password reset mail for consultant",
+  "value": "Password reset mail voor consultant",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTemplateType-PS": {
+  "originalValue": "Password reset mail for candidate",
+  "value": "Password reset mail voor kandidaat",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTemplateType-S": {
+  "originalValue": "Session invitation mail",
+  "value": "Uitnodiging voor sessie-mail",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTemplateTypeHeader": {
+  "originalValue": "Template type",
+  "value": "Sjabloontype",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTestDescriptionLabel": {
+  "originalValue": "Description",
+  "value": "Beschrijving",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditorTestSubjectLabel": {
+  "originalValue": "Subject",
+  "value": "Onderwerp",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditor_ActionHeader": {
+  "originalValue": "Actions",
+  "value": "Acties",
+  "valueAsOriginal": "N"
+ },
+ "MailTemplateEditor_WriterFieldsLabel": {
+  "originalValue": "Usable fields",
+  "value": "Bruikbare velden",
+  "valueAsOriginal": "N"
+ },
+ "PersonListerController.PersonStatusArchived": {
+  "originalValue": "(archived)",
+  "value": "gearchiveerde",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-CompanyName-lbl": {
+  "originalValue": "Company name",
+  "value": "Bedrijfsnaam",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-CompanyName-val": {
+  "originalValue": "Company name",
+  "value": "Bedrijfsnaam",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-ITSLimitations": {
+  "originalValue": "ITS consultant limitation settings",
+  "value": "DE consultant beperking instellingen",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-LegalCopyright-lbl": {
+  "originalValue": "Copyright message",
+  "value": "Copyright bericht",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-LegalCopyright-val": {
+  "originalValue": "Copyright message",
+  "value": "Copyright bericht",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-LegalStuff": {
+  "originalValue": "Legal notices",
+  "value": "Wettelijke vermeldingen",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-Mail": {
+  "originalValue": "Mail address settings",
+  "value": "Instellingen voor e-mail adressen",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-MailServer": {
+  "originalValue": "Mail server settings",
+  "value": "Mail serverinstellingen",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-MaxNumberOfConsulants-lbl": {
+  "originalValue": "Max number of consultants",
+  "value": "Max aantal consultants",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-MaxNumberOfConsulants-val": {
+  "originalValue": "Maximum number of consultant accounts per customer (enter a number or leave empty for unlimited)",
+  "value": "Maximum aantal consultant accounts per klant (Voer een nummer in of laat leeg voor onbeperkt)",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPPassword-lbl": {
+  "originalValue": "SMTP Password",
+  "value": "SMTP-wachtwoord",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPPassword-val": {
+  "originalValue": "Enter the SMTP user password to login to the SMTP server",
+  "value": "Voer het SMTP-gebruikerswachtwoord in om in te loggen op de SMTP-server",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPPort-lbl": {
+  "originalValue": "SMTP Port",
+  "value": "SMTP-poort",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPPort-val": {
+  "originalValue": "Enter the SMTP Port name",
+  "value": "Voer de naam van de SMTP-poort in",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPSender-lbl": {
+  "originalValue": "SMTP sender",
+  "value": "SMTP-afzender",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPSender-val": {
+  "originalValue": "Enter a mail address as the default senders address",
+  "value": "Voer een e-mail adres in als het standaardadres voor afzenders",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPServer-lbl": {
+  "originalValue": "SMTP Server",
+  "value": "SMTP-server",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPServer-val": {
+  "originalValue": "Enter the SMTP server name",
+  "value": "Voer de naam van de SMTP-server in",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPUseTLS-lbl": {
+  "originalValue": "SMTP UseTLS",
+  "value": "SMTP UseTLS",
+  "valueAsOriginal": "Y"
+ },
+ "ServerSettingsDiv-SMTPUseTLS-val": {
+  "originalValue": "Enter the SMTP UseTLS flag value (T or F)",
+  "value": "Voer de SMTP UseTLS Flag waarde (T of F)",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPUser-lbl": {
+  "originalValue": "SMTP User",
+  "value": "SMTP-gebruiker",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-SMTPUser-val": {
+  "originalValue": "Enter the SMTP User name to login to the SMTP server",
+  "value": "Voer de SMTP-gebruikersnaam in om in te loggen op de SMTP-server",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-TranslateKey-lbl": {
+  "originalValue": "Microsoft Azure translation key",
+  "value": "Microsoft Azure-Vertaal sleutel",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-TranslateKey-val": {
+  "originalValue": "Enter the Microsoft Azure translation key to enable translation services",
+  "value": "De Microsoft Azure-Vertaal sleutel invoeren om vertaalservices in te schakelen",
+  "valueAsOriginal": "N"
+ },
+ "ServerSettingsDiv-Translation": {
+  "originalValue": "Translation settings",
+  "value": "Instellingen voor vertaling",
+  "valueAsOriginal": "N"
+ },
+ "SessionChangeEditor.BatteryText": {
+  "originalValue": "Battery : ",
+  "value": "Batterij: ",
+  "valueAsOriginal": "N"
+ },
+ "SessionChangeEditor.NoTestsYet": {
+  "originalValue": "No tests added yet",
+  "value": "Nog geen tests toegevoegd",
+  "valueAsOriginal": "N"
+ },
+ "SessionChangeEditor.SelectATest": {
+  "originalValue": "Select a questionnaire to add to the session",
+  "value": "Een vragenlijst selecteren die u aan de sessie wilt toevoegen",
+  "valueAsOriginal": "N"
+ },
+ "SessionListerController.SessionStatusArchived": {
+  "originalValue": "archived",
+  "value": "Gearchiveerde",
+  "valueAsOriginal": "N"
+ },
+ "SessionListerController.SessionStatusBusy": {
+  "originalValue": "in progress",
+  "value": "in uitvoering",
+  "valueAsOriginal": "N"
+ },
+ "SessionListerController.SessionStatusCommon": {
+  "originalValue": "available in the system",
+  "value": "beschikbaar in het systeem",
+  "valueAsOriginal": "N"
+ },
+ "SessionListerController.SessionStatusDone": {
+  "value": "gereed voor rapportage"
+ },
+ "SessionListerController.SessionStatusReady": {
+  "originalValue": "ready for test taking",
+  "value": "klaar voor de test te nemen",
+  "valueAsOriginal": "N"
+ },
+ "SessionMailer.PasswordUsePrevious": {
+  "originalValue": "* please use the previously e-mailed password *",
+  "value": "* Gebruik het eerder e-mailed wachtwoord *",
+  "valueAsOriginal": "N"
+ },
+ "SessionNewEditor.BatteryText": {
+  "originalValue": "Battery : ",
+  "value": "Batterij: ",
+  "valueAsOriginal": "N"
+ },
+ "SessionNewEditor.DatesInvalid": {
+  "value": "Controleer de datumvelden in de velden geboortedata en sessie geldigheid. De waarden zijn geen geldige datums."
+ },
+ "SessionNewEditor.NoTestsYet": {
+  "originalValue": "No tests added yet",
+  "value": "Nog geen tests toegevoegd",
+  "valueAsOriginal": "N"
+ },
+ "SessionNewEditor.PasswordMissing": {
+  "originalValue": "The password is not set or less than 6 characters.",
+  "value": "Het wachtwoord is niet ingesteld of minder dan 6 tekens.",
+  "valueAsOriginal": "N"
+ },
+ "SessionNewEditor.SelectATest": {
+  "originalValue": "Select a questionnaire to add to the session",
+  "value": "Een vragenlijst selecteren die u aan de sessie wilt toevoegen",
+  "valueAsOriginal": "N"
+ },
+ "TestTemplateEditor.screen": {
+  "originalValue": "Screen",
+  "value": "Scherm",
+  "valueAsOriginal": "N"
+ },
+ "TestTemplateEditor.varName": {
+  "originalValue": "ScreenComponent",
+  "value": "ScreenComponent",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.Header": {
+  "originalValue": "Save report",
+  "value": "Rapport opslaan",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSReportTemplateEditor": {
+  "originalValue": "You have not saved your changes. Would you like to save now?",
+  "value": "U hebt uw wijzigingen niet opgeslagen. Wilt u nu opslaan?",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSReportTemplateEditor_0": {
+  "originalValue": "No",
+  "value": "No",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.ITSReportTemplateEditor_1": {
+  "originalValue": "Yes",
+  "value": "Ja",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSScreenTemplateEditorTemplateLoadError": {
+  "originalValue": "The template could not be loaded. Please return to the template overview screen and try to load the details again.",
+  "value": "De sjabloon kan niet worden geladen. Ga terug naar het template overzicht scherm en probeer de details opnieuw te laden.",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSScreenTemplateEditorTemplateLoadError_0": {
+  "originalValue": "OK",
+  "value": "OK",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.ITSSessionEditor": {
+  "originalValue": "Are you sure you want to delete this test? If this is the only test in this session then the session will be deleted as well.",
+  "value": "Weet u zeker dat u deze test wilt verwijderen? Als dit de enige test in deze sessie dan de sessie zal ook worden geschrapt.",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSSessionEditor.DeleteTest": {
+  "originalValue": "Are you sure you want to delete this test? If this is the only test in this session then the session will be deleted as well.",
+  "value": "Weet u zeker dat u deze test wilt verwijderen? Als dit de enige test in deze sessie dan de sessie zal ook worden geschrapt.",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSSessionEditor.DeleteTest_0": {
+  "originalValue": "Yes, delete this test",
+  "value": "Ja, deze test verwijderen",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSSessionEditor.DeleteTest_1": {
+  "originalValue": "No",
+  "value": "No",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.ITSSessionEditor_0": {
+  "originalValue": "Yes, delete this test",
+  "value": "Ja, deze test verwijderen",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSSessionEditor_1": {
+  "originalValue": "No",
+  "value": "No",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.ITSTestTemplateEditorDeleteReport": {
+  "originalValue": "Are you sure you want to delete this report?",
+  "value": "Weet u zeker dat u dit rapport wilt verwijderen?",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSTestTemplateEditorDeleteReport_0": {
+  "originalValue": "Yes",
+  "value": "Ja",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSTestTemplateEditorDeleteReport_1": {
+  "originalValue": "No",
+  "value": "No",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.ITSTestTemplateEditorDeleteTest": {
+  "originalValue": "Are you sure you want to delete this test?",
+  "value": "Weet u zeker dat u deze test wilt verwijderen?",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSTestTemplateEditorDeleteTest_0": {
+  "originalValue": "Yes",
+  "value": "Ja",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSTestTemplateEditorDeleteTest_1": {
+  "originalValue": "No",
+  "value": "No",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.ITSTestTemplateEditorSaveTestRequired": {
+  "originalValue": "You have not saved your changes. Would you like to save now?",
+  "value": "U hebt uw wijzigingen niet opgeslagen. Wilt u nu opslaan?",
+  "valueAsOriginal": "N"
+ },
+ "dialogMessages.ITSTestTemplateEditorSaveTestRequired_0": {
+  "originalValue": "No",
+  "value": "No",
+  "valueAsOriginal": "Y"
+ },
+ "dialogMessages.ITSTestTemplateEditorSaveTestRequired_1": {
+  "originalValue": "Yes",
+  "value": "Ja",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.Button": {
+  "originalValue": "Close",
+  "value": "Sluiten",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.Header": {
+  "originalValue": "Error",
+  "value": "Fout",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.ITSBatteryLister.LoadListFailed": {
+  "originalValue": "The battery list could not be loaded at this moment.",
+  "value": "De batterij lijst kon niet worden geladen op dit moment.",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.ITSConsultantEditor.SaveFailed": {
+  "originalValue": "The consultant could not be saved.",
+  "value": "De consultant kan niet worden opgeslagen.",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.ITSLoginController.LoadingCompanyFailed": {
+  "originalValue": "Loading company information failed",
+  "value": "Het laden van bedrijfsgegevens is mislukt",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.ITSReportTemplateEditor.DeleteReportFailed": {
+  "originalValue": "The report could not be deleted at this moment.",
+  "value": "Het rapport kan op dit moment niet worden verwijderd.",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.ITSReportTemplateEditor.LoadReportFailed": {
+  "value": "Het rapport kan op dit moment niet worden geladen."
+ },
+ "errorMessages.ITSResetPasswordEditor.PasswordOK": {
+  "originalValue": "Your password is successfully updated",
+  "value": "Uw wachtwoord is bijgewerkt",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.ITSResetPasswordEditor.PasswordTooShort": {
+  "originalValue": "The new password is not good. The password needs to be at least 10 characters long and contain upper and lowercase letters, at least one digit and at least one special character.",
+  "value": "Het nieuwe wachtwoord is niet goed. Het wachtwoord moet minimaal 10 tekens lang zijn en hoofd-en kleine letters, ten minste \u00e9\u00e9n cijfer en ten minste \u00e9\u00e9n speciaal teken bevatten.",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.ITSSessionEditor.PersonUnarchived": {
+  "originalValue": "The person belonging to this session has been assigned a new login password. Please resend the test invitation.",
+  "value": "De persoon die tot deze sessie behoort, heeft een nieuw inlogwachtwoord gekregen. Gelieve de test uitnodiging opnieuw te verzenden.",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.OrganisationEditorController.SwitchFailed": {
+  "originalValue": "The Organisation could not be switched.",
+  "value": "De organisatie kon niet worden geschakeld.",
+  "valueAsOriginal": "N"
+ },
+ "errorMessages.mailTemplateLoadedError": {
+  "originalValue": "The e-mail templates could not be loaded at this moment. Please try again later.",
+  "value": "De e-mail sjablonen kunnen op dit moment niet worden geladen. Probeer het later opnieuw.",
+  "valueAsOriginal": "N"
+ },
+ "infoMessages.Button": {
+  "value": "Sluiten"
+ },
+ "infoMessages.Header": {
+  "value": "Informatie"
+ },
+ "infoMessages.ITSReportTemplateLocalPublisherLister.SaveTemplateOK": {
+  "value": "De rapportsjabloon is gepubliceerd."
+ },
+ "infoMessages.ITSResetPasswordEditor.PasswordOK": {
+  "originalValue": "Your password is successfully updated",
+  "value": "Uw wachtwoord is bijgewerkt",
+  "valueAsOriginal": "N"
+ },
+ "infoMessages.ITSScreenTemplateLocalPublisherLister.SaveTemplateOK": {
+  "originalValue": "The screen template was successfully published.",
+  "value": "De scherm sjabloon is met succes gepubliceerd.",
+  "valueAsOriginal": "N"
+ },
+ "infoMessages.ITSSessionMailerEditor.MailOK": {
+  "value": "De e-mail is verstuurd."
+ },
+ "infoMessages.ITSTestTemplateLocalPublisherLister.SaveTemplateOK": {
+  "value": "De test sjabloon is met succes gepubliceerd."
+ },
+ "infoMessages.SessionViewReports.NoReports": {
+  "value": "There are no reports to show for this test."
+ },
+ "js.MasterTag": {
+  "originalValue": "[centrally managed]",
+  "value": "[centraal beheerde]",
+  "valueAsOriginal": "N"
+ },
+ "warningMessages.Button": {
+  "originalValue": "Close",
+  "value": "Sluiten",
+  "valueAsOriginal": "N"
+ },
+ "warningMessages.Header": {
+  "originalValue": "Warning",
+  "value": "Waarschuwing",
+  "valueAsOriginal": "N"
+ },
+ "warningMessages.ITSChangeExistingSessionEditor.DuplicateTestAdded": {
+  "originalValue": "Please note : You have added the same test twice to this session. ",
+  "value": "Let op: je hebt dezelfde test twee keer toegevoegd aan deze sessie. ",
+  "valueAsOriginal": "N"
+ },
+ "warningMessages.ITSCreditsOrderByMailEditor.MailFailed": {
+  "originalValue": "Sending the e-mail failed.",
+  "value": "Het verzenden van de e-mail is mislukt.",
+  "valueAsOriginal": "N"
+ },
+ "warningMessages.ITSSessionMailerEditor.ConsultantLoadingFailed": {
+  "value": "De consultant kon niet worden geladen."
+ },
+ "warningMessages.ITSSessionMailerEditor.MailFailed": {
+  "value": "Het verzenden van de e-mail is mislukt."
+ },
+ "warningMessages.SessionNewEditor.SessionValidationFailed": {
+  "originalValue": "The session could not be saved because information is missing",
+  "value": "De sessie kan niet worden opgeslagen omdat er gegevens ontbreken",
+  "valueAsOriginal": "N"
+ },
+ "warningMessages.passwordExpired": {
+  "originalValue": "Your password has expired. Please change your password now.",
+  "value": "Uw wachtwoord is verlopen. Wijzig nu uw wachtwoord.",
+  "valueAsOriginal": "N"
+ }
+}

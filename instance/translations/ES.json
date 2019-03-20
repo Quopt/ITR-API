@@ -1,0 +1,650 @@
+{
+ "#AdminInterface.AISDM": {
+  "value": "\n                Seleccione lo que desea hacer\n            "
+ },
+ "#AdminInterface.AdminInterfaceCompanyHailingHeading": {
+  "value": "Welcome to&nbsp;"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementBody": {
+  "value": "Tienes <label class=\"alert-info\" id=\"AdminInterfaceCreditManagementBodyAmount\">0</label> unidades de cr\u00e9dito en tu sistema.<br>"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementBodyAmount": {
+  "value": "0"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementButton": {
+  "value": "Pedir m\u00e1s cr\u00e9ditos"
+ },
+ "#AdminInterface.AdminInterfaceCreditManagementHeader": {
+  "value": "Gesti\u00f3n de cr\u00e9dito"
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateButton": {
+  "value": "Empezar a invitar al candidato"
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateExplanation": {
+  "value": "Invite a un nuevo candidato a tomar una o m\u00e1s pruebas en el ITS. Rellene la direcci\u00f3n de correo electr\u00f3nico del candidato que aparece a continuaci\u00f3n y pulse el bot\u00f3n <b>Start para invitar al candidato</b> a continuaci\u00f3n."
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateHeading": {
+  "value": "Invitar a nuevo candidato"
+ },
+ "#AdminInterface.AdminInterfaceInviteNewCandidateUserName": {
+  "value": "Direcci\u00f3n de correo electr\u00f3nico"
+ },
+ "#AdminInterface.AdminInterfaceInviteRRSessionsButton": {
+  "value": "Mostrar en curso o reportar sesiones listas"
+ },
+ "#AdminInterface.AdminInterfaceInviteRRSessionsHeader": {
+  "value": "Sesiones de informe listas"
+ },
+ "#AdminInterface.AdminInterfaceInviteRRSessionsbody": {
+  "value": "Las sesiones a continuaci\u00f3n se han completado recientemente. \u00bfla sesi\u00f3n sigue en curso o no est\u00e1 en la lista de abajo? A continuaci\u00f3n, haga clic en el enlace."
+ },
+ "#AdminInterface.AdminInterfaceInviteTCatalogBody": {
+  "value": "Si desea ver la lista de pruebas disponibles o leer el manual de prueba, seleccione la prueba o haga clic en el enlace de m\u00e1s abajo."
+ },
+ "#AdminInterface.AdminInterfaceInviteTCatalogHeader": {
+  "value": "Cat\u00e1logo de pruebas"
+ },
+ "#AdminInterface.AdminInterfaceInviteTCatalogdropdownMenu": {
+  "value": "\n                Seleccione su prueba\n            "
+ },
+ "#AdminInterface.AdminInterfaceInviteUserMngtBody": {
+  "value": "Los siguientes usuarios han iniciado sesi\u00f3n recientemente. \u00bfNecesita un nuevo usuario o el acceso de usuario necesita ser revocado? Haga clic en <b>control acceso de usuario</b>."
+ },
+ "#AdminInterface.AdminInterfaceInviteUserMngtButton": {
+  "value": "Controlar el acceso de usuarios"
+ },
+ "#AdminInterface.AdminInterfaceInviteUserMngtHeader": {
+  "value": "Administraci\u00f3n de usuarios"
+ },
+ "#AdminInterface.AdminInterfaceSettingsBody": {
+  "value": "Controla tus preferencias personales o de tus empresas eligiendo lo que quieres hacer en la lista de abajo. O abra el men\u00fa del sistema para m\u00e1s opciones."
+ },
+ "#AdminInterface.AdminInterfaceSettingsButton": {
+  "value": "Men\u00fa abierto"
+ },
+ "#AdminInterface.AdminInterfaceSettingsHeader": {
+  "value": "Sus preferencias"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-ActionsHeader": {
+  "value": "Actions"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-GenericHeader": {
+  "value": "Generic section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-HTMLHeader": {
+  "value": "HTML and scripting section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeader": {
+  "value": "Preview section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderPnP": {
+  "value": "PnP preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderTE": {
+  "value": "Test Editor preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-PreviewHeaderTT": {
+  "value": "Test Taking preview"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-TemplateVarSelectHeader": {
+  "value": "Select template variable"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-VarHeader": {
+  "value": "Template variable section"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-addTemplateVar": {
+  "value": "\n                        <i class=\"fa fa-sm fa-plus aria-hidden='true'\"></i>Agregar nueva variable de plantilla"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-copyButton": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i>Copiar esta plantilla"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-deleteButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Eliminar esta plantilla"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-descriptionHeader": {
+  "value": "Description"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-downloadButton": {
+  "value": "<i class=\"fa fa-fw fa-download\"></i>Descargar definici\u00f3n de plantillas"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-explanationHeader": {
+  "value": "Explanation"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGenerator": {
+  "value": "Generator snippet (id, num_blocks)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorGeneratePreviews": {
+  "value": "\n                    <i class=\"fa fa-sm fa-check aria-hidden='true'\"></i>Mostrar previsualizaciones"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorGetValue": {
+  "value": "Snippet to get value (id, num_blocks)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorHTML": {
+  "value": "HTML template"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorHTMLPnP": {
+  "value": "HTML template for PnP input (if different from\n                    html template)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorInitScript": {
+  "value": "Initialisation snippet (id, num_blocks, test_mode, template_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorPnP": {
+  "value": "Generator snippet PnP (id, num_blocks)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorSetValue": {
+  "value": "Snippet to set value (id, num_blocks, varvalue)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-labelGeneratorValidateScript": {
+  "value": "Validation snippet (id, num_blocks, test_mode, template_values, runtime_values)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-remarksHeader": {
+  "value": "Remarks"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-removeTemplateVar": {
+  "value": "\n                    <i class=\"fa fa-sm fa-minus aria-hidden='true'\"></i>Quitar variable de plantilla"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-saveButton": {
+  "value": "<i id=\"AdminInterfaceScreenTemplate-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i>Guardar plantilla de pantalla"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesPnPButton": {
+  "value": "<i class=\"fa fa-eye\"></i>Mostrar valores"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesTEButton": {
+  "value": "<i class=\"fa fa-eye\"></i>Mostrar valores"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-showValuesTTButton": {
+  "value": "<i class=\"fa fa-eye\"></i>Mostrar valores"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-uploadButton": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>Cargar definici\u00f3n de plantilla"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardefaultvalueheader": {
+  "value": "Default value"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vardescriptionheader": {
+  "value": "Description"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-varnameheader": {
+  "value": "Var name"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartype": {
+  "value": "Type of variable"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeA": {
+  "value": "Text (multiple lines)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeB": {
+  "value": "On/off switch"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeE": {
+  "value": "Explanation"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeH": {
+  "value": "HTML Text (multiple lines)"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeL": {
+  "value": "List of choices"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplate-vartypeT": {
+  "value": "Text"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateEditHeaderH4": {
+  "value": "Edit and create test screen templates"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectHeader": {
+  "value": "Select a screen template or add a new one"
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectList": {
+  "value": "\n            <li id=\"AdminInterfaceScreenTemplateSelectListLoading\">lista est\u00e1 cargando...</li>\n        "
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenTemplateSelectListLoading": {
+  "value": " lista est\u00e1 cargando..."
+ },
+ "#AdminInterfaceScreenTemplateEditor.AdminInterfaceScreenVarSelectListLoading": {
+  "value": "list is loading ..."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditAccordionLabel": {
+  "value": "Session validity"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditHeader": {
+  "value": "Create new candidate session"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditInformationLabel": {
+  "value": "Information about the candidate"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditMailIncludeResultsLabel": {
+  "value": "Incluir los resultados de las pruebas en el correo"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditMailMeLabel": {
+  "value": "Env\u00edeme un correo cuando finalice esta sesi\u00f3n en"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionEditNotificationLabel": {
+  "value": "Session notification settings"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateBirthDateLabel": {
+  "value": "Nacimiento"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateFirstNameLabel": {
+  "value": "Nombre de pila"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateForLabel": {
+  "value": "Direcci\u00f3n de correo electr\u00f3nico del candidato o login"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateInitialsLabel": {
+  "value": "Iniciales"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateLastNameLabel": {
+  "value": "Apellido"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidatePasswordLabel": {
+  "value": "Por favor ingrese una contrase\u00f1a."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexFemaleLabel": {
+  "value": "Mujer"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexLabel": {
+  "value": "Sexo"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexMaleLabel": {
+  "value": "Hombre"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionCandidateSexUnknownLabel": {
+  "value": "Desconocido"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionLabel": {
+  "value": "Descripci\u00f3n de la sesi\u00f3n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionDescriptionTT": {
+  "value": "Introduzca una descripci\u00f3n de la sesi\u00f3n."
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionEndDateEnforcedLabel": {
+  "value": "Detener la sesi\u00f3n cuando todav\u00eda est\u00e1 en curso en esta fecha y hora"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionEndDateLabel": {
+  "value": "La sesi\u00f3n no puede iniciarse <b>despu\u00e9s de</b> esta fecha y hora"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionStartDateLabel": {
+  "value": "No se puede iniciar la sesi\u00f3n <b>antes</b> de esta fecha y hora"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsIncludeOtherLanguagesLabel": {
+  "value": "Incluir pruebas en otros idiomas"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsInputListLabel": {
+  "value": "Pruebas en esta sesi\u00f3n"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionC1": {
+  "value": "No tests added yet"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH1": {
+  "value": "Test name"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH2": {
+  "value": "Test language"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH3": {
+  "value": "Norm 1"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH4": {
+  "value": "Norm 2"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH5": {
+  "value": "Norm 3"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionH6": {
+  "value": "Actions"
+ },
+ "#AdminInterfaceSessionEditNew.AdminInterfaceSessionNewSessionTestsSelectionHead": {
+  "value": "\n                    <tr>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH1\">Test name</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH2\">Test language</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH3\">Norm 1</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH4\">Norm 2</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH5\">Norm 3</td>\n                        <td id=\"AdminInterfaceSessionNewSessionTestsSelectionH6\">Actions</td>\n                    </tr>\n                    "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceScreenTemplate-downloadButton": {
+  "value": "<i class=\"fa fa-fw fa-download\"></i>Descargar definici\u00f3n de plantillas"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceScreenTemplate-uploadButton": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>Cargar definici\u00f3n de plantilla"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-LanguageSelectLabel": {
+  "value": "Lenguaje de prueba"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-uploadButtonA": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>Cargar archivo"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor-uploadButtonB": {
+  "value": "<i class=\"fa fa-fw fa-upload\"></i>Cargar archivo PDF"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonCopy": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i>Copiar esta prueba"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonDelete": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Eliminar esta definici\u00f3n de prueba"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonSave": {
+  "value": "<i id=\"AdminInterfaceTestTemplateEditor-saveIcon\" class=\"fa fa-fw fa-thumbs-up\"></i>Guardar definici\u00f3n de prueba"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonTrial": {
+  "value": "<i class=\"fa fa-fw fa-flask\"></i>Funcionamiento del laboratorio de prueba"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionButtonTrialPnP": {
+  "value": "<i class=\"fa fa-fw fa-flask\"></i>Laboratorio de prueba de ejecuci\u00f3n PNP"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorActionHeader": {
+  "value": "Actions"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddNewTest": {
+  "value": "\n            <i class=\"fa fa-sm fa-plus aria-hidden='true'\"></i>Agregar nueva definici\u00f3n de prueba"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddNormButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Agregar nueva norma"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScaleButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Agregar nueva escala"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScoreMatrixButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Agregar nueva l\u00ednea de puntuaci\u00f3n"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScreenButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Agregar nueva pantalla"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorAddScreenComponentButton": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Agregar nuevo componente de pantalla"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorCatalogMediaHeader": {
+  "value": "Catalog media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorCopyToNewScreenButton": {
+  "value": "<i class=\"fa fa-fw fa-copy\"></i>Copiar a la nueva pantalla"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorHeaderH4": {
+  "value": "Edit and create test definitions"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_AvailableCatalogCol": {
+  "value": "Available catalog files"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_AvailableMediaCol": {
+  "value": "Available media files"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_CatFileLinkCol": {
+  "value": "File link"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_CatFileNameCol": {
+  "value": "File name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_FileLink": {
+  "value": "File link"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorMedia_FileName": {
+  "value": "File name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormActiveHeader": {
+  "value": "Norm can be used"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormDefaultOrderLabel": {
+  "value": "Default norm order"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormExplanationHeader": {
+  "value": "Norm explanation"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormHeader": {
+  "value": "Select norm"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormNameHeader": {
+  "value": "Norm description"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormPercentilesHeader": {
+  "value": "Percentile values present"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormRemarksHeader": {
+  "value": "Remarks (only shown here)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-D": {
+  "value": "Decile (1-10)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-O": {
+  "value": "Other"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-P": {
+  "value": "Percentile (1-100)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-S": {
+  "value": "Stanine (1-9)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-T": {
+  "value": "Textual"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormType-V": {
+  "value": "Vigintile (1-20)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormTypeHeader": {
+  "value": "Norm type"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorNormVarNameHeader": {
+  "value": "Norm variable name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorRemoveNormButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Eliminar norma"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorRemoveScaleButton": {
+  "value": "<i class=\"fa fa-fw fa-trash\"></i>Quitar escala"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleActiveHeader": {
+  "value": "Show scale as test result"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleDefaultHeader": {
+  "value": "Default value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleExplanationHeader": {
+  "value": "Scale explanation"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleHeader": {
+  "value": "Select scale"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleMaxHeader": {
+  "value": "Maximum value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleMinHeader": {
+  "value": "Minimum value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleNameHeader": {
+  "value": "Scale description"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScalePrecisionHeader": {
+  "value": "Scale precision"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleRemarksHeader": {
+  "value": "Remarks (only shown here)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleType-N": {
+  "value": "Numeric"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleType-T": {
+  "value": "Textual"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleTypeHeader": {
+  "value": "Scale type"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScaleVarNameHeader": {
+  "value": "Scale variable name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenContentsHeaderText": {
+  "value": "Screen contents"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics": {
+  "value": "Screen\n                    dynamics"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_addNewLine": {
+  "value": "<i class=\"fa fa-fw fa-plus\"></i>Agregar nueva regla de din\u00e1mica de pantalla"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_source": {
+  "value": "Value"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_sourcecomponent": {
+  "value": "Screen\n                                component (source)\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_targetcomponent": {
+  "value": "Screen\n                                component (target)\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenDynamics_targetvisible": {
+  "value": "Visible\n                            "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenHeaderText": {
+  "value": "Screen list"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorScreenVarText": {
+  "value": "Screen item settings"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectHeader": {
+  "value": "Test definition\n        section"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectListLoading": {
+  "value": " lista est\u00e1 cargando..."
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorSelectSelectList": {
+  "value": "\n            <li id=\"AdminInterfaceTestTemplateEditorSelectListLoading\">lista est\u00e1 cargando...</li>\n        "
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormColumnsHeader": {
+  "value": "Norm columns"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormComplexScoringHeader": {
+  "value": "Complex norming\n                    script"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabNormsListHeader": {
+  "value": "Norms"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesComplexScoringHeader": {
+  "value": "Complex scoring\n                    script"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesListHeader": {
+  "value": "Scales"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeader": {
+  "value": "Scoring matrix"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderA": {
+  "value": "Answer"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderQ": {
+  "value": "Question"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderScale": {
+  "value": "Scale"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTabScalesScoreMatrixHeaderScore": {
+  "value": "Score"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestActiveLabel": {
+  "value": "Test can be\n                used"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCatalogExplanationLabel": {
+  "value": "Catalog information"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestCopyrightsLabel": {
+  "value": "Copyrights"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestDescriptionLabel": {
+  "value": "Description"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestExplanationLabel": {
+  "value": "Explanation"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestMediaHeader": {
+  "value": "Test media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestNameLabel": {
+  "value": "Test name"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditorTestRemarksLabel": {
+  "value": "Remarks (only shown\n                here)"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabCatalog": {
+  "value": "Catalog information"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabMedia": {
+  "value": "Media"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabNorms": {
+  "value": "Norms"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScoring": {
+  "value": "Scoring"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabScreens": {
+  "value": "Screens"
+ },
+ "#AdminInterfaceTestTemplateEditor.AdminInterfaceTestTemplateEditor_TabTestInformation": {
+  "value": "Test information"
+ },
+ "#ForgotWindow.ForgotWindowBackButton": {
+  "value": "\n                    Cancel\n                "
+ },
+ "#ForgotWindow.ForgotWindowInstruction": {
+  "value": "Please enter your email address below and we will send you a link to reset your password."
+ },
+ "#ForgotWindow.ForgotWindowResetButton": {
+  "value": "\n                    Send password reset mail\n                "
+ },
+ "#ForgotWindow.UserName": {
+  "value": "E-mail"
+ },
+ "#LoginWindow.LoginWindowHeading": {
+  "value": "Login"
+ },
+ "#LoginWindow.LoginWindowLoginButton": {
+  "value": "\n                    Login\n                "
+ },
+ "#LoginWindow.LoginWindowPassword": {
+  "value": "Password"
+ },
+ "#LoginWindow.LoginWindowPasswordForgotten": {
+  "value": "Have you forgotten your\n                    password?"
+ },
+ "#LoginWindow.LoginWindowSelectLanguageLabel": {
+  "value": "Select other language"
+ },
+ "#LoginWindow.LoginWindowUserName": {
+  "value": "User name"
+ },
+ "#LoginWindowSelectCompany.LoginWindowSelectCompanyHeader": {
+  "value": "\n                    <img src=\"images\\its.png\" style=\"width:64px;height:64px;vertical-align:text-bottom;\">\n                    Select the company you want to work with "
+ },
+ "#NavbarsAdmin.NavbarsAdminLogoutButton": {
+  "value": "Logout\n        "
+ },
+ "#NavbarsAdmin.NavbarsAdminSearchButton": {
+  "value": "Search"
+ },
+ "#NavbarsAdmin.NavbarsLabelHeadingWelcome": {
+  "value": "Welcome"
+ },
+ "#PasswordResetWindow.PasswordResetWindowBackButton": {
+  "value": "\n                Cancel\n            "
+ },
+ "#PasswordResetWindow.PasswordResetWindowButton": {
+  "value": "\n                Reset password\n            "
+ },
+ "#PasswordResetWindow.UserName": {
+  "value": "Confirm new password"
+ },
+ "ITSTest.js.AfterNormingScript": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ },
+ "ITSTest.js.AfterScript": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ },
+ "ITSTest.js.BeforeNormingScript": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ },
+ "ITSTest.js.BeforeScript": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ },
+ "ITSTest.js.Per360": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ },
+ "ITSTest.js.Post360": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ },
+ "ITSTest.js.Pre360": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ },
+ "ITSTest.js.ScaleScoreScript": {
+  "value": "/* Consulte el manual de instrucciones antes de utilizar secuencias de comandos complejas */"
+ }
+}

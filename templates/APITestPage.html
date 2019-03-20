@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ITS API V1 test page</title>
+    <link rel="stylesheet" href="static/style.css">
+	<script src="static/jquery/jquery-3.1.1.js"></script>
+  </head>
+  <body>
+    <!-- page content -->
+	<br/>Username : <input type="text" id="user" value="Admin"> Password : <input type="text" id="password" value="22CentigradeInArequipaToday"> <button id="loginButton" type="button">Login</button><button id="resetPasswordButton" type="button">Reset password</button><button id="sendResetPasswordButton" type="button">Send reset password</button><button id="checkForValidTokenButton" type="button">Check token</button><button id="logoutButton" type="button">Logout</button> <br/>
+    Login token <input type="text" id="LoginToken"><span id="MultipleCompaniesFound"></span><br/>
+	<br/>Page number : <input type="text" id="pageNr" value="0"> Page size : <input type="text" id="pageSize"> Page sort : <input type="text" id="pageSort"> Search field : <input type="text" id="searchField"> Include archived : <input type="checkbox" id="includeArchived" checked="True"> Include master : <input type="checkbox" id="includeMaster" checked="True"> <br/>
+	<br/>Entity to search : <select id="EntityToSearch">
+        <option value="audittrail"> audittrail</option>
+        <option value="batteries">batteries </option>
+        <option value="educations">educations </option>
+        <option value="generatedreports"> generatedreports</option>
+        <option value="groups"> groups</option>
+        <option value="nationalities"> nationalities</option>
+        <option value="organisations">organisations </option>
+        <option value="persons "> persons</option>
+        <option value="sessions">sessions </option>
+        <option value="sessiontests">sessiontests </option>
+        <option value="reportdefinitions">reportdefinitions </option>
+        <option value="reportdefinitionchapters">reportdefinitionchapters</option>
+        <option value="companies"> companies</option>
+        <option value="creditgrants">creditgrants </option>
+        <option value="creditusages">creditusages </option>
+        <option value="datagathering">datagathering</option>
+        <option value="rightstemplates">rightstemplates </option>
+        <option value="logins">logins </option>
+        <option value="tokens"> tokens</option>
+        <option value="systemsettings">systemsettings </option>
+        <option value="screentemplates">screentemplates </option>
+        <option value="tests">tests </option>
+        <option value="translations">translations</option>
+    </select>
+    Search text : <input type="text" id="SearchText">
+    ID/Rest of URL : <input type="text" style="width:40%" id="IDText">
+    <button id="SearchButton" type="button" onclick="genericSearchFunction($('#EntityToSearch').val(),$('#IDText').val());">search</button>
+
+	<br/><textarea style="width: 100%;" rows="12" id="SearchResult"></textarea><br/>
+    <button type="button" id="post" onclick="genericPostFunction( lastSearchedPath, $('#SearchResult').val());">Post new data</button>
+	<br/><br/><br/><br/><br/>
+	<div id="callResult"></div>
+<script>
+baseURL = window.location.href.substring(0, window.location.href.lastIndexOf('/')+1);
+LoginToken = '';
+IncludeArchived = 'Y';
+IncludeMaster = 'Y';
+retrievedData = "";
+
+function htmlEntities(str)
+{
+   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+$('#includeArchived').click(function() {
+  if ($('#includeArchived').is(":checked")) { IncludeArchived = 'Y'; } else { IncludeArchived = 'N'; }
+ }
+)
+
+$('#includeMaster').click(function() {
+  if ($('#includeMaster').is(":checked")) { IncludeMaster = 'Y'; } else { IncludeMaster = 'N'; }
+ }
+)
+
+$('#resetPasswordButton').click(function() {
+   $.ajax({
+      url: baseURL + 'resetpassword',
+	  headers: {
+	      'UserID' : $('#user').val() ,
+		  'Password' : $('#password').val(),
+          'SessionID' : $('#LoginToken').val()
+		  } ,
+      error: function() {
+         alert('<p>resetPasswordButton failed. Please try again.</p>' );
+      },
+      success: function(data, textStatus, xhr) {
+	     alert('resetPasswordButton succeeded, password is changed')
+      },
+      type: 'POST'
+   });
+});
+
+$('#sendResetPasswordButton').click(function() {
+   $.ajax({
+      url: baseURL + 'sendresetpassword',
+	  headers: {
+	      'UserID' : $('#user').val() ,
+		  'Password' : $('#password').val(),
+          'SessionID' : $('#LoginToken').val()
+		  } ,
+      error: function() {
+         alert('<p>sendResetPasswordButton failed. Please try again.</p>' );
+      },
+      success: function(data, textStatus, xhr) {
+	     alert('call succeeded, check mail for reset token');
+      },
+      type: 'POST'
+   });
+});
+
+$('#checkForValidTokenButton').click(function() {
+   $.ajax({
+      url: baseURL + 'checktoken',
+	  headers: {
+	      'UserID' : $('#user').val() ,
+		  'Password' : $('#password').val(),
+          'SessionID' : $('#LoginToken').val()
+		  } ,
+      error: function() {
+         alert('<p>checkTokenButton failed. Please try again.</p>' );
+      },
+      success: function(data, textStatus, xhr) {
+	     alert('checkTokenButton call succeeded');
+      },
+      type: 'POST'
+   });
+})
+
+$('#logoutButton').click(function() {
+   $.ajax({
+      url: baseURL + 'logout',
+	  headers: {
+	      'UserID' : $('#user').val() ,
+		  'Password' : $('#password').val(),
+          'SessionID' : $('#LoginToken').val()
+		  } ,
+      error: function() {
+         alert('<p>logoutButton failed. Please try again.</p>' );
+      },
+      success: function(data, textStatus, xhr) {
+	     alert('logoutButton call succeeded');
+      },
+      type: 'POST'
+   });
+})
+
+$('#loginButton').click(function() {
+   $.ajax({
+      url: baseURL + 'login',
+	  headers: {
+	      'UserID' : $('#user').val() ,
+		  'Password' : $('#password').val()
+		  } ,
+      error: function() {
+         alert('<p>Login failed. Please try again.</p>' + baseURL + 'login');
+      },
+      contentType: "application/json",
+	  dataType : "json",
+      success: function(data, textStatus, xhr) {
+	     LoginToken = data['SessionID'];
+		 MultipleCompaniesFound = data['MultipleCompaniesFound'];
+		 $('#LoginToken').val(LoginToken);
+		 $('#MultipleCompaniesFound')[0].innerHTML = MultipleCompaniesFound;
+      },
+      type: 'GET'
+   });
+});
+
+var lastSearchedPath = "";
+function genericSearchFunction(path, id_to_search){
+   $("#SearchResult")[0].innerHTML = "";
+   //alert(baseURL + path + '/' + id_to_search);
+   lastSearchedPath =  baseURL + path + '/' + id_to_search ;
+   if (id_to_search!=''){
+	   var resultsajax = $.ajax({
+		  url: lastSearchedPath,
+		  headers: { 'SessionID' : LoginToken,
+                     'UserID' : $('#user').val() } ,
+		  error: function() {
+			 alert('<p>Retrieving '+ path + '/' + id_to_search + ' failed. Please try again.</p>' );
+		  },
+		  contentType: "application/json",
+	      dataType : "json",
+		  success: function(data, textStatus, xhr) {
+			 $("#SearchResult")[0].innerHTML = JSON.stringify(data); 
+			 retrievedData = data;
+		  },
+		  type: 'GET'
+	   });
+   }
+   else
+   {
+	   var resultsajax = $.ajax({
+		  url: baseURL + path,
+		  headers: {
+			  'SessionID' : LoginToken,
+              'UserID' : $('#user').val(),
+			  'StartPage' : $('#pageNr').val(),
+			  'PageSize' : $('#pageSize').val(),
+			  'Sort' : $('#pageSort').val(),
+			  'SearchField' : $('#searchField').val(),
+			  'IncludeArchived' : IncludeArchived,
+			  'IncludeMaster' : IncludeMaster,
+			  'RecordFilter' : $('#userSearchText').val()
+			  } ,
+		  error: function() {
+			 alert('<p>Retrieving '+ path + ' failed. Please try again.</p>' );
+		  },
+		  contentType: "application/json",
+	      dataType : "json",
+		  success: function(data, textStatus, xhr) {
+			 $("#SearchResult")[0].innerHTML = JSON.stringify(data); 
+			 retrievedData = data;
+		  },
+		  type: 'GET'
+	   });
+	}
+}
+
+var result1, result2, result3;
+function genericPostFunction(path, json_to_commit) {
+    var resultsajax = $.ajax({
+		  url: path,
+		  headers: { 'SessionID' : LoginToken,
+                     'UserID' : $('#user').val() } ,
+		  data : json_to_commit,
+          error: function() {
+			 alert('<p>Posting '+ path + '/' + json_to_commit + ' failed. Please try again.</p>' );
+		  },
+		  contentType: "application/json",
+	      //dataType : "json",
+		  success: function(data, textStatus, xhr) {
+			 result1 = data;
+			 result2 = textStatus;
+			 result3 = xhr;
+		  },
+		  type: 'POST'
+	   });
+}
+
+$('#checkTokenButton').click(function() {
+	   var parsajax = $.ajax({
+		  url: baseURL + 'CHECKTOKEN',
+		  headers: { 'SessionID' : LoginToken, 'UserID' : $('#user').val(),
+		    'CompanyID' : $('#checkTokenCompanyID').val()
+			},
+		  error: function() {
+			 alert('<p>Checking token failed. Please try again.</p>' );
+		  },
+		  success: function(data, textStatus, xhr) {
+			 alert('<p>Checking token OK. </p>' );
+		  },
+		  type: 'GET'
+	   });
+});
+
+</script>
+  </body>
+</html>
