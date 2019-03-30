@@ -344,7 +344,7 @@ def clientauditlog_get():
                                                                                   ITR_minimum_access_levels.regular_office_user)
 
 
-@app.route('/audittrail/<identity>', methods=['GET'])
+@app.route('/audittrail/<identity>', methods=['GET', 'POST', 'DELETE'])
 def clientauditlog_get_id(identity):
     check_master_header(request)
 
@@ -1020,31 +1020,6 @@ def reportdefinition_get_id(identity):
                                                                      ITR_minimum_access_levels.report_author,
                                                                      identity)
 
-
-@app.route('/reportdefinitionchapters', methods=['GET'])
-def reportdefinitionchapter_get():
-    return ITSRestAPIORMExtensions.ReportChapter().common_paginated_read_request(request,
-                                                                                 ITR_minimum_access_levels.regular_office_user)
-
-
-@app.route('/reportdefinitionchapters/<identity>', methods=['GET', 'POST', 'DELETE'])
-def reportdefinitionchapter_get_id(identity):
-    if request.method == 'GET':
-        return ITSRestAPIORMExtensions.ReportChapter().return_single_object(request,
-                                                                            ITR_minimum_access_levels.regular_office_user,
-                                                                            identity)
-    elif request.method == 'POST':
-        check_master_header(request)
-        return ITSRestAPIORMExtensions.ReportChapter().change_single_object(request,
-                                                                            ITR_minimum_access_levels.test_and_report_author,
-                                                                            identity)
-    elif request.method == 'DELETE':
-        check_master_header(request)
-        return ITSRestAPIORMExtensions.ReportChapter().delete_single_object(request,
-                                                                            ITR_minimum_access_levels.test_and_report_author,
-                                                                            identity)
-
-
 @app.route('/companies', methods=['GET'])
 def companies_get():
     check_master_header(request)
@@ -1238,11 +1213,11 @@ def rightstemplates_get_id(identity):
                                                                                identity)
     elif request.method == 'POST':
         return ITSRestAPIORMExtensions.SecurityTemplate().change_single_object(request,
-                                                                               ITR_minimum_access_levels.regular_office_user,
+                                                                               ITR_minimum_access_levels.organisation_supervisor,
                                                                                identity)
     elif request.method == 'DELETE':
         return ITSRestAPIORMExtensions.SecurityTemplate().delete_single_object(request,
-                                                                               ITR_minimum_access_levels.regular_office_user,
+                                                                               ITR_minimum_access_levels.organisation_supervisor,
                                                                                identity)
 
 
@@ -1690,7 +1665,7 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
             return jsonify(file_array), 200
         elif request.method == 'DELETE':
             # delete this folder
-            if os.path.exists(pathname):
+            if os.path.exists(pathname) and not test_taking_user:
                 ITSHelpers.remove_folder(pathname, basepathname)
             return "folder removed", 200
     else:
