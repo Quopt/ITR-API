@@ -973,6 +973,7 @@ def reportdefinition_get():
 def reportdefinition_get_id(identity):
     basepathname = os.path.dirname(os.path.join(os.sep, app.instance_path, 'cache'))
     pathname = os.path.dirname(os.path.join(os.sep, app.instance_path, 'cache', ITSHelpers.string_split_to_filepath(identity)))
+    include_master = False
     try:
         include_master = request.headers['IncludeMaster'] == "Y"
     except:
