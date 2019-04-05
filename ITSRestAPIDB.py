@@ -203,7 +203,7 @@ def create_db(db_name):
     if sql_path == "":
         sql_path = application.app.instance_path
     sql_command = ""
-    file_name = "\\CREATEDB.SQL"
+    file_name = os.sep + "CREATEDB.SQL"
 
     run_db_script(db_engine_object, db_name, file_name, sql_path)
 
@@ -255,7 +255,7 @@ def migrate_db(db_engine, db_name, current_version, db_id):
     if sql_path == "":
         sql_path = application.app.instance_path
     # check if there is a migration file, if not abort
-    file_name = "\\MIGRATEDB" + str(current_version) + ".SQL"
+    file_name = os.sep + "MIGRATEDB" + str(current_version) + ".SQL"
     if os.path.isfile(sql_path + file_name):
         run_db_script(db_engine, db_name, file_name, sql_path)
         migrate_db(db_engine, db_name, current_version + 1, db_id)
