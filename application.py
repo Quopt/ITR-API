@@ -1883,4 +1883,15 @@ if __name__ == '__main__':
     # app.debug = True
     # MET FLASK app.run()
     # app.run(debug=True)
-    serve(app.wsgi_app, threads = 25, listen="*:443")
+    itrport = "443"
+    try:
+        itrport = str(os.environ['ITRPORT'])
+    except:
+        pass
+    itrthreads = 25
+    try:
+        itrthreads = int(os.environ['ITRTHREADS'])
+    except:
+        pass
+
+    serve(app.wsgi_app, threads = itrthreads, listen="*:" + itrport)
