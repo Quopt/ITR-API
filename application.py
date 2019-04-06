@@ -38,6 +38,7 @@ from ITSLogging import *
 from ITSPrefixMiddleware import *
 import ITSTranslate
 import ITSHelpers
+import ITSGit
 
 app = Flask(__name__, instance_relative_config=True)
 app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/api')
@@ -1872,6 +1873,60 @@ def send_mail():
     else:
         return "You are not authorised to sent emails",404
 
+@app.route('/refreshpublics', methods=['POST'])
+def refresh_publics():
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+        request)
+    if master_user:
+        currentrefreshday = (datetime.today() - datetime.utcfromtimestamp(0)).days
+        lastrefreshday = 0
+        with ITSRestAPIDB.session_scope("") as session:
+            param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                 ITSRestAPIORMExtensions.SystemParam.ParameterName == "LASTREPOREFRESH").first()
+            newinstall = False
+            if param is None:
+              param = ITSRestAPIORMExtensions.SystemParam()
+              param.ParameterName  = "LASTREPOREFRESH"
+              session.add(param)
+              newinstall = True
+            if lastrefreshday != currentrefreshday:
+                param.ParValue = currentrefreshday
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-ReportTemplates')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-TestTemplates')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-TestScreenTemplates')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-Plugins')
+                if newinstall:
+                    ITSGit.install_from_repo(app.instance_path,'https://github.com/Quopt/ITR-TestScreenTemplates')
+        return "OK", 200
+
+    else:
+        return "You are not authorised to refresh the public repositories", 404
+
+@app.route('/listpublics/{reponame}', methods=['GET'])
+def list_publics(reponame):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+        request)
+    if master_user:
+        return 200, ITSGit.list_repo_files(app.instance_path, reponame)
+
+@app.route('/listpublics/{reponame}/{filename}', methods=['GET'])
+def list_publics_file(reponame, filename):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+        request)
+    if master_user:
+        short_repo_name = reponame.split('/')[-1]
+        newfilename = os.path.join(os.sep, app.instance_path, 'cache', 'git', short_repo_name, filename)
+        if os.path.exists(newfilename):
+            raw_bytes = ""
+            with open(newfilename, 'rb') as r:
+                raw_bytes = r.read()
+            response = make_response(raw_bytes)
+            response.headers['Content-Type'] = "application/octet-stream"
+            head, tail = os.path.split(newfilename)
+            response.headers['Content-Disposition'] = "inline; filename=" + tail
+            return response
+        else:
+            return 'File not found', 404
 
 @app.errorhandler(500)
 def internal_error(error):
