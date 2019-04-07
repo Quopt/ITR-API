@@ -1907,7 +1907,8 @@ def list_publics(reponame):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
     if master_user:
-        return 200, ITSGit.list_repo_files(app.instance_path, reponame)
+        tempfile =  ITSGit.list_repo_files(app.instance_path, reponame)
+        return tempfile , 200
 
 @app.route('/listpublics/<reponame>/<filename>', methods=['GET'])
 def list_publics_file(reponame, filename):
@@ -1927,6 +1928,27 @@ def list_publics_file(reponame, filename):
             return response
         else:
             return 'File not found', 404
+
+@app.route('/installpublics/itr-translation/<filename>', methods=['POST','DELETE'])
+def list_publics_file(reponame, filename):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+        request)
+    if master_user:
+        short_repo_name = reponame.split('/')[-1]
+        srcfilename = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'itr-translation', filename)
+        newfilename = os.path.join(os.sep, app.instance_path, 'translations', filename)
+        if request.method == "POST":
+            try:
+                shutil.copyfile(srcfilename, newfilename)
+                return "OK", 200
+            except:
+                return "File copy failed. Maybe you do not have sufficient rights on the file system", 404
+        elif request.method == "DELETE":
+            try:
+                os.remove(newfilename)
+                return "OK", 200
+            except:
+                return "File delete failed. Maybe you do not have sufficient rights on the file system", 404
 
 @app.errorhandler(500)
 def internal_error(error):
