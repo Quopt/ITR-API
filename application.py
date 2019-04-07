@@ -1889,14 +1889,16 @@ def refresh_publics():
               param.ParameterName  = "LASTREPOREFRESH"
               session.add(param)
               newinstall = True
+            else:
+                lastrefreshday = int(param.ParValue)
             if lastrefreshday != currentrefreshday:
                 param.ParValue = currentrefreshday
                 ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-reporttemplates')
                 ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testtemplates')
                 ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testscreentemplates')
                 ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-plugins')
-                if newinstall:
-                    ITSGit.install_from_repo(app.instance_path,'https://github.com/Quopt/itr-testscreentemplates')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-translations')
+
         return "OK", 200
 
     else:
