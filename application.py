@@ -1936,7 +1936,6 @@ def install_publics_file( filename):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
     if master_user:
-        short_repo_name = reponame.split('/')[-1]
         srcfilename = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'itr-translations', filename)
         newfilename = os.path.join(os.sep, app.instance_path, 'translations', filename)
         if request.method == "POST":
