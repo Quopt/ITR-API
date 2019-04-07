@@ -37,14 +37,14 @@ def list_repo_files(instance_path, repo_url):
     returnlist = []
     onlyfiles = [f for f in os.listdir(pathname) if os.path.isfile(os.path.join(pathname, f))]
     for f in onlyfiles:
-        if f != "LICENSE" and f != "README.md":
+        if f != "LICENSE" and f != "README.md" and f.split('.')[-1] != "itrinfo":
             a = {}
             a['name'] = f
             a['getdate'] = time.ctime(os.path.getmtime(os.path.join(pathname, f)))
             a['explanation'] = ''
-            tempfilename = os.path.join(pathname, f, '.itrinfo')
+            tempfilename = os.path.join(pathname, f + '.itrinfo')
             if os.path.exists(tempfilename):
-                a['explanation'] = open(tempfilename,"r").readlines()
+                a['explanation'] = open(tempfilename,"r").read()
 
             returnlist.append(a)
 
