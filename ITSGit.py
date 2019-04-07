@@ -40,6 +40,7 @@ def list_repo_files(instance_path, repo_url):
         a = {}
         a['name'] = f
         a['getdate'] = time.ctime(os.path.getmtime(os.path.join(pathname, f)))
+        if os.path.join(pathname, f)
         returnlist.append(a)
 
     return json.dumps(returnlist)

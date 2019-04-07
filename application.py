@@ -1891,25 +1891,25 @@ def refresh_publics():
               newinstall = True
             if lastrefreshday != currentrefreshday:
                 param.ParValue = currentrefreshday
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-ReportTemplates')
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-TestTemplates')
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-TestScreenTemplates')
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-Plugins')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-reporttemplates')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testtemplates')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testscreentemplates')
+                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-plugins')
                 if newinstall:
-                    ITSGit.install_from_repo(app.instance_path,'https://github.com/Quopt/ITR-TestScreenTemplates')
+                    ITSGit.install_from_repo(app.instance_path,'https://github.com/Quopt/itr-testscreentemplates')
         return "OK", 200
 
     else:
         return "You are not authorised to refresh the public repositories", 404
 
-@app.route('/listpublics/{reponame}', methods=['GET'])
+@app.route('/listpublics/<reponame>', methods=['GET'])
 def list_publics(reponame):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
     if master_user:
         return 200, ITSGit.list_repo_files(app.instance_path, reponame)
 
-@app.route('/listpublics/{reponame}/{filename}', methods=['GET'])
+@app.route('/listpublics/<reponame>/<filename>', methods=['GET'])
 def list_publics_file(reponame, filename):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
