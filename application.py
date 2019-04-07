@@ -1930,7 +1930,7 @@ def list_publics_file(reponame, filename):
             return 'File not found', 404
 
 @app.route('/installpublics/itr-translation/<filename>', methods=['POST','DELETE'])
-def list_publics_file(reponame, filename):
+def install_publics_file(reponame, filename):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
     if master_user:
