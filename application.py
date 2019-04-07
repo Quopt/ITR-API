@@ -1931,27 +1931,27 @@ def list_publics_file(reponame, filename):
         else:
             return 'File not found', 404
 
-@app.route('/installpublics/itr-translation/<filename>', methods=['POST','DELETE'])
+@app.route('/installpublics/itr-translations/<filename>', methods=['POST','DELETE'])
 def install_publics_file(reponame, filename):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
     if master_user:
         short_repo_name = reponame.split('/')[-1]
-        srcfilename = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'itr-translation', filename)
+        srcfilename = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'itr-translations', filename)
         newfilename = os.path.join(os.sep, app.instance_path, 'translations', filename)
         if request.method == "POST":
             try:
                 shutil.copyfile(srcfilename, newfilename)
                 return "OK", 200
             except Exception as ex:
-                print(ex.message)
+                app_log.error('Install publics API failed %s', str(e))
                 return "File copy failed. Maybe you do not have sufficient rights on the file system", 404
         elif request.method == "DELETE":
             try:
                 os.remove(newfilename)
                 return "OK", 200
             except Exception as ex:
-                print(ex.message)
+                app_log.error('Install publicsls API failed %s', str(e))
                 return "File delete failed. Maybe you do not have sufficient rights on the file system", 404
 
 @app.errorhandler(500)
