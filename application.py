@@ -1943,13 +1943,15 @@ def install_publics_file(reponame, filename):
             try:
                 shutil.copyfile(srcfilename, newfilename)
                 return "OK", 200
-            except:
+            except Exception as ex:
+                print(ex.message)
                 return "File copy failed. Maybe you do not have sufficient rights on the file system", 404
         elif request.method == "DELETE":
             try:
                 os.remove(newfilename)
                 return "OK", 200
-            except:
+            except Exception as ex:
+                print(ex.message)
                 return "File delete failed. Maybe you do not have sufficient rights on the file system", 404
 
 @app.errorhandler(500)
