@@ -25,7 +25,7 @@ def clone_or_refresh_repo(instance_path, repo_url):
         os.makedirs(basepathname)
     if not os.path.exists(pathname):
         os.makedirs(pathname)
-    if os.path.exists(pathname):
+    if not os.path.exists(pathname):
         subprocess.run(['git','clone',repo_url], cwd=basepathname)
     else:
         subprocess.run(['git', 'reset', '--hard', 'origin/master'], cwd=pathname)

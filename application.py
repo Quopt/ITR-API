@@ -1877,6 +1877,8 @@ def send_mail():
 def refresh_publics():
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
+    clone_needed = False
+
     if master_user:
         currentrefreshday = (datetime.today() - datetime.utcfromtimestamp(0)).days
         lastrefreshday = 0
@@ -1893,11 +1895,17 @@ def refresh_publics():
                 lastrefreshday = int(param.ParValue)
             if lastrefreshday != currentrefreshday:
                 param.ParValue = currentrefreshday
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-reporttemplates')
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testtemplates')
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testscreentemplates')
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-plugins')
-                ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-translations')
+                clone_needed = True
+
+        if clone_needed:
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-reporttemplates')
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testtemplates')
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testscreentemplates')
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-plugins')
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-translations')
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-API')
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-webclient')
+            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-Public-API')
 
         return "OK", 200
 
