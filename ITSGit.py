@@ -28,7 +28,9 @@ def clone_or_refresh_repo(instance_path, repo_url):
     if not os.path.exists(pathname):
         subprocess.run(['git','clone',repo_url], cwd=basepathname)
     else:
+        subprocess.run(['git', 'fetch', '--all'], cwd=pathname)
         subprocess.run(['git', 'reset', '--hard', 'origin/master'], cwd=pathname)
+        subprocess.run(['git', 'pull', 'origin', 'master'], cwd=pathname)
 
 def list_repo_files(instance_path, repo_url):
     short_repo_name = repo_url.split('/')[-1]
