@@ -15,6 +15,8 @@
 import os, time
 import subprocess
 import json
+from application import app_log
+
 
 def clone_or_refresh_repo(instance_path, repo_url):
     # https://github.com/Quopt/ITR-Docker
@@ -24,13 +26,22 @@ def clone_or_refresh_repo(instance_path, repo_url):
     if not os.path.exists(basepathname):
         os.makedirs(basepathname)
     if not os.path.exists(pathname):
-        os.makedirs(pathname)
-    if not os.path.exists(pathname):
-        subprocess.run(['git','clone',repo_url], cwd=basepathname)
+        try:
+            outputtext = subprocess.run(['git','clone',repo_url], cwd=basepathname, encoding='utf-8', stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        except Exception as e:
+            app_log.error('Clone failed %s', str(e))
+            print_outputtext (outputtext)
     else:
-        subprocess.run(['git', 'fetch', '--all'], cwd=pathname)
-        subprocess.run(['git', 'reset', '--hard', 'origin/master'], cwd=pathname)
-        subprocess.run(['git', 'pull', 'origin', 'master'], cwd=pathname)
+        outputtext = subprocess.run(['git', 'fetch', '--all'], cwd=pathname, encoding='utf-8', stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        print_outputtext (outputtext)
+        outputtext = subprocess.run(['git', 'reset', '--hard', 'origin/master'], cwd=pathname, encoding='utf-8', stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        print_outputtext (outputtext)
+        outputtext = subprocess.run(['git', 'pull', 'origin', 'master'], cwd=pathname, encoding='utf-8', stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        print_outputtext (outputtext)
+
+def print_outputtext( outputtext):
+    for line in outputtext.stdout.split('\n'):
+        app_log.warning(outputtext)
 
 def list_repo_files(instance_path, repo_url):
     short_repo_name = repo_url.split('/')[-1]
