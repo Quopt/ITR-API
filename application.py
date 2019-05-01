@@ -1971,14 +1971,14 @@ def install_publics_file( filename):
             try:
                 shutil.copyfile(srcfilename, newfilename)
                 return "OK", 200
-            except Exception as ex:
+            except Exception as e:
                 app_log.error('Install publics API failed %s', str(e))
                 return "File copy failed. Maybe you do not have sufficient rights on the file system", 404
         elif request.method == "DELETE":
             try:
                 os.remove(newfilename)
                 return "OK", 200
-            except Exception as ex:
+            except Exception as e:
                 app_log.error('Install publicsls API failed %s', str(e))
                 return "File delete failed. Maybe you do not have sufficient rights on the file system", 404
 
