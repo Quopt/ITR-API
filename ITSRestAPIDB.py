@@ -219,7 +219,7 @@ def run_db_script(db_engine_object, db_name, file_name, sql_path):
 
     global new_company_id, admin_user_id
 
-    app_log.info('Running db script %s on %s', [file_name, db_name])
+    app_log.info('Running db script %s on %s' % (file_name, db_name))
     with open(sql_path + file_name, 'r') as f:
         for line in f:
             if line.strip() == "":
@@ -229,7 +229,7 @@ def run_db_script(db_engine_object, db_name, file_name, sql_path):
                     sql_command_subst = sql_command_subst.replace('%TABLESPACE%', db_tablespace )
                     sql_command_subst = sql_command_subst.replace('%NEWCOMPANYID%', str(new_company_id))
                     sql_command_subst = sql_command_subst.replace('%ADMINUSERID%', str(admin_user_id))
-                    app_log.info(' %s > %s', [db_name, sql_command_subst])
+                    #app_log.info(' %s > %s' % (db_name, sql_command_subst))
                     db_engine_object.execution_options(isolation_level="AUTOCOMMIT").execute(sql_command_subst)
                 sql_command = ""
             else:

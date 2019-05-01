@@ -590,6 +590,13 @@ def sessionsview_get():
                                                                                      ITR_minimum_access_levels.regular_office_user)
     return a
 
+@app.route('/groupsessionsview', methods=['GET'])
+def groupsessionsview_get():
+    check_master_header(request)
+    a = ITSRestAPIORMExtensions.ViewClientGroupSessions().common_paginated_read_request(request,
+                                                                                     ITR_minimum_access_levels.regular_office_user)
+    return a
+
 @app.route('/sessiontests/<sessionid>', methods=['GET'])
 def sessiontests_get_for_session(sessionid):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
@@ -1847,6 +1854,20 @@ def translations(langcode):
             return "OK", 200
         else:
             return "no master user or no translation key set", 404
+
+@app.route('/translate/<sourcelangcode>/<targetlangcode>', methods=['GET'])
+def translate_string(sourcelangcode, targetlangcode):
+    token = request.headers['SessionID']
+    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        user_id, company_id)
+
+    if (master_user or translator_user or author_user or author_report_user) and ITSTranslate.translation_available():
+        text_to_translate = request.headers['TextToTranslate']
+        translated_text = ITSTranslate.get_translation_with_source_language(sourcelangcode, targetlangcode, text_to_translate)
+        return translated_text, 200
+    else:
+        return "Translations not available, check the azure translate string and the user's rights", 404
 
 @app.route('/sendmail', methods=['POST'])
 def send_mail():

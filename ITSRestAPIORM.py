@@ -747,3 +747,34 @@ class ViewClientSessionTestsWithPerson(Base):
     Description = Column(Unicode(200), nullable=False, server_default=text("('')"))
     SessionStatus = Column(Integer, nullable=False, server_default=text("((1))"))
     Active = Column(Boolean, nullable=False, server_default=text("True"))
+
+
+class ViewClientGroupSessions(Base):
+    __tablename__ = 'viewclientgroupsessions'
+
+    ID=Column(UUIDType(binary=False), primary_key=True)
+    GroupSessionID = Column(UUIDType(binary=False), nullable=False)
+    GroupID = Column(UUIDType(binary=False), nullable=False)
+    SessionType = Column(SmallInteger, nullable=False, server_default=text("((0))"))
+    Description = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    Goal = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    UsedBatteryIDs = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    UserDefinedFields = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    Remarks = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    SessionState = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    AllowedStartDateTime = Column(DateTime(timezone=True), nullable=False,
+                                  server_default=text("('2000-01-01 04:00:00 -1:00')"))
+    AllowedEndDateTime = Column(DateTime(timezone=True), nullable=False, server_default=text("('1-1-2100 9:00:00')"))
+    StartedAt = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
+    EndedAt = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
+    Status = Column(Integer, nullable=False, server_default=text("((1))"))
+    Active = Column(Boolean, nullable=False, server_default=text("True"))
+    EMailNotificationAdresses = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    EnforceSessionEndDateTime = Column(Boolean, nullable=False, server_default=text("False"))
+    ManagedByUserID = Column(UUIDType(binary=False), nullable=False,
+                             server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
+    EmailNotificationIncludeResults = Column(Boolean, nullable=False, server_default=text("False"))
+
+    readycount = Column(Integer, nullable=False, server_default=text("((0))"))
+    inprogresscount = Column(Integer, nullable=False, server_default=text("((0))"))
+    donecount = Column(Integer, nullable=False, server_default=text("((0))"))

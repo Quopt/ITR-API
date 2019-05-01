@@ -555,7 +555,9 @@ class ViewClientSessionTestsWithPerson(ITSRestAPIORM.ViewClientSessionTestsWithP
         , "AllowedStartDateTime", "AllowedEndDateTime", "StartedAt", "EndedAt"}
     may_work_with_own_objects_field = ""
 
-class ViewClientSessionsWithPerson(ITSRestAPIORM.ViewClientSessionsWithPerson, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
+
+class ViewClientSessionsWithPerson(ITSRestAPIORM.ViewClientSessionsWithPerson,
+                                   ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     identity_field = "ID"
     default_order_by_field = "Description"
     archive_field = "active"
@@ -568,5 +570,20 @@ class ViewClientSessionsWithPerson(ITSRestAPIORM.ViewClientSessionsWithPerson, I
         , "active"
         , "AllowedStartDateTime", "AllowedEndDateTime", "StartedAt", "EndedAt"}
 
-    unified_search_fields = {"Description", "EMail", "FirstName", "LastName", "Initials" }
+    unified_search_fields = {"Description", "EMail", "FirstName", "LastName", "Initials"}
     may_work_with_own_objects_field = "ManagedByUserID"
+
+
+class ViewClientGroupSessions(ITSRestAPIORM.ViewClientGroupSessions,
+                              ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
+    identity_field = "ID"
+    default_order_by_field = "Description"
+    archive_field = "active"
+    select_fields = {"ID"
+        , "Description"
+        , "active"
+        , "AllowedStartDateTime", "AllowedEndDateTime"}
+
+    unified_search_fields = {"Description"}
+    may_work_with_own_objects_field = "ManagedByUserID"
+
