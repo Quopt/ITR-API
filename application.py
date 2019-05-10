@@ -17,7 +17,7 @@ import datetime
 import json
 import time
 import os
-import hashlib, uuid
+import hashlib, uuid, urllib
 import types
 import traceback
 import shutil
@@ -1863,7 +1863,10 @@ def translate_string(sourcelangcode, targetlangcode):
         user_id, company_id)
 
     if (master_user or translator_user or author_user or author_report_user) and ITSTranslate.translation_available():
-        text_to_translate = request.headers['TextToTranslate']
+        request.get_data()
+        x = request.headers['ToTranslate']
+        text_to_translate = urllib.parse.unquote(x)
+
         translated_text = ITSTranslate.get_translation_with_source_language(sourcelangcode, targetlangcode, text_to_translate)
         return translated_text, 200
     else:
