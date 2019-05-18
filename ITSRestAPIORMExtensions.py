@@ -76,6 +76,7 @@ class ClientBatteries(ITSRestAPIORM.ClientBattery, ITSRestAPIORMExtendedFunction
     pass_through_fields = {"BatteryTests", "BatteryReports", "PluginData"}
     fields_to_be_removed = {}
 
+
 class ClientEducation(ITSRestAPIORM.ClientEducation, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
     identity_field = "ID"
@@ -91,6 +92,7 @@ class ClientEducation(ITSRestAPIORM.ClientEducation, ITSRestAPIORMExtendedFuncti
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
+
 
 class ClientGeneratedReport(ITSRestAPIORM.ClientGeneratedReport, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -189,7 +191,7 @@ class ClientPerson(ITSRestAPIORM.ClientPerson, ITSRestAPIORMExtendedFunctions.OR
     default_order_by_field = "EMail"
     select_fields = {"ID"
         , "EMail"
-#        , "Password"  passwords can only be stored, not retrieved for reasons of safety
+                     #        , "Password"  passwords can only be stored, not retrieved for reasons of safety
         , "FirstName"
         , "Initials"
         , "LastName"
@@ -252,7 +254,7 @@ class ClientSessionTest(ITSRestAPIORM.ClientSessionTest, ITSRestAPIORMExtendedFu
         , "WarningTime"
         , "CurrentPage"
         , "TotalPages"
-        }
+                     }
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Status", "HowTheTestIsTaken", "WarningMessage"}
@@ -305,6 +307,7 @@ class ClientSession(ITSRestAPIORM.ClientSession, ITSRestAPIORMExtendedFunctions.
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+
 class Report(ITSRestAPIORM.Report, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
     identity_field = "ID"
@@ -321,8 +324,9 @@ class Report(ITSRestAPIORM.Report, ITSRestAPIORMExtendedFunctions.ORMExtendedFun
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
-    pass_through_fields = {"PluginData","ReportGraphs"}
+    pass_through_fields = {"PluginData", "ReportGraphs"}
     fields_to_be_removed = {}
+
 
 class SecurityCompany(ITSRestAPIORM.SecurityCompany, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -342,7 +346,7 @@ class SecurityCompany(ITSRestAPIORM.SecurityCompany, ITSRestAPIORMExtendedFuncti
         , "CompanyCountry"
         , "InternationalVATNr", "MailAddress", "VisitingAddress", "InvoiceAddress"
         , "ContactPerson", "ContactPhone", "ContactEMail"
-        }
+                             }
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -376,10 +380,11 @@ class SecurityCreditUsage(ITSRestAPIORM.SecurityCreditUsage, ITSRestAPIORMExtend
         , "UserID"
         , "CompanyID"
         , "InvoiceCode", "OriginalTicks", "DiscountedTicks", "TotalTicks", "UsageDateTime", "SessionID",
-        "SessionName","UserName"}
+                     "SessionName", "UserName"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"InvoiceCode", "OriginalTicks", "DiscountedTicks", "TotalTicks", "UsageDateTime", "SessionName","UserName"}
+    unified_search_fields = {"InvoiceCode", "OriginalTicks", "DiscountedTicks", "TotalTicks", "UsageDateTime",
+                             "SessionName", "UserName"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -418,14 +423,16 @@ class SecurityTemplate(ITSRestAPIORM.SecurityTemplate, ITSRestAPIORMExtendedFunc
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+
 class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
     identity_field = "ID"
     default_order_by_field = "Email"
-    select_fields = { "ID", "CompanyID", "Email", "UserName", "MailAddress", "VisitingAddress", "InvoiceAddress",
+    select_fields = {"ID", "CompanyID", "Email", "UserName", "MailAddress", "VisitingAddress", "InvoiceAddress",
                      "InformationAddress", "LastLoginDateTime", "EndDateLicense", "StartDateLicense",
                      "UserOpeningsScreen", "PreferredLanguage", "PasswordExpirationDate", "LastLoginDateTime",
-                     "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor", "IsTestScreenTemplateAuthor",
+                     "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor",
+                     "IsTestScreenTemplateAuthor",
                      "IsTranslator", "MayOrderCredits", "MayWorkWithBatteriesOnly", "DoNotRenewLicense",
                      "Active", "UserCulture", "SessionPool", "MayWorkWithOwnObjectsOnly",
                      "SecurityTemplateID", "HasPersonalCreditPool", "CurrentPersonalCreditLevel"}
@@ -439,6 +446,7 @@ class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.OR
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {"Password"}
     pass_through_fields = {"PluginData"}
+
 
 class SecurityWebSessionToken(ITSRestAPIORM.SecurityWebSessionToken,
                               ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
@@ -478,7 +486,7 @@ class TestScreenTemplate(ITSRestAPIORM.TestScreenTemplate, ITSRestAPIORMExtended
     select_fields = {"ID"
         , "Description"
         , "Explanation"
-      }
+                     }
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Description", "Explanation", "Remarks"}
@@ -487,7 +495,7 @@ class TestScreenTemplate(ITSRestAPIORM.TestScreenTemplate, ITSRestAPIORMExtended
     may_work_with_own_objects_field = ""
 
     fields_to_be_removed = {}
-    pass_through_fields = {"TemplateVariables","PluginData"}
+    pass_through_fields = {"TemplateVariables", "PluginData"}
 
     # extra properties for Json supported fields
     TemplateVariablesJson = ""
@@ -536,7 +544,9 @@ class Test(ITSRestAPIORM.Test, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctio
                            "PluginData", "RequiredParsPerson", "RequiredParsSession", "RequiredParsGroup",
                            "RequiredParsOrganisation"}
 
-class ViewClientSessionTestsWithPerson(ITSRestAPIORM.ViewClientSessionTestsWithPerson, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
+
+class ViewClientSessionTestsWithPerson(ITSRestAPIORM.ViewClientSessionTestsWithPerson,
+                                       ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     identity_field = "ID"
     archive_field = "Active"
     default_order_by_field = "Description"
@@ -545,7 +555,7 @@ class ViewClientSessionTestsWithPerson(ITSRestAPIORM.ViewClientSessionTestsWithP
         , "FirstName"
         , "Initials"
         , "LastName"
-        }
+                             }
     select_fields = {"ID"
         , "Description"
         , "EMail"
@@ -582,8 +592,49 @@ class ViewClientGroupSessions(ITSRestAPIORM.ViewClientGroupSessions,
     select_fields = {"ID"
         , "Description"
         , "active"
-        , "AllowedStartDateTime", "AllowedEndDateTime"}
+        , "AllowedStartDateTime", "AllowedEndDateTime"
+        , "readycount"
+        , "inprogresscount"
+        , "donecount"
+    }
 
     unified_search_fields = {"Description"}
     may_work_with_own_objects_field = "ManagedByUserID"
 
+
+class ViewClientGroupSessionCandidates(ITSRestAPIORM.ViewClientGroupSessionCandidates,
+                                       ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
+    identity_field = "ID"
+    default_order_by_field = "EMail"
+    select_fields = {"ID"
+        , "EMail"
+        , "FirstName"
+        , "Initials"
+        , "LastName"
+        , "TitlesBefore"
+        , "TitlesAfter"
+        , "EducationID"
+        , "OrganisationID"
+        , "NationalityID"
+        , "PreferredLanguage"
+        , "Sex"
+        , "DateOfLastTest"
+        , "BirthDate"
+        , "CompanyID"
+        , "Active"
+        , "ManagedByUserID"}
+    sort_fields = {}
+    order_fields = {}
+    unified_search_fields = {"EMail", "FirstName"
+        , "Initials"
+        , "LastName"
+        , "TitlesBefore"
+        , "TitlesAfter"
+        , "PreferredLanguage"
+        , "Sex"
+        , "DateOfLastTest"
+        , "BirthDate"
+        , "Remarks"}
+    archive_field = "Active"
+    user_limit_select_field = {}
+    may_work_with_own_objects_field = "ManagedByUserID"

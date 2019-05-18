@@ -778,3 +778,36 @@ class ViewClientGroupSessions(Base):
     readycount = Column(Integer, nullable=False, server_default=text("((0))"))
     inprogresscount = Column(Integer, nullable=False, server_default=text("((0))"))
     donecount = Column(Integer, nullable=False, server_default=text("((0))"))
+
+
+
+class ViewClientGroupSessionCandidates(Base):
+    __tablename__ = 'viewclientgroupsessioncandidates'
+
+    ID = Column(UUIDType(binary=False), primary_key=True)
+    sessionid = Column(UUIDType(binary=False), primary_key=False)
+    sessiontype = Column(SmallInteger, nullable=False)
+    sessionstatus = Column(Integer, nullable=False)
+    EMail = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    Password = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    FirstName = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    Initials = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    LastName = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    TitlesBefore = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    TitlesAfter = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    EducationID = Column(UUIDType(binary=False), nullable=False,
+                             server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
+    OrganisationID = Column(UUIDType(binary=False), nullable=False,
+                             server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
+    NationalityID = Column(UUIDType(binary=False), nullable=False,
+                             server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
+    PreferredLanguage = Column(Unicode(10), nullable=False, server_default=text("('E')"))
+    Sex = Column(Integer, nullable=False, server_default=text("((3))"))
+    DateOfLastTest = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
+    BirthDate = Column(Date, nullable=False, server_default=text("('2000-01-01')"))
+    Active = Column(Boolean, nullable=False, server_default=text("True"))
+    CompanyID = Column(UUIDType(binary=False), nullable=False,
+                             server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
+    ManagedByUserID = Column(UUIDType(binary=False), nullable=False,
+                             server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
+

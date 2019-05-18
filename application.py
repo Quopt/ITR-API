@@ -749,6 +749,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                                 invoicing_ok = localcompany.AllowNegativeCredits
                             if invoicing_ok and totalCosts > 0:
                                 # now execute the query to deduct the CurrentCreditLevel directly in the database (avoiding concurrency issues)
+                                if localtest.InvoiceCode == "" or localtest.InvoiceCode is None :
+                                 localtest.InvoiceCode = localtest.TestName
                                 newinvoicelog = ITSRestAPIORMExtensions.SecurityCreditUsage()
                                 newinvoicelog.ID = uuid.uuid4()
                                 newinvoicelog.UserID = id_of_user
@@ -864,6 +866,15 @@ def sessions_get():
     return ITSRestAPIORMExtensions.ClientSession().common_paginated_read_request(request,
                                                                           ITR_minimum_access_levels.test_taking_user,
                                                                                  additional_where_clause)
+
+
+@app.route('/sessions/<identity>/groupmembers', methods=['GET'])
+def sessions_groupmembers(identity):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+
+    return ITSRestAPIORMExtensions.ViewClientGroupSessionCandidates().common_paginated_read_request(request,
+                                                                     ITR_minimum_access_levels.regular_office_user)
+
 
 
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
