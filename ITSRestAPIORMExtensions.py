@@ -622,7 +622,10 @@ class ViewClientGroupSessionCandidates(ITSRestAPIORM.ViewClientGroupSessionCandi
         , "BirthDate"
         , "CompanyID"
         , "Active"
-        , "ManagedByUserID"}
+        , "ManagedByUserID"
+        , "sessionid"
+        , "sessiontype"
+        , "sessionstatus"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"EMail", "FirstName"
