@@ -610,6 +610,7 @@ def sessiontests_get_for_session(sessionid):
 
 @app.route('/sessiontests/<sessionid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessiontests_get_id(sessionid, identity):
+    app_log.info('SessionTests %s %s', sessionid, identity)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
         request)
     if request.method == 'GET':
@@ -895,6 +896,7 @@ def sessions_delete_tests(identity):
 
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessions_get_id(identity):
+    app_log.info('Sessions %s ',  identity)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
