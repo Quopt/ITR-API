@@ -872,9 +872,25 @@ def sessions_get():
 def sessions_groupmembers(identity):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
 
+    additional_where_clause = 'parentsessionid=\'' + str(identity) + '\''
     return ITSRestAPIORMExtensions.ViewClientGroupSessionCandidates().common_paginated_read_request(request,
-                                                                     ITR_minimum_access_levels.regular_office_user)
+                                                                     ITR_minimum_access_levels.regular_office_user,
+                                                                                 additional_where_clause)
 
+
+@app.route('/sessions/<identity>/deletealltests', methods=['DELETE'])
+def sessions_delete_tests(identity):
+    # delete all tests from this session that have not been started yet
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    if request.method == 'DELETE':
+        if office_user:
+            with ITSRestAPIDB.session_scope(company_id) as qry_session:
+                qry_session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                    ITSRestAPIORMExtensions.ClientSessionTest.SessionID == identity).filter(
+                    ITSRestAPIORMExtensions.ClientSessionTest.Status == 10).delete()
+            return 200, "OK"
+        else:
+            return 403, "you do not have the rights to delete tests from the session"
 
 
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
@@ -979,7 +995,8 @@ def removeUnnecessaryUserLogins(company_id, id_of_user):
 
                 person = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).filter(
                     ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).first()
-                person.Active = False
+                if person is not None:
+                    person.Active = False
 
 
 @app.route('/reportdefinitions', methods=['GET'])

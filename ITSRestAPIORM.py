@@ -785,6 +785,7 @@ class ViewClientGroupSessionCandidates(Base):
     __tablename__ = 'viewclientgroupsessioncandidates'
 
     ID = Column(UUIDType(binary=False), primary_key=True)
+    parentsessionid = Column(UUIDType(binary=False), primary_key=False)
     sessionid = Column(UUIDType(binary=False), primary_key=False)
     sessiontype = Column(SmallInteger, nullable=False)
     sessionstatus = Column(Integer, nullable=False)
