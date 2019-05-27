@@ -201,7 +201,7 @@ def create_db(db_name):
     # create the database by opening the script and firing off the script commands one by one
     sql_path = ITSRestAPISettings.get_setting("SQLPATH")
     if sql_path == "":
-        sql_path = application.app.instance_path
+        sql_path = os.path.join(application.app.root_path, 'database')
     sql_command = ""
     file_name = os.sep + "CREATEDB.SQL"
 
@@ -253,7 +253,7 @@ def migrate_db(db_engine, db_name, current_version, db_id):
     # migrate the database if a migration is known
     sql_path = ITSRestAPISettings.get_setting("SQLPATH")
     if sql_path == "":
-        sql_path = application.app.instance_path
+        sql_path = os.path.join(application.app.root_path, 'database')
     # check if there is a migration file, if not abort
     file_name = os.sep + "MIGRATEDB" + str(current_version) + ".SQL"
     if os.path.isfile(sql_path + file_name):
