@@ -31,6 +31,7 @@ class ITR_minimum_access_levels(Enum):
     translator = 6
     report_author = 7
     test_screen_template_author = 8
+    password_manager = 9
 
 
 class ORMExtendedFunctions:
@@ -358,6 +359,8 @@ class ORMExtendedFunctions:
                 proceed = user_object.IsOrganisationSupervisor == True
             if required_minimum_access_level == ITR_minimum_access_levels.test_author:
                 proceed = user_object.IsTestAuthor == True
+            if required_minimum_access_level == ITR_minimum_access_levels.password_manager:
+                proceed = user_object.IsPasswordManager == True
             if required_minimum_access_level == ITR_minimum_access_levels.report_author:
                 proceed = user_object.IsReportAuthor == True
             if required_minimum_access_level == ITR_minimum_access_levels.test_screen_template_author:

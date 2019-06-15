@@ -21,6 +21,8 @@ from enum import Enum
 import hashlib, uuid
 from copy import deepcopy
 import datetime
+import secrets
+import string
 
 from ITSLogging import *
 
@@ -236,10 +238,11 @@ def get_id_of_user_with_token_and_company_id(user_id, company_id):
     author_report_user = ""
     author_test_screen_templates_user = ""
     office_user = ""
+    is_password_manager = ""
 
     try:
         for recs in connection.execute(
-                'select "ID", "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor", "IsTestScreenTemplateAuthor", "IsTranslator", "IsOfficeUser" from "SecurityUsers" where "CompanyID" = %s and "Email" = %s order by "IsOfficeUser"',
+                'select "ID", "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor", "IsTestScreenTemplateAuthor", "IsTranslator", "IsOfficeUser", "IsPasswordManager" from "SecurityUsers" where "CompanyID" = %s and "Email" = %s order by "IsOfficeUser"',
                 company_id, user_id):
             id_of_user = recs[0]
             master_user = recs[1]
@@ -250,13 +253,14 @@ def get_id_of_user_with_token_and_company_id(user_id, company_id):
             author_test_screen_templates_user = recs[6]
             translator_user = recs[7]
             office_user = recs[8]
+            is_password_manager = recs[9]
     finally:
         try:
          connection.dispose()
         except:
          pass
 
-    return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user
+    return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager
 
 
 def create_or_update_testrun_user(user_guid, company_id, user_id, new_password, active_status, delete_only):
@@ -274,6 +278,10 @@ def create_or_update_testrun_user(user_guid, company_id, user_id, new_password, 
         if len(user_list) == 1 :
             new_user = user_list[0]
         else :
+            if new_password == "":
+                # this is a new user without password. That is not good. Create one
+                alphabet = string.ascii_letters + string.digits
+                new_password = ''.join(secrets.choice(alphabet) for i in range(8))
             new_user = ITSRestAPIORMExtensions.SecurityUser()
             new_user.ID = user_guid
             new_user.CompanyID = company_id
@@ -283,11 +291,14 @@ def create_or_update_testrun_user(user_guid, company_id, user_id, new_password, 
         if active_status and not delete_only:
             new_user.Email = user_id
             new_user.UserName = user_id
-            hashed_password = hashlib.sha512((new_password + str(user_guid)).encode('utf-8')).hexdigest()
-            new_user.Password = hashed_password
+            if new_password != "":
+                hashed_password = hashlib.sha512((new_password + str(user_guid)).encode('utf-8')).hexdigest()
+                new_user.Password = hashed_password
             new_user.Active = active_status
             new_user.IsTestTakingUser = True
             session.add(new_user)
+
+    return new_password
 
 def delete_login(user_guid):
     with ITSRestAPIDB.session_scope("") as session:
@@ -372,9 +383,9 @@ def clone_user_login(user_id, user_guid, old_company_id, new_company_id):
                 "IsReportAuthor", "IsTestScreenTemplateAuthor", "IsTranslator", "MayOrderCredits",
                 "MayWorkWithBatteriesOnly", "DoNotRenewLicense", "Active", "UserCulture", "SessionPool",
                 "MayWorkWithOwnObjectsOnly", "SecurityTemplateID", "HasPersonalCreditPool", "CurrentPersonalCreditLevel",
-                "PluginData")
+                "PluginData","IsPasswordManager")
             select
-            %s, %s, "Email", '22CentigradeInArequipaToday' as "Password", "UserOpeningsScreen", "UserName", "UserRights", "UserParameters", "PreferredLanguage", "MailAddress", "VisitingAddress", "InvoiceAddress", "InformationAddress", "Remarks", "PasswordExpirationDate", "StartDateLicense", "EndDateLicense", "LastLoginDateTime", "LastRefreshDateTime", "IsMasterUser", "IsTestTakingUser", "IsOfficeUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor", "IsTestScreenTemplateAuthor", "IsTranslator", "MayOrderCredits", "MayWorkWithBatteriesOnly", "DoNotRenewLicense", "Active", "UserCulture", "SessionPool", "MayWorkWithOwnObjectsOnly", "SecurityTemplateID", "HasPersonalCreditPool", "CurrentPersonalCreditLevel", "PluginData"
+            %s, %s, "Email", '22CentigradeInArequipaToday' as "Password", "UserOpeningsScreen", "UserName", "UserRights", "UserParameters", "PreferredLanguage", "MailAddress", "VisitingAddress", "InvoiceAddress", "InformationAddress", "Remarks", "PasswordExpirationDate", "StartDateLicense", "EndDateLicense", "LastLoginDateTime", "LastRefreshDateTime", "IsMasterUser", "IsTestTakingUser", "IsOfficeUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor", "IsTestScreenTemplateAuthor", "IsTranslator", "MayOrderCredits", "MayWorkWithBatteriesOnly", "DoNotRenewLicense", "Active", "UserCulture", "SessionPool", "MayWorkWithOwnObjectsOnly", "SecurityTemplateID", "HasPersonalCreditPool", "CurrentPersonalCreditLevel", "PluginData", "IsPasswordManager"
             from
             "SecurityUsers"
             where
@@ -408,6 +419,7 @@ def clone_user_login(user_id, user_guid, old_company_id, new_company_id):
                     newconsultant.IsReportAuthor = consultant.IsReportAuthor
                     newconsultant.IsTestScreenTemplateAuthor = consultant.IsTestScreenTemplateAuthor
                     newconsultant.IsTranslator = consultant.IsTranslator
+                    newconsultant.IsPasswordManager = consultant.IsPasswordManager
                     newconsultant.MayOrderCredits = consultant.MayOrderCredits
                     newconsultant.MayWorkWithBatteriesOnly = consultant.MayWorkWithBatteriesOnly
                     newconsultant.MayWorkWithOwnObjectsOnly = consultant.MayWorkWithOwnObjectsOnly

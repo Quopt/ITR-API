@@ -510,6 +510,7 @@ class SecurityUser(Base):
     IsReportAuthor = Column(Boolean, nullable=False, server_default=text("False"))
     IsTestScreenTemplateAuthor = Column(Boolean, nullable=False, server_default=text("False"))
     IsTranslator = Column(Boolean, nullable=False, server_default=text("False"))
+    IsPasswordManager = Column(Boolean, nullable=False, server_default=text("False"))
     MayOrderCredits = Column(Boolean, nullable=False, server_default=text("False"))
     MayWorkWithBatteriesOnly = Column(Boolean, nullable=False, server_default=text("False"))
     DoNotRenewLicense = Column(Boolean, nullable=False, server_default=text("False"))

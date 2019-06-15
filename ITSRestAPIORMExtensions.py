@@ -433,7 +433,7 @@ class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.OR
                      "UserOpeningsScreen", "PreferredLanguage", "PasswordExpirationDate", "LastLoginDateTime",
                      "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor",
                      "IsTestScreenTemplateAuthor",
-                     "IsTranslator", "MayOrderCredits", "MayWorkWithBatteriesOnly", "DoNotRenewLicense",
+                     "IsTranslator", "IsPasswordManager", "MayOrderCredits", "MayWorkWithBatteriesOnly", "DoNotRenewLicense",
                      "Active", "UserCulture", "SessionPool", "MayWorkWithOwnObjectsOnly",
                      "SecurityTemplateID", "HasPersonalCreditPool", "CurrentPersonalCreditLevel"}
     sort_fields = {}

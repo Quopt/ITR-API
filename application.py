@@ -136,7 +136,7 @@ def check_master_header(request):
 
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
         if master_user:
@@ -149,7 +149,7 @@ def check_master_header(request):
             except:
                 pass
 
-        return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id
+        return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager
     except:
         pass
 
@@ -516,7 +516,7 @@ def persons_get():
 
 @app.route('/persons/<identity>', methods=['GET', 'POST', 'DELETE'])
 def persons_get_id(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
         to_return = ITSRestAPIORMExtensions.ClientPerson().return_single_object(request,
@@ -525,7 +525,7 @@ def persons_get_id(identity):
         if test_taking_user and not office_user:
             try:
                 if str(to_return["ID"]) != str(id_of_user):
-                    return "Session cannot be accessed as test taking user", 404
+                    return "Person cannot be accessed as test taking user", 404
             except:
                 pass
             return to_return
@@ -539,10 +539,16 @@ def persons_get_id(identity):
         request.get_data()
         data = request.data
         data_dict = json.loads(data)
-        if office_user:
-            ITSRestAPILogin.create_or_update_testrun_user(data_dict['ID'], company_id, data_dict['EMail'], data_dict['Password'], data_dict['Active'], False)
+        # save the password of the candidates in the database (NEVER save the password for consultants)
+        old_password = data_dict['Password']
+        new_password = ""
+        fix_password = False
         allowed_fields_to_update = [col.name for col in ITSRestAPIORMExtensions.ClientPerson.__table__.columns]
-        allowed_fields_to_update.remove("Password")
+        if office_user:
+            new_password = ITSRestAPILogin.create_or_update_testrun_user(data_dict['ID'], company_id, data_dict['EMail'], data_dict['Password'], data_dict['Active'], False)
+            fix_password = (old_password != new_password and new_password != "") or old_password != ""
+        if not fix_password:
+            allowed_fields_to_update.remove("Password")
         allowed_fields_to_update = ",".join(allowed_fields_to_update)
         if test_taking_user and not office_user:
             #check if the offered session is for this person
@@ -553,9 +559,18 @@ def persons_get_id(identity):
                 return "Person cannot be updated as test taking user", 404
             allowed_fields_to_update = 'DateOfLastTest'
 
-        return ITSRestAPIORMExtensions.ClientPerson().change_single_object(request,
+        to_return =  ITSRestAPIORMExtensions.ClientPerson().change_single_object(request,
                                                                            ITR_minimum_access_levels.test_taking_user,
                                                                            identity, allowed_fields_to_update)
+        if fix_password:
+            with ITSRestAPIDB.session_scope(company_id) as session:
+                tempPerson = session.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                    ITSRestAPIORMExtensions.ClientPerson.ID == identity).first()
+                tempPerson.Password = new_password
+                session.add(tempPerson)
+
+        return to_return
+
     elif request.method == 'DELETE':
         # if the person is in the login table in the master database then delete the user and the related sessions
         if office_user:
@@ -569,6 +584,20 @@ def persons_get_id(identity):
                 return ITSRestAPIORMExtensions.ClientPerson().delete_single_object(request,
                                                                            ITR_minimum_access_levels.regular_office_user,
                                                                            identity)
+
+@app.route('/persons/<identity>/password', methods=['GET'])
+def persons_get_id_password(identity):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+
+    if is_password_manager:
+        with ITSRestAPIDB.session_scope(company_id) as qry_session:
+            # save to the local master database
+            user_found = qry_session.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                ITSRestAPIORMExtensions.ClientPerson.ID == identity).first()
+            return '{"Password":"' + user_found.Password + '"}'
+    else:
+        return 403, "You do not have the right to view a candidate password"
+
 
 @app.route('/sessiontests', methods=['GET'])
 def sessiontests_get():
@@ -599,7 +628,7 @@ def groupsessionsview_get():
 
 @app.route('/sessiontests/<sessionid>', methods=['GET'])
 def sessiontests_get_for_session(sessionid):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     additional_where_clause = "SessionID='" + str(sessionid) + "'"
     if request.method == 'GET':
@@ -611,7 +640,7 @@ def sessiontests_get_for_session(sessionid):
 @app.route('/sessiontests/<sessionid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessiontests_get_id(sessionid, identity):
     app_log.info('SessionTests %s %s', sessionid, identity)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
@@ -810,7 +839,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
 @app.route('/sessionteststaking/<sessionid>', methods=['GET'])
 # copy of sessiontests point only for test taking users
 def sessionteststaking_get(sessionid):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     additional_where_clause = 'PersID=\'' + str(id_of_user) +"',SessionID='" + str(sessionid) + "'"
     return ITSRestAPIORMExtensions.ClientSessionTest().common_paginated_read_request(request,
@@ -820,7 +849,7 @@ def sessionteststaking_get(sessionid):
 
 @app.route('/sessionteststaking/<sessionid>/<identity>', methods=['GET', 'POST'])
 def sessionteststaking_get_id(sessionid, identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if request.method == 'GET':
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
@@ -859,7 +888,7 @@ def sessionteststaking_get_id(sessionid, identity):
 
 @app.route('/sessions', methods=['GET'])
 def sessions_get():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
 
     additional_where_clause = ""
     if test_taking_user and not office_user :
@@ -871,7 +900,7 @@ def sessions_get():
 
 @app.route('/sessions/<identity>/groupmembers', methods=['GET'])
 def sessions_groupmembers(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
 
     additional_where_clause = 'parentsessionid=\'' + str(identity) + '\''
     return ITSRestAPIORMExtensions.ViewClientGroupSessionCandidates().common_paginated_read_request(request,
@@ -882,14 +911,14 @@ def sessions_groupmembers(identity):
 @app.route('/sessions/<identity>/deletealltests', methods=['DELETE'])
 def sessions_delete_tests(identity):
     # delete all tests from this session that have not been started yet
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
     if request.method == 'DELETE':
         if office_user:
             with ITSRestAPIDB.session_scope(company_id) as qry_session:
                 qry_session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
                     ITSRestAPIORMExtensions.ClientSessionTest.SessionID == identity).filter(
                     ITSRestAPIORMExtensions.ClientSessionTest.Status == 10).delete()
-            return 200, "OK"
+            return "OK", 200
         else:
             return 403, "you do not have the rights to delete tests from the session"
 
@@ -897,7 +926,7 @@ def sessions_delete_tests(identity):
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessions_get_id(identity):
     app_log.info('Sessions %s ',  identity)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
         to_return = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
@@ -980,6 +1009,12 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request):
                                 "\r\n\r\n%s" % url_to_click,
                                 temp_session.EMailNotificationAdresses, jsonify(temp_session.__dict__))
             removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
+    else:
+        with ITSRestAPIDB.session_scope(company_id) as qry_session:
+            sess = qry_session.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                ITSRestAPIORMExtensions.ClientSession.ID == identity).first()
+            if sess:
+                removeUnnecessaryUserLogins(company_id, sess.PersonID)
 
 def sessionPostTriggerDelete(company_id, id_of_user):
     removeUnnecessaryUserLogins(company_id, id_of_user)
@@ -987,10 +1022,13 @@ def sessionPostTriggerDelete(company_id, id_of_user):
 def removeUnnecessaryUserLogins(company_id, id_of_user):
     with ITSRestAPIDB.session_scope(company_id) as clientsession:
         with ITSRestAPIDB.session_scope("") as mastersession:
-            temp_session = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+            temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).filter(
+                ITSRestAPIORMExtensions.ClientSession.Active ).count()
+            temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
                 ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
                 ITSRestAPIORMExtensions.ClientSessionTest.Status < 30 ).count()
-            if temp_session == 0:
+            if temp_session_tests == 0 or temp_sessions == 0:
                 # no tests to take for this person any more, remove the login
                 mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
                     ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
@@ -1142,7 +1180,7 @@ def creditgrants_get_id(identity):
         # increase the companies credit level with the saved credit grant
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
         if master_user:
@@ -1272,7 +1310,7 @@ def logins_get_id(identity):
     master_db_query = False
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     if identity == 'currentuser':
         identity = id_of_user
@@ -1326,6 +1364,8 @@ def logins_get_id(identity):
                     AllowedFieldsToChange.remove('IsReportAuthor')
                 if not consultant.IsTestScreenTemplateAuthor :
                     AllowedFieldsToChange.remove('IsTestScreenTemplateAuthor')
+                if not consultant.IsPasswordManager:
+                    AllowedFieldsToChange.remove('IsPasswordManager')
                 if not consultant.IsTranslator :
                     AllowedFieldsToChange.remove('IsTranslator')
                 if not consultant.MayOrderCredits :
@@ -1394,7 +1434,7 @@ def login_change_password():
     # get the session id and the user id from the token
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
     if user_id != "":
@@ -1443,7 +1483,7 @@ def tokens_get_id(identity):
 
 @app.route('/tokens/<identity>/<newcompany>', methods=['POST'])
 def token_change_company(identity, newcompany):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
 
     if master_user:
@@ -1474,7 +1514,7 @@ def systemsettings_get():
 
 @app.route('/systemsettings/<identity>', methods=['GET', 'POST', 'DELETE'])
 def systemsettings_get_id(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
 
     if not office_user:
         return "You do not have sufficient rights to make this call", 404
@@ -1614,7 +1654,7 @@ def tests_get_id(identity):
         # test taking users may request all test definition since they need them for test taking, but will get limited fields back to protect scoring and norming rules
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
         ITSRestAPIORMExtensions.Test().__class__.fields_to_be_removed = {}
         if (not office_user) and test_taking_user:
@@ -1680,7 +1720,7 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
         masterFiles = True
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname = os.path.dirname(
         os.path.join(os.sep, app.instance_path, 'media', str(company_id),
@@ -1714,7 +1754,7 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
 def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_dst):
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname_src = os.path.dirname(
         os.path.join(os.sep, app.instance_path, 'media', str(company_id),
@@ -1749,7 +1789,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
             return "File API failed", 500
         # get the company id from the token instead of the api
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
                 user_id, company_id)
     fileType = fileType.upper()
     pathname = os.path.dirname(
@@ -1846,7 +1886,7 @@ def translations(langcode):
     elif request.method == 'POST':
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
         if (master_user or translator_user) and ITSTranslate.translation_available():
@@ -1889,7 +1929,7 @@ def translations(langcode):
 def translate_string(sourcelangcode, targetlangcode):
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
     if (master_user or translator_user or author_user or author_report_user) and ITSTranslate.translation_available():
@@ -1904,7 +1944,7 @@ def translate_string(sourcelangcode, targetlangcode):
 
 @app.route('/sendmail', methods=['POST'])
 def send_mail():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
 
     if office_user:
         request.get_data()
@@ -1929,7 +1969,7 @@ def send_mail():
 
 @app.route('/refreshpublics', methods=['POST'])
 def refresh_publics():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     clone_needed = False
 
@@ -1968,7 +2008,7 @@ def refresh_publics():
 
 @app.route('/listpublics/<reponame>', methods=['GET'])
 def list_publics(reponame):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if master_user:
         tempfile =  ITSGit.list_repo_files(app.instance_path, reponame)
@@ -1976,7 +2016,7 @@ def list_publics(reponame):
 
 @app.route('/listpublics/<reponame>/<filename>', methods=['GET'])
 def list_publics_file(reponame, filename):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if master_user:
         short_repo_name = reponame.split('/')[-1]
@@ -1995,7 +2035,7 @@ def list_publics_file(reponame, filename):
 
 @app.route('/installpublics/itr-translations/<filename>', methods=['POST','DELETE'])
 def install_publics_file( filename):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if master_user:
         srcfilename = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'itr-translations', filename)
