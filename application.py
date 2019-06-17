@@ -39,6 +39,7 @@ from ITSPrefixMiddleware import *
 import ITSTranslate
 import ITSHelpers
 import ITSGit
+import ITSEncrypt
 
 app = Flask(__name__, instance_relative_config=True)
 app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/api')
@@ -547,8 +548,7 @@ def persons_get_id(identity):
         if office_user:
             new_password = ITSRestAPILogin.create_or_update_testrun_user(data_dict['ID'], company_id, data_dict['EMail'], data_dict['Password'], data_dict['Active'], False)
             fix_password = (old_password != new_password and new_password != "") or old_password != ""
-        if not fix_password:
-            allowed_fields_to_update.remove("Password")
+        allowed_fields_to_update.remove("Password")
         allowed_fields_to_update = ",".join(allowed_fields_to_update)
         if test_taking_user and not office_user:
             #check if the offered session is for this person
@@ -566,7 +566,7 @@ def persons_get_id(identity):
             with ITSRestAPIDB.session_scope(company_id) as session:
                 tempPerson = session.query(ITSRestAPIORMExtensions.ClientPerson).filter(
                     ITSRestAPIORMExtensions.ClientPerson.ID == identity).first()
-                tempPerson.Password = new_password
+                tempPerson.Password = ITSEncrypt.encrypt_string(new_password)
                 session.add(tempPerson)
 
         return to_return
@@ -594,7 +594,7 @@ def persons_get_id_password(identity):
             # save to the local master database
             user_found = qry_session.query(ITSRestAPIORMExtensions.ClientPerson).filter(
                 ITSRestAPIORMExtensions.ClientPerson.ID == identity).first()
-            return '{"Password":"' + user_found.Password + '"}'
+            return '{"Password":"' + ITSEncrypt.decrypt_string(user_found.Password) + '"}'
     else:
         return 403, "You do not have the right to view a candidate password"
 
@@ -1024,10 +1024,10 @@ def removeUnnecessaryUserLogins(company_id, id_of_user):
         with ITSRestAPIDB.session_scope("") as mastersession:
             temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
                 ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).filter(
-                ITSRestAPIORMExtensions.ClientSession.Active ).count()
+                ITSRestAPIORMExtensions.ClientSession.Active).count()
             temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
                 ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
-                ITSRestAPIORMExtensions.ClientSessionTest.Status < 30 ).count()
+                ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
             if temp_session_tests == 0 or temp_sessions == 0:
                 # no tests to take for this person any more, remove the login
                 mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(

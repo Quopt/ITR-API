@@ -13,3 +13,4 @@ Flask-Cache == 0.13.1
 flask-compress == 1.4.0
 waitress == 1.2.1
 requests == 2.21.0
+cryptography == 2.7

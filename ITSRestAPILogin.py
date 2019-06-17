@@ -16,6 +16,7 @@
 # related functions
 import ITSRestAPIDB
 import ITSRestAPIORMExtensions
+import ITSEncrypt
 from sqlalchemy.orm import *
 from enum import Enum
 import hashlib, uuid

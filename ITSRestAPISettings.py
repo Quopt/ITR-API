@@ -44,6 +44,18 @@ def get_setting(setting_name, defaultval = ""):
         except:
             return ""
 
+def write_setting(customer_id, setting_name, setting_value, par_protected):
+    with ITSRestAPIDB.session_scope(customer_id) as session:
+        param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+            ITSRestAPIORMExtensions.SystemParam.ParameterName == setting_name).first()
+        if param is None:
+            param = ITSRestAPIORMExtensions.SystemParam()
+            param.ParameterName = setting_name
+            param.ParValue = setting_value
+            param.ParProtected = par_protected
+            session.add(param)
+        else:
+            param.ParValue = setting_value
 
 def get_setting_for_customer (customer_id, setting_name, check_master_db_too, consultant_id):
     global settings_cache
