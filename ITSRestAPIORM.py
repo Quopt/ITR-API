@@ -489,6 +489,7 @@ class SecurityUser(Base):
     Password = Column(Unicode(200), nullable=False, server_default=text("('')"))
     UserOpeningsScreen = Column(Unicode(200), nullable=False, server_default=text("('')"))
     UserName = Column(Unicode(200), nullable=False)
+    APIKey = Column(Unicode(400), nullable=False)
     UserRights = Column(UnicodeText, nullable=False, server_default=text("('')"))
     UserParameters = Column(UnicodeText, nullable=False, server_default=text("('')"))
     PreferredLanguage = Column(Unicode(10), nullable=False, server_default=text("('E')"))

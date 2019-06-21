@@ -1330,6 +1330,16 @@ def logins_get_id(identity):
                                                                                     identity, True)
         except:
             pass
+
+        #decrypt the API key if present
+        if is_password_manager:
+         temp_return = json.loads(to_return.data)
+         try:
+          temp_return['APIKey'] = ITSEncrypt.decrypt_string(temp_return['APIKey'])
+          to_return = json.dumps(temp_return)
+         except:
+          pass
+
         return to_return
     elif request.method == 'POST':
         with ITSRestAPIDB.session_scope(company_id) as clientsession:
@@ -1373,8 +1383,16 @@ def logins_get_id(identity):
                 if consultant.MayWorkWithBatteriesOnly :
                     AllowedFieldsToChange.remove('MayWorkWithBatteriesOnly')
 
-            # check if the password is present and can be updated
+            # encrypt the API key if present
             request.get_data()
+            if is_password_manager:
+                temp_param = json.loads(request.data)
+                temp_param['APIKey'] = ITSEncrypt.encrypt_string(temp_param['APIKey'])
+                request.data = json.dumps(temp_param)
+            else:
+                AllowedFieldsToChange.remove('APIKey')
+
+            # check if the password is present and can be updated
             temp_param = ITSHelpers.Empty()
             temp_param = json.loads(request.data)
             password = temp_param["Password"]
