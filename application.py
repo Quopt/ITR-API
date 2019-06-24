@@ -48,10 +48,12 @@ app.json_encoder = ITSJsonify.CustomJSONEncoder
 @app.teardown_request
 def teardown_request(exception=None):
     #stop all open database connections
+    #app_log.info("teardown request")
     try:
      for key, dbengine in ITSRestAPIDB.db_engines_created.items():
         try:
-            dbengine.dispose()
+            #dbengine.dispose()
+            pass
         except:
             pass
     except:
