@@ -621,6 +621,7 @@ class Test(Base):
     TestDefinitionIsCommercial = Column(Boolean, nullable=False, server_default=text("False"))
     TestDefinitionIsExternal = Column(Boolean, nullable=False, server_default=text("False"))
     TestDefinitionIsBanned = Column(Boolean, nullable=False, server_default=text("False"))
+    TestDefinitionIsProtected = Column(Boolean, nullable=False, server_default=text("True"))
     Active = Column(Boolean, nullable=False, server_default=text("True"))
     SupportsTestTaking = Column(Boolean, nullable=False, server_default=text("True"))
     SupportsTestScoring = Column(Boolean, nullable=False, server_default=text("True"))

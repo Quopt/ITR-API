@@ -1671,19 +1671,13 @@ def tests_get_id(identity):
     pathname = os.path.dirname(os.path.join(os.sep, app.instance_path, 'cache', ITSHelpers.string_split_to_filepath(identity)))
     if request.method == 'GET':
         cachefilename = "test.json"
-        # test taking users may request all test definition since they need them for test taking, but will get limited fields back to protect scoring and norming rules
+        # test taking users may request all test definitions since they need them for test taking, but will get limited fields back to protect scoring and norming rules
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
-        ITSRestAPIORMExtensions.Test().__class__.fields_to_be_removed = {}
         if (not office_user) and test_taking_user:
-            # limit the amount of fields returned
-            ITSRestAPIORMExtensions.Test().__class__.fields_to_be_removed = {
-                "norms", "documents", "scoreRules", "graphs",
-                "RequiredParsPerson", "RequiredParsSession", "RequiredParsGroup",
-                "RequiredParsOrganisation"
-            }
+            # use a special cache file for the test cache for test takers
             cachefilename = "test_limited.json"
 
         # return the object
@@ -1692,7 +1686,7 @@ def tests_get_id(identity):
         except:
             pass
         cachedfilefull = os.path.join(os.sep, pathname, "master_" + cachefilename) if include_master else os.path.join(os.sep, pathname, cachefilename)
-        if os.path.isfile(cachedfilefull):
+        if os.path.isfile(cachedfilefull) and 1==0:
              return (open(cachedfilefull, 'r').read()), 200
         else:
             to_return = ITSRestAPIORMExtensions.Test().return_single_object(request,
@@ -1711,8 +1705,30 @@ def tests_get_id(identity):
                     if not os.path.exists(pathname):
                         os.makedirs(pathname)
                     text_file = open(cachedfilefull, "w")
-                    text_file.write(json.dumps(to_return.json))
+                    tempjson = to_return.json
+                    # remove the fields for a protected test
+                    if cachefilename == "test_limited.json":
+                        if tempjson['TestDefinitionIsProtected']:
+                            del tempjson["norms"]
+                            del tempjson["documents"]
+                            del tempjson["scoreRules"]
+                            del tempjson["ScoringScript"]
+                            del tempjson["BeforeNormingScript"]
+                            del tempjson["AfterNormingScript"]
+                            del tempjson["Per360"]
+                            del tempjson["Post360"]
+                            del tempjson["Pre360"]
+                            del tempjson["graphs"]
+                            del tempjson["RequiredParsPerson"]
+                            del tempjson["RequiredParsSession"]
+                            del tempjson["RequiredParsGroup"]
+                            del tempjson["RequiredParsOrganisation"]
+                    tempdump = json.dumps(tempjson)
+                    text_file.write(tempdump)
                     text_file.close()
+                    # in case of a protected file return the file and not the to_return
+                    if cachefilename == "test_limited.json":
+                        return (open(cachedfilefull, 'r').read()), 200
             except:
                 pass
 
