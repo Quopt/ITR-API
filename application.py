@@ -277,7 +277,9 @@ def send_reset_password():
     # otherwise return a 200 and send an email
 
     # get the user id and password from the header
-    user_id = request.headers['UserID']
+    user_id = request.headers['Username']
+    url_base = request.headers['BaseURL']
+    langcode = request.headers['ITRLang']
 
     # check if we know this user
     if ITSRestAPILogin.check_if_user_account_is_valid(user_id) != ITSRestAPILogin.LoginUserResult.user_not_found:
@@ -290,9 +292,27 @@ def send_reset_password():
         # return_obj['ExpirationDateTime'] = now.isoformat()
 
         # and now sent an email to the user
-        ITSMailer.send_mail('Master','Password reset mail',
-                            "You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : \r\n" +
-                            request.url + "/ITS2/default.html?Token=" + token + "&Path=PasswordReset", user_id)
+        filename = os.path.join(app.instance_path, 'translations/', langcode + '.json')
+        current_translation = json.load(open(filename, 'r'))
+        translatedSubject, newTranslationSubject = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Subject', 'Password reset mail', current_translation)
+        translatedMail, newTranslationMail = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Body', "You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : " , current_translation)
+
+        if newTranslationMail or newTranslationSubject:
+            # write the translations into the file
+            current_translation['PasswordResetMail.Subject'] = {}
+            current_translation['PasswordResetMail.Subject']['value'] = translatedSubject
+            current_translation['PasswordResetMail.Body'] = {}
+            current_translation['PasswordResetMail.Body']['value'] = translatedMail
+            try:
+                with open(filename, 'w') as translationFile:
+                    translationFile.write(json.dumps(current_translation, indent=1, sort_keys=True))
+                    translationFile.close()
+            except:
+                pass
+
+        ITSMailer.send_mail('Master',translatedSubject,
+                            translatedMail + "\r\n" +
+                            url_base + "/default.html?Token=" + token + "&Path=PasswordReset", user_id)
 
         return "An email is sent to the users known email address", 200
     else:
@@ -302,7 +322,9 @@ def send_reset_password():
 @app.route('/resetpassword', methods=['POST'])
 def reset_password():
     # get the user id and password from the header
-    user_id = request.headers['UserID']
+    user_id = request.headers['Username']
+    url_base = request.headers['BaseURL']
+    langcode = request.headers['ITRLang']
     new_password = request.headers['Password']
 
     # check if we know this user
@@ -310,11 +332,11 @@ def reset_password():
         # check if the token is valid
         token = request.headers['SessionID']
 
-        if ITSRestAPILogin.check_session_token(token):
+        if ITSRestAPILogin.check_session_token(token) and len(new_password) > 6:
             ITSRestAPILogin.update_user_password(user_id, new_password)
             return "The password has been reset to the indicated password", 200
         else:
-            return "Invalid or expired token", 404
+            return "Invalid data or expired token", 404
     else:
         return "User not found or no known email address linked to this user", 404
 
@@ -1011,6 +1033,8 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request):
                                 "\r\n\r\n%s" % url_to_click,
                                 temp_session.EMailNotificationAdresses, jsonify(temp_session.__dict__))
             removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
+            # now check the geo address if there
+
     else:
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
             sess = qry_session.query(ITSRestAPIORMExtensions.ClientSession).filter(
@@ -1938,8 +1962,8 @@ def translations(langcode):
                     os.makedirs(os.path.dirname(filename))
             for line in new_data:
                 # needs translation
-                translatedText = ITSTranslate.get_translation(langcode, new_data[line]['value'])
-                if translatedText is not None :
+                translatedText, newTranslation = ITSTranslate.get_translation_if_needed(langcode, line, new_data[line]['value'], old_data)
+                if translatedText is not None and newTranslation:
                     old_data[line] = new_data[line]
                     old_data[line]['originalValue'] = new_data[line]['value']
                     old_data[line]['value'] = translatedText

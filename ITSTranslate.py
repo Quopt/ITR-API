@@ -29,6 +29,13 @@ def get_translation(target_language, text_to_translate):
     app_log.info(">>> %s ", translation)
     return translation
 
+def get_translation_if_needed(target_language, translation_key, text_to_translate, existing_translations):
+    try:
+        if existing_translations[translation_key]:
+            return existing_translations[translation_key]['value'], False
+    except:
+        return get_translation(target_language, text_to_translate), True
+
 def translation_available():
     return ITSRestAPISettings.get_setting_for_customer("",'TRANSLATE_AZURE_KEY', False, "") != ""
 

@@ -58,7 +58,10 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
     if from_sender == "":
         from_sender = ITSRestAPISettings.get_setting_for_customer(customer_id,'SMTP_SENDER',True, consultant_id)
     msg['From'] = from_sender
-    msg['Reply-to'] = reply_to
+    if reply_to == "":
+        msg['Reply-to'] = from_sender
+    else:
+        msg['Reply-to'] = reply_to
 
     # Assume we know that the image files are all in PNG format
     for file in files_to_attach:
