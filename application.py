@@ -164,6 +164,14 @@ def getIP(request):
         ip_address = request.environ['HTTP_X_FORWARDED_FOR']
     return ip_address
 
+def getWWW(request):
+    ip_address = ""
+    if request.environ.get('HTTP_X_FORWARDED_HOST') is None: # if behind engine x offloading server
+        ip_address = request.environ['HTTP_ORIGIN']
+    else:
+        ip_address = request.environ['HTTP_X_FORWARDED_HOST']
+    return ip_address
+
 # API implementations
 @app.route('/')
 def hello_world():
@@ -234,7 +242,11 @@ def login():
     user_id = request.headers['UserID']
     user_password = request.headers['Password']
     user_company = ""
-    app_log.info('Login started for %s', user_id)
+    ip_address = getIP(request)  # we need to check for ip in the future
+    www = getWWW(request)
+
+    app_log.info('Login started for %s %s %s', user_id, ip_address, www)
+
     if request.headers.__contains__('CompanyID'):
         user_company = request.headers['CompanyID']
 
@@ -1865,7 +1877,6 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
                              ITSHelpers.string_split_to_filepath(maintainingObjectIdentity))) + os.sep + fileType
             filename = pathname + os.sep + ITSHelpers.to_filename(fileId)
 
-        ip_address = getIP(request) # we need to check for ip in the future
         # return the file
         if os.path.exists(filename):
             raw_bytes = ""
