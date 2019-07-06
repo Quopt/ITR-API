@@ -25,6 +25,7 @@ from flask_cors import CORS
 from flask_compress import Compress
 from datetime import datetime, timezone, timedelta
 from waitress import serve
+import time
 
 import ITSRestAPILogin
 import ITSMailer
@@ -45,10 +46,24 @@ app = Flask(__name__, instance_relative_config=True)
 app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/api')
 app.json_encoder = ITSJsonify.CustomJSONEncoder
 
+startRequestTimer={} # only for debug purposes ! will not work with multiple calls at the same time
+@app.before_request
+def before_request_callback():
+    global startRequestTimer
+    startRequestTimer[request.path] = time.time()
+
 @app.teardown_request
 def teardown_request(exception=None):
+    global startRequestTimer
+
+    endRequestTimer = time.time()
+    try:
+        app_log.info('Method called %s %s Timing %s', request.path, request.method, str(endRequestTimer - startRequestTimer[request.path]))
+    except:
+        app_log.info('Method called %s %s', request.path, request.method)
+    del startRequestTimer[request.path]
+
     #stop all open database connections
-    #app_log.info("teardown request")
     try:
      for key, dbengine in ITSRestAPIDB.db_engines_created.items():
         try:
@@ -292,6 +307,7 @@ def send_reset_password():
     user_id = request.headers['Username']
     url_base = request.headers['BaseURL']
     langcode = request.headers['ITRLang']
+    app_log.info('Sendresetpassword %s ', user_id)
 
     # check if we know this user
     if ITSRestAPILogin.check_if_user_account_is_valid(user_id) != ITSRestAPILogin.LoginUserResult.user_not_found:
@@ -338,6 +354,7 @@ def reset_password():
     url_base = request.headers['BaseURL']
     langcode = request.headers['ITRLang']
     new_password = request.headers['Password']
+    app_log.info('Resetpassword %s ',  user_id)
 
     # check if we know this user
     if ITSRestAPILogin.check_if_user_account_is_valid(user_id) != ITSRestAPILogin.LoginUserResult.user_not_found:
@@ -356,6 +373,7 @@ def reset_password():
 @app.route('/checktoken', methods=['POST'])
 def check_token():
     token = request.headers['SessionID']
+    app_log.info('Checktoken %s ',  token)
 
     if ITSRestAPILogin.check_session_token(token):
         return "Token is valid", 200
@@ -366,6 +384,7 @@ def check_token():
 @app.route('/logout', methods=['POST'])
 def logout():
     token = request.headers['SessionID']
+    app_log.info('Logout %s ',  token)
 
     if ITSRestAPILogin.check_session_token(token):
         ITSRestAPILogin.delete_session_token(token)
@@ -675,7 +694,6 @@ def sessiontests_get_for_session(sessionid):
 
 @app.route('/sessiontests/<sessionid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessiontests_get_id(sessionid, identity):
-    app_log.info('SessionTests %s %s', sessionid, identity)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if request.method == 'GET':
@@ -961,7 +979,6 @@ def sessions_delete_tests(identity):
 
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessions_get_id(identity):
-    app_log.info('Sessions %s ',  identity)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
@@ -1489,6 +1506,7 @@ def login_change_password():
     # this is only available to the user him/herself
     # get the session id and the user id from the token
     token = request.headers['SessionID']
+    app_log.info('logins currentuser changepassword %s %s ', token, request.method)
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
@@ -1515,6 +1533,7 @@ def login_change_password():
 
 @app.route('/tokens', methods=['GET'])
 def tokens_get():
+    app_log.warning('TOKEN LIST RETRIEVED')
     check_master_header(request)
 
     return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
@@ -1539,6 +1558,7 @@ def tokens_get_id(identity):
 
 @app.route('/tokens/<identity>/<newcompany>', methods=['POST'])
 def token_change_company(identity, newcompany):
+
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
 
