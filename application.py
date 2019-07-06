@@ -59,9 +59,9 @@ def teardown_request(exception=None):
     endRequestTimer = time.time()
     try:
         app_log.info('Method called %s %s Timing %s', request.path, request.method, str(endRequestTimer - startRequestTimer[request.path]))
+        del startRequestTimer[request.path]
     except:
         app_log.info('Method called %s %s', request.path, request.method)
-    del startRequestTimer[request.path]
 
     #stop all open database connections
     try:
