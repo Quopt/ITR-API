@@ -2167,4 +2167,5 @@ if __name__ == '__main__':
     except:
         pass
 
+    app_log.info("Starting waitress server on port %s with %s threads.", itrport, itrthreads)
     serve(app.wsgi_app, threads = itrthreads, listen="*:" + itrport)
