@@ -173,18 +173,27 @@ def check_master_header(request):
 
 def getIP(request):
     ip_address = ""
-    if request.environ.get('HTTP_X_FORWARDED_FOR') is None: # if behind engine x offloading server
-        ip_address = request.environ['REMOTE_ADDR']
-    else:
-        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+    try:
+     ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+    except:
+     try:
+      ip_address = request.environ['REMOTE_ADDR']
+     except: 
+       return ""  
     return ip_address
 
 def getWWW(request):
     ip_address = ""
-    if request.environ.get('HTTP_X_FORWARDED_HOST') is None: # if behind engine x offloading server
-        ip_address = request.environ['HTTP_ORIGIN']
-    else:
-        ip_address = request.environ['HTTP_X_FORWARDED_HOST']
+    try:
+     ip_address = request.environ['HTTP_X_FORWARDED_HOST']
+    except:
+     try:
+      ip_address = request.environ['HTTP_ORIGIN']
+     except: 
+      try:
+       ip_address = request.environ['HOST']
+      except:
+       return ""  
     return ip_address
 
 # API implementations
