@@ -269,7 +269,7 @@ def login():
     ip_address = getIP(request)  # we need to check for ip in the future
     www = getWWW(request)
 
-    app_log.info('Login started for %s %s %s', user_id, ip_address, www)
+    app_log.info('Login started for %s %s %s %s', user_id, ip_address, www, request.host)
 
     if request.headers.__contains__('CompanyID'):
         user_company = request.headers['CompanyID']
