@@ -272,7 +272,7 @@ def route_companylogo():
                 ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
             if tempCompany is not None:
                 user_company = tempCompany.ID
-                
+
     parValue = ""
 
     try:
