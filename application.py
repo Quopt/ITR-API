@@ -273,6 +273,14 @@ def login():
 
     if request.headers.__contains__('CompanyID'):
         user_company = request.headers['CompanyID']
+    else:
+        # try to check the request.host against the know administrative ids in the database to determine the company id
+        wwwid = request.host.lower()
+        with ITSRestAPIDB.session_scope("") as session:
+            tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
+            if tempCompany is not None:
+             user_company = tempCompany.ID
 
     # check them against the database and return whether or not OK
     login_result = ITSRestAPILogin.login_user(user_id, user_password, user_company)
