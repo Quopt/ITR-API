@@ -259,6 +259,24 @@ def route_companyname():
 
     return parValue, 200
 
+@app.route('/companylogo')
+def route_companylogo():
+    user_company = ""
+    if request.headers.__contains__('CompanyID'):
+        user_company = request.headers['CompanyID']
+
+    parValue = ""
+
+    try:
+     with ITSRestAPIDB.session_scope(user_company, False) as session:
+        if request.method == 'GET':
+            param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                ITSRestAPIORMExtensions.SystemParam.ParameterName == "COMPANYLOGO").first()
+            parValue = param.ParValue
+    except:
+        pass
+
+    return parValue, 200
 
 @app.route('/login', methods=['GET'])
 def login():
