@@ -216,7 +216,15 @@ def route_copyright():
     user_company = ""
     if request.headers.__contains__('CompanyID'):
         user_company = request.headers['CompanyID']
-
+    else:
+        # try to check the request.host against the know administrative ids in the database to determine the company id
+        wwwid = request.host.lower()
+        with ITSRestAPIDB.session_scope("") as session:
+            tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
+            if tempCompany is not None:
+                user_company = str(tempCompany.ID)
+                
     parValue = ""
 
     try:
