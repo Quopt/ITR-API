@@ -1662,6 +1662,8 @@ def systemsettings_get_id(identity):
     else:
         if not organisation_supervisor_user and request.method != 'GET':
             return "You do not have sufficient rights to make this call", 404
+        if (not master_user) and (identity.toupper() == "MAXNUMBEROFCONSULTANTS") and (request.method != 'GET'):
+            return "You do not have sufficient rights to make this call", 404
         #session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client(company_id))()
         sessionid = company_id
 
@@ -1703,6 +1705,9 @@ def systemsettings_get_id(identity):
                 session.commit()
                 return "Parameter value updated", 200
         elif request.method == 'DELETE':
+            if not master_user:
+                return "You do not have sufficient rights to make this call", 404
+
             session.query(ITSRestAPIORMExtensions.SystemParam).filter(
                 ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).delete()
             session.commit()
@@ -2219,6 +2224,17 @@ if __name__ == '__main__':
         itrthreads = int(os.environ['ITRTHREADS'])
     except:
         pass
+    itrqueue = 2500
+    try:
+        itrqueue = int(os.environ['ITRQUEUE'])
+    except:
+        pass
 
-    app_log.info("Starting waitress server on port %s with %s threads.", itrport, itrthreads)
-    serve(app.wsgi_app, threads = itrthreads, listen="*:" + itrport)
+    connection_limit = 500
+    try:
+        connection_limit = int(os.environ['ITRCONNECTIONLIMIT'])
+    except:
+        pass
+
+    app_log.info("Starting waitress server on port %s with %s threads and queue size of %s and connection limit %s.", itrport, itrthreads, itrqueue, connection_limit)
+    serve(app.wsgi_app, threads = itrthreads, listen="*:" + itrport, backlog=itrqueue, connection_limit=connection_limit)
