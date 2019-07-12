@@ -1662,7 +1662,7 @@ def systemsettings_get_id(identity):
     else:
         if not organisation_supervisor_user and request.method != 'GET':
             return "You do not have sufficient rights to make this call", 404
-        if (not master_user) and (identity.toupper() == "MAXNUMBEROFCONSULTANTS") and (request.method != 'GET'):
+        if (not master_user) and (identity.upper() == "MAXNUMBEROFCONSULTANTS") and (request.method != 'GET'):
             return "You do not have sufficient rights to make this call", 404
         #session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client(company_id))()
         sessionid = company_id
