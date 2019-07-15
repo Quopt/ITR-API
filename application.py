@@ -774,6 +774,21 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
     json_obj = json.loads(temp_test.data)
     if int(json_obj["Status"]) >= 30:
         # save as anonymous data
+        temp_dict = json_obj["Results"]
+        for toplevelitem in temp_dict:
+            try:
+             for secondlevelitem in temp_dict[toplevelitem]:
+                for thirdlevelitem in temp_dict[toplevelitem][secondlevelitem]:
+                    if thirdlevelitem == "Anonimise":
+                        try:
+                            if temp_dict[toplevelitem][secondlevelitem][thirdlevelitem]:
+                                json_obj["Results"][toplevelitem][secondlevelitem]["Value"] = "*ANONIMISED*"
+                        except:
+                            pass
+            except:
+             pass
+
+
         # save to the central server system
         # get the person, session, group and test data
         temp_person = ITSRestAPIORMExtensions.ClientPerson().return_single_object(request,
@@ -782,71 +797,124 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
         temp_session = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
                                                                                     ITR_minimum_access_levels.test_taking_user,
                                                                                     json_obj['SessionID'])
-        json_person_obj = json.loads(temp_person.data)
-        json_session_obj = json.loads(temp_session.data)
-        json_group_obj = ""
-        temp_group = {}
-        tempPersonData = {}
-        if json_session_obj['GroupID'] != '00000000-0000-0000-0000-000000000000':
-            try:
-                temp_group = ITSRestAPIORMExtensions.ClientGroup().return_single_object(request,
-                                                                                        ITR_minimum_access_levels.test_taking_user,
-                                                                                        json_session_obj['GroupID'])
-                json_group_obj = json.loads(temp_group.data)
-            except:
-                pass
 
-        # check if a data gathering id for this test is already present
-        with ITSRestAPIDB.session_scope("") as qry_session:
-                # save to the local master database
-                data_gathering = qry_session.query(ITSRestAPIORMExtensions.SecurityDataGathering).filter(
-                            ITSRestAPIORMExtensions.SecurityDataGathering.SessionID == json_obj['SessionID']).filter(
-                            ITSRestAPIORMExtensions.SecurityDataGathering.TestID == json_obj['TestID']).first()
-                if data_gathering == None:
-                  data_gathering = ITSRestAPIORMExtensions.SecurityDataGathering()
-                  data_gathering.ID = uuid.uuid4()
-                data_gathering.CompanyID = company_id
-                data_gathering.SessionID = json_obj['SessionID']
-                data_gathering.TestID = json_obj['TestID']
-                tempPersonData['Sex'] = json_person_obj['Sex']
-                tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
-                tempPersonData['BirthDate'] = json_person_obj['BirthDate']
-                tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
-                data_gathering.PersonData = json.dumps(tempPersonData)
-                data_gathering.PluginData = "{}"
-                data_gathering.GroupData = json.dumps(json_group_obj)
-                data_gathering.SessionData = json.dumps(json_session_obj)
-                data_gathering.TestData = json.dumps(json_obj)
-
-                qry_session.add(data_gathering)
 
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
-            # save to the local master database
-            data_gathering = qry_session.query(ITSRestAPIORMExtensions.SecurityDataGathering).filter(
-                ITSRestAPIORMExtensions.SecurityDataGathering.SessionID == json_obj['SessionID']).filter(
-                ITSRestAPIORMExtensions.SecurityDataGathering.TestID == json_obj['TestID']).first()
-            if data_gathering == None:
-                data_gathering = ITSRestAPIORMExtensions.SecurityDataGathering()
-                data_gathering.ID = uuid.uuid4()
-            data_gathering.CompanyID = company_id
-            data_gathering.SessionID = json_obj['SessionID']
-            data_gathering.TestID = json_obj['TestID']
-            tempPersonData['Sex'] = json_person_obj['Sex']
-            tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
-            tempPersonData['BirthDate'] = json_person_obj['BirthDate']
-            tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
-            data_gathering.PersonData = json.dumps(tempPersonData)
-            data_gathering.PluginData = "{}"
-            data_gathering.GroupData = json.dumps(json_group_obj)
-            data_gathering.SessionData = json.dumps(json_session_obj)
-            data_gathering.TestData = json.dumps(json_obj)
+            with ITSRestAPIDB.session_scope("") as qry_session_master:
+                temp_testdef = qry_session.query(ITSRestAPIORMExtensions.Test).filter(
+                    ITSRestAPIORMExtensions.Test.ID == json_obj['TestID']).first()
+                if temp_testdef is None:
+                         temp_testdef = qry_session_master.query(ITSRestAPIORMExtensions.Test).filter(
+                             ITSRestAPIORMExtensions.Test.ID == json_obj['TestID']).first()
+                temp_company = qry_session_master.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                        ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
 
-            qry_session.add(data_gathering)
+                json_person_obj = json.loads(temp_person.data)
+                json_session_obj = json.loads(temp_session.data)
+                json_group_obj = ""
+                temp_group = {}
+                tempPersonData = {}
 
-        # now save to the central server using a json call
-        tempPersonData['UserDefinedFields'] = ""
-        data_gathering.PersonData = json.dumps(tempPersonData)
-        # to do
+                # console test program to get to for example the anonise flag
+                #app = Flask(__name__, instance_relative_config=True)
+                #app.app_context()
+                #qry_session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client('015e1e32-4377-4a10-8312-4d4be357cc3c', False))()
+                #temp_object = qry_session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(ITSRestAPIORMExtensions.ClientSessionTest.SessionID == '5834452d-c4e8-4d53-a701-c9cc6bca96c5').first()
+                #temp_dict = json.loads(temp_object.Results) # of json_obj["Results"]
+                #temp_dict['Question1']['Antwoord']['Anonimise']
+                #for toplevelitem in temp_dict:
+                #    for secondlevelitem in temp_dict[toplevelitem]:
+                #        for thirdlevelitem in temp_dict[toplevelitem][secondlevelitem]:
+                #            if thirdlevelitem == "Anonimise":
+                #                try:
+                #                    print(temp_dict[toplevelitem][secondlevelitem][thirdlevelitem])
+                #                    if temp_dict[toplevelitem][secondlevelitem][thirdlevelitem]:
+                #                     print(toplevelitem, secondlevelitem, thirdlevelitem,
+                #                          temp_dict[toplevelitem][secondlevelitem]["Value"])
+                #                     temp_dict[toplevelitem][secondlevelitem]["Value"] = "*ANONIMISED*"
+                #                except:
+                #                    pass
+
+
+                if json_session_obj['GroupSessionID'] != '00000000-0000-0000-0000-000000000000':
+                    try:
+                        temp_group = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
+                                                                                                ITR_minimum_access_levels.test_taking_user,
+                                                                                                json_session_obj['GroupSessionID'])
+                        json_group_obj = json.loads(temp_group.data)
+                        json_group_obj['PluginData'] = ""
+                    except:
+                        pass
+
+                # check if a data gathering id for this test is already present
+                with ITSRestAPIDB.session_scope("") as qry_session:
+                        # save to the local master database
+                        data_gathering = qry_session.query(ITSRestAPIORMExtensions.SecurityDataGathering).filter(
+                                    ITSRestAPIORMExtensions.SecurityDataGathering.SessionID == json_obj['SessionID']).filter(
+                                    ITSRestAPIORMExtensions.SecurityDataGathering.TestID == json_obj['TestID']).first()
+                        if data_gathering == None:
+                          data_gathering = ITSRestAPIORMExtensions.SecurityDataGathering()
+                          data_gathering.ID = uuid.uuid4()
+                        data_gathering.CompanyID = company_id
+                        data_gathering.SessionID = json_obj['SessionID']
+                        data_gathering.TestID = json_obj['TestID']
+                        tempPersonData['Sex'] = json_person_obj['Sex']
+                        tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
+                        tempPersonData['BirthDate'] = json_person_obj['BirthDate']
+                        tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
+                        data_gathering.PersonData = json.dumps(tempPersonData)
+                        data_gathering.PluginData = "{}"
+                        data_gathering.GroupData = json.dumps(json_group_obj)
+                        data_gathering.SessionData = json.dumps(json_session_obj)
+                        data_gathering.TestData = json.dumps(json_obj)
+
+                        data_gathering.SessionDescription = json_session_obj['Description']
+                        data_gathering.TestDescription = temp_testdef.Description
+                        data_gathering.CompanyDescription = temp_company.CompanyName
+                        try:
+                         data_gathering.GroupDescription = json_group_obj['Description']
+                        except:
+                         pass
+                        data_gathering.SessionEndData = json_session_obj['EndedAt']
+
+                        qry_session.add(data_gathering)
+
+                with ITSRestAPIDB.session_scope(company_id) as qry_session:
+                    # save to the local master database
+                    data_gathering = qry_session.query(ITSRestAPIORMExtensions.SecurityDataGathering).filter(
+                        ITSRestAPIORMExtensions.SecurityDataGathering.SessionID == json_obj['SessionID']).filter(
+                        ITSRestAPIORMExtensions.SecurityDataGathering.TestID == json_obj['TestID']).first()
+                    if data_gathering == None:
+                        data_gathering = ITSRestAPIORMExtensions.SecurityDataGathering()
+                        data_gathering.ID = uuid.uuid4()
+                    data_gathering.CompanyID = company_id
+                    data_gathering.SessionID = json_obj['SessionID']
+                    data_gathering.TestID = json_obj['TestID']
+                    tempPersonData['Sex'] = json_person_obj['Sex']
+                    tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
+                    tempPersonData['BirthDate'] = json_person_obj['BirthDate']
+                    tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
+                    data_gathering.PersonData = json.dumps(tempPersonData)
+                    data_gathering.PluginData = "{}"
+                    data_gathering.GroupData = json.dumps(json_group_obj)
+                    data_gathering.SessionData = json.dumps(json_session_obj)
+                    data_gathering.TestData = json.dumps(json_obj)
+
+                    data_gathering.SessionDescription = json_session_obj['Description']
+                    data_gathering.TestDescription = temp_testdef.Description
+                    data_gathering.CompanyDescription = temp_company.CompanyName
+                    try:
+                        data_gathering.GroupDescription = json_group_obj['Description']
+                    except:
+                        pass
+                    data_gathering.SessionEndData = json_session_obj['EndedAt']
+
+                    qry_session.add(data_gathering)
+
+                # now save to the central server using a json call
+                tempPersonData['UserDefinedFields'] = ""
+                data_gathering.PersonData = json.dumps(tempPersonData)
+                # to do
 
         # invoice the test
         if int(json_obj["Status"]) == 30 :

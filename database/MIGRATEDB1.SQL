@@ -768,8 +768,7 @@ ALTER TABLE public."SecurityCompanies"
 
 CREATE INDEX "IX_SC_CompanyCountry"
     ON public."SecurityCompanies" USING btree
-    ("CompanyCountry" COLLATE pg_catalog."default")
-    TABLESPACE %TABLESPACE%;
+    ("CompanyCountry" COLLATE pg_catalog."default")TABLESPACE %TABLESPACE%;
 
 -- Index: IX_SC_CompanyName
 

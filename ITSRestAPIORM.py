@@ -452,7 +452,11 @@ class SecurityDataGathering(Base):
     SessionData = Column(UnicodeText, nullable=False, server_default=text("('')"))
     TestData = Column(UnicodeText, nullable=False, server_default=text("('')"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
-
+    TestDescription = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    SessionDescription = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    CompanyDescription = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    GroupDescription = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    SessionEndData = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
 
 class SecurityTemplate(Base):
     __tablename__ = 'SecurityTemplates'
