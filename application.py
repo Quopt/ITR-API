@@ -1868,7 +1868,7 @@ def tests_get_id(identity):
         except:
             pass
         cachedfilefull = os.path.join(os.sep, pathname, "master_" + cachefilename) if include_master else os.path.join(os.sep, pathname, cachefilename)
-        if os.path.isfile(cachedfilefull) and 1==0:
+        if os.path.isfile(cachedfilefull):
              return (open(cachedfilefull, 'r').read()), 200
         else:
             to_return = ITSRestAPIORMExtensions.Test().return_single_object(request,
