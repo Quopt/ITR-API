@@ -1952,7 +1952,8 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
                      ITSHelpers.string_split_to_filepath(maintainingObjectIdentity)))
         basepathname = os.path.dirname(
             os.path.join(os.sep, app.instance_path, 'media', 'master'))
-    if fileType != "all":
+    fileType = fileType.upper()
+    if fileType != "ALL":
         pathname = pathname + os.sep + fileType
 
     if master_user or organisation_supervisor_user or author_user or test_taking_user:
