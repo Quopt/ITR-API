@@ -512,6 +512,7 @@ class SecurityUser(Base):
     IsOfficeUser = Column(Boolean, nullable=False, server_default=text("False"))
     IsOrganisationSupervisor = Column(Boolean, nullable=False, server_default=text("False"))
     IsTestAuthor = Column(Boolean, nullable=False, server_default=text("False"))
+    IsResearcher = Column(Boolean, nullable=False, server_default=text("False"))
     IsReportAuthor = Column(Boolean, nullable=False, server_default=text("False"))
     IsTestScreenTemplateAuthor = Column(Boolean, nullable=False, server_default=text("False"))
     IsTranslator = Column(Boolean, nullable=False, server_default=text("False"))

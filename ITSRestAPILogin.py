@@ -243,7 +243,7 @@ def get_id_of_user_with_token_and_company_id(user_id, company_id):
 
     try:
         for recs in connection.execute(
-                'select "ID", "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor", "IsTestScreenTemplateAuthor", "IsTranslator", "IsOfficeUser", "IsPasswordManager" from "SecurityUsers" where "CompanyID" = %s and "Email" = %s order by "IsOfficeUser"',
+                'select "ID", "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor", "IsTestScreenTemplateAuthor", "IsTranslator", "IsOfficeUser", "IsPasswordManager", "IsResearcher" from "SecurityUsers" where "CompanyID" = %s and "Email" = %s order by "IsOfficeUser"',
                 company_id, user_id):
             id_of_user = recs[0]
             master_user = recs[1]
@@ -255,13 +255,14 @@ def get_id_of_user_with_token_and_company_id(user_id, company_id):
             translator_user = recs[7]
             office_user = recs[8]
             is_password_manager = recs[9]
+            is_researcher = recs[10]
     finally:
         try:
          connection.dispose()
         except:
          pass
 
-    return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager
+    return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher
 
 
 def create_or_update_testrun_user(user_guid, company_id, user_id, new_password, active_status, delete_only):
@@ -420,6 +421,7 @@ def clone_user_login(user_id, user_guid, old_company_id, new_company_id):
                     newconsultant.IsReportAuthor = consultant.IsReportAuthor
                     newconsultant.IsTestScreenTemplateAuthor = consultant.IsTestScreenTemplateAuthor
                     newconsultant.IsTranslator = consultant.IsTranslator
+                    newconsultant.IsResearcher = consultant.IsResearcher
                     newconsultant.IsPasswordManager = consultant.IsPasswordManager
                     newconsultant.MayOrderCredits = consultant.MayOrderCredits
                     newconsultant.MayWorkWithBatteriesOnly = consultant.MayWorkWithBatteriesOnly

@@ -396,8 +396,19 @@ class SecurityDataGathering(ITSRestAPIORM.SecurityDataGathering, ITSRestAPIORMEx
     identity_field = "ID"
     default_order_by_field = "ID"
     select_fields = {"ID"
-        , "CompanyID"
-        , "SessionID"}
+         , "CompanyID"
+         , "SessionID"
+         ,"TestID"
+         ,"PersonData"
+         ,"GroupData"
+         ,"SessionData"
+         ,"TestData"
+         ,"PluginData"
+         ,"TestDescription"
+         ,"SessionDescription"
+         ,"CompanyDescription"
+         ,"GroupDescription"
+         ,"SessionEndData"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"ID"}
@@ -406,7 +417,6 @@ class SecurityDataGathering(ITSRestAPIORM.SecurityDataGathering, ITSRestAPIORMEx
     may_work_with_own_objects_field = ""
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
-
 
 class SecurityTemplate(ITSRestAPIORM.SecurityTemplate, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -432,7 +442,7 @@ class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.OR
                      "InformationAddress", "LastLoginDateTime", "EndDateLicense", "StartDateLicense",
                      "UserOpeningsScreen", "PreferredLanguage", "PasswordExpirationDate", "LastLoginDateTime",
                      "IsMasterUser", "IsTestTakingUser", "IsOrganisationSupervisor", "IsTestAuthor", "IsReportAuthor",
-                     "IsTestScreenTemplateAuthor",
+                     "IsTestScreenTemplateAuthor", "IsResearcher",
                      "IsTranslator", "IsPasswordManager", "MayOrderCredits", "MayWorkWithBatteriesOnly", "DoNotRenewLicense",
                      "Active", "UserCulture", "SessionPool", "MayWorkWithOwnObjectsOnly",
                      "SecurityTemplateID", "HasPersonalCreditPool", "CurrentPersonalCreditLevel"}

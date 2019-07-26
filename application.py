@@ -154,7 +154,7 @@ def check_master_header(request):
 
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
         if master_user:
@@ -1356,7 +1356,7 @@ def creditgrants_get_id(identity):
         # increase the companies credit level with the saved credit grant
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
         if master_user:
@@ -1427,25 +1427,26 @@ def creditusage_get_id(identity):
 @app.route('/datagathering', methods=['GET'])
 def datagathering_get():
     check_master_header(request)
-    return ITSRestAPIORMExtensions.SecurityCreditUsage().common_paginated_read_request(request,
-                                                                                       ITR_minimum_access_levels.regular_office_user)
+    return ITSRestAPIORMExtensions.SecurityDataGathering().common_paginated_read_request(request,
+                                                                                       ITR_minimum_access_levels.data_researcher)
 
 
 @app.route('/datagathering/<identity>', methods=['GET', 'POST', 'DELETE'])
 def datagathering_get_id(identity):
     if request.method == 'GET':
         check_master_header(request)
-        return ITSRestAPIORMExtensions.SecurityCreditUsage().return_single_object(request,
-                                                                                  ITR_minimum_access_levels.regular_office_user,
+        return ITSRestAPIORMExtensions.SecurityDataGathering().return_single_object(request,
+                                                                                  ITR_minimum_access_levels.data_researcher,
                                                                                   identity)
     elif request.method == 'POST':
-        return ITSRestAPIORMExtensions.SecurityCreditUsage().change_single_object(request,
-                                                                                  ITR_minimum_access_levels.regular_office_user,
+        check_master_header(request)
+        return ITSRestAPIORMExtensions.SecurityDataGathering().change_single_object(request,
+                                                                                  ITR_minimum_access_levels.data_researcher,
                                                                                   identity)
     elif request.method == 'DELETE':
         check_master_header(request)
-        return ITSRestAPIORMExtensions.SecurityCreditUsage().delete_single_object(request,
-                                                                                  ITR_minimum_access_levels.regular_office_user,
+        return ITSRestAPIORMExtensions.SecurityDataGathering().delete_single_object(request,
+                                                                                  ITR_minimum_access_levels.data_researcher,
                                                                                   identity)
 
 
@@ -1486,7 +1487,7 @@ def logins_get_id(identity):
     master_db_query = False
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     if identity == 'currentuser':
         identity = id_of_user
@@ -1552,6 +1553,8 @@ def logins_get_id(identity):
                     AllowedFieldsToChange.remove('IsTestScreenTemplateAuthor')
                 if not consultant.IsPasswordManager:
                     AllowedFieldsToChange.remove('IsPasswordManager')
+                if not consultant.IsResearcher :
+                    AllowedFieldsToChange.remove('IsResearcher')
                 if not consultant.IsTranslator :
                     AllowedFieldsToChange.remove('IsTranslator')
                 if not consultant.MayOrderCredits :
@@ -1629,7 +1632,7 @@ def login_change_password():
     token = request.headers['SessionID']
     app_log.info('logins currentuser changepassword %s %s ', token, request.method)
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
     if user_id != "":
@@ -1856,7 +1859,7 @@ def tests_get_id(identity):
         # test taking users may request all test definitions since they need them for test taking, but will get limited fields back to protect scoring and norming rules
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
         if (not office_user) and test_taking_user:
             # use a special cache file for the test cache for test takers
@@ -1938,7 +1941,7 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
         masterFiles = True
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname = os.path.dirname(
         os.path.join(os.sep, app.instance_path, 'media', str(company_id),
@@ -1973,7 +1976,7 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
 def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_dst):
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname_src = os.path.dirname(
         os.path.join(os.sep, app.instance_path, 'media', str(company_id),
@@ -2008,7 +2011,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
             return "File API failed", 500
         # get the company id from the token instead of the api
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
                 user_id, company_id)
     fileType = fileType.upper()
     pathname = os.path.dirname(
@@ -2104,7 +2107,7 @@ def translations(langcode):
     elif request.method == 'POST':
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
         if (master_user or translator_user) and ITSTranslate.translation_available():
@@ -2147,7 +2150,7 @@ def translations(langcode):
 def translate_string(sourcelangcode, targetlangcode):
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
     if (master_user or translator_user or author_user or author_report_user) and ITSTranslate.translation_available():
