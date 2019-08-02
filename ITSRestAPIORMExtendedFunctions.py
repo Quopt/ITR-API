@@ -94,16 +94,23 @@ class ORMExtendedFunctions:
                 if value_in_filter_line[len(value_in_filter_line) - 1] == "'":
                     value_in_filter_line = value_in_filter_line[:len(value_in_filter_line) - 1]
 
+                separator = "="
+                if field_in_filter_line.endswith(">") or field_in_filter_line.endswith("<"):
+                    separator = field_in_filter_line[-1:] + separator
+                    field_in_filter_line = field_in_filter_line[:-1]
+                if field_in_filter_line.endswith("%"):
+                    separator = "like"
+                    field_in_filter_line = field_in_filter_line[:-1]
                 if field_in_filter_line in inspect(self).mapper.column_attrs:
                     if filter_where_single == "":
-                        filter_where_single = "A.\"" + field_in_filter_line + "\" = '" + value_in_filter_line.replace(
+                        filter_where_single = "A.\"" + field_in_filter_line + "\" "+separator+" '" + value_in_filter_line.replace(
                             "'", "''") + "' "
                     else:
                         if last_field_in_filter_line == field_in_filter_line :
-                            filter_where_single = "(" +  filter_where_single + " or A.\"" + field_in_filter_line + "\" = '" + value_in_filter_line.replace(
+                            filter_where_single = "(" +  filter_where_single + " or A.\"" + field_in_filter_line + "\" "+separator+" '" + value_in_filter_line.replace(
                                 "'", "''") + "' )"
                         else:
-                            filter_where_single = filter_where_single + " and A.\"" + field_in_filter_line + "\" = '" + value_in_filter_line.replace("'", "''") + "' "
+                            filter_where_single = filter_where_single + " and A.\"" + field_in_filter_line + "\" "+separator+" '" + value_in_filter_line.replace("'", "''") + "' "
                     last_field_in_filter_line = field_in_filter_line
         # print("X6")
         if limit_by_user_id != "":
@@ -210,7 +217,9 @@ class ORMExtendedFunctions:
             try:
                 if include_client:
                     try:
-                        a = qry_session.execute(final_select).fetchall()
+                        stmt = text(final_select)
+                        qry = qry_session.execute(stmt)
+                        a = qry.fetchall()
                     finally:
                         qry_session.dispose()
             except:
@@ -220,7 +229,9 @@ class ORMExtendedFunctions:
             qry_session_master = ITSRestAPIDB.get_db_engine_connection_master()
             try:
                 b = []
-                b = qry_session_master.execute(final_select_master).fetchall()
+                stmt = text(final_select_master)
+                qry = qry_session_master.execute(stmt)
+                b = qry.fetchall()
             except:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
