@@ -2095,11 +2095,11 @@ def translations(langcode):
     filename = os.path.join(app.instance_path, 'translations/', langcode + '.json')
     if request.method == 'GET':
         if os.path.isfile(filename):
-            old_data = json.load(open(filename, 'r'))
-            new_data = {}
-            for line in old_data:
-                new_data[line] = old_data[line]
-                #print(old_data[line])
+            # old_data = json.load(open(filename, 'r'))
+            # new_data = {}
+            # for line in old_data:
+            #     new_data[line] = old_data[line]
+            #     #print(old_data[line])
             with open(filename, 'r') as translationFile:
                 return translationFile.read(), 200
         else:
@@ -2123,7 +2123,16 @@ def translations(langcode):
                     os.makedirs(os.path.dirname(filename))
             for line in new_data:
                 # needs translation
-                translatedText, newTranslation = ITSTranslate.get_translation_if_needed(langcode, line, new_data[line]['value'], old_data)
+                header_force_translation = False
+                try:
+                    header_force_translation = request.headers['ForceTranslation'] == "Y"
+                except:
+                    pass
+                if header_force_translation:
+                    newTranslation = True
+                    translatedText = new_data[line]['value']
+                else:
+                    translatedText, newTranslation = ITSTranslate.get_translation_if_needed(langcode, line, new_data[line]['value'], old_data)
                 if translatedText is not None and newTranslation:
                     old_data[line] = new_data[line]
                     old_data[line]['originalValue'] = new_data[line]['value']
