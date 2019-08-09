@@ -1326,6 +1326,10 @@ def companies_get_id(identity):
         with ITSRestAPIDB.session_scope("") as session:
             session.query(ITSRestAPIORMExtensions.SecurityCreditGrant).filter(
                 ITSRestAPIORMExtensions.SecurityCreditGrant.CompanyID == identity).delete()
+        # delete the credit usages
+        with ITSRestAPIDB.session_scope("") as session:
+            session.query(ITSRestAPIORMExtensions.SecurityCreditUsage).filter(
+                ITSRestAPIORMExtensions.SecurityCreditUsage.CompanyID == identity).delete()
 
         # delete any stored files
         folder_to_delete = os.path.join(os.sep, app.instance_path, 'media', str(identity) )
