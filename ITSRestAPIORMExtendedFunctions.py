@@ -67,16 +67,16 @@ class ORMExtendedFunctions:
             if len(self.unified_search_fields) > 0:
                 for c in self.unified_search_fields:
                     if filter_where == "":
-                        filter_where = filter_where + "(cast(A.\"" + c + "\" as varchar(100)) "
+                        filter_where = filter_where + "(A.\"" + c + "\" "
                     else:
-                        filter_where = filter_where + " || cast(A.\"" + c + "\" as varchar(100)) "
+                        filter_where = filter_where + " || A.\"" + c + "\" "
             else:
                 for c in inspect(self).mapper.column_attrs:
                     if filter_where == "":
-                        filter_where = filter_where + "(cast(A.\"" + c.key + "\" as varchar(100)) "
+                        filter_where = filter_where + "(A.\"" + c.key + "\" "
                     else:
-                        filter_where = filter_where + " || cast(A.\"" + c.key + "\" as varchar(100)) "
-            filter_where = filter_where + " ilike \'%%" + filter_expression.replace("'", "'+char(39)+'") + "%%\' )"
+                        filter_where = filter_where + " || A.\"" + c.key + "\" "
+            filter_where = filter_where + ") ilike \'%%" + filter_expression.replace("'", "'+char(39)+'") + "%%\' "
         # print("X5")
 
         # single field filter expression.
@@ -206,6 +206,7 @@ class ORMExtendedFunctions:
         final_select_master = "with TempTable as  ( select ROW_NUMBER() " + temp_orderby + " AS RowNumber, A.* from \"" + temp_table_name + "\" as A " + filter_where_total + ")  select " + \
                               select_fields_text + ", 1 as dbsource from TempTable " + row_selector
         # print("X11")
+        print(final_select)
         # now construct the total query
         if client_database_id == "":
             qry_session = ITSRestAPIDB.get_db_engine_connection_master()

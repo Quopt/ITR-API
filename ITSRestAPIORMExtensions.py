@@ -44,7 +44,7 @@ class ClientAuditLog(ITSRestAPIORM.ClientAuditLog, ITSRestAPIORMExtendedFunction
         , "SessionID"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"ObjectType", "OldData", "NewData", "AuditMessage", "CreateDate"}
+    unified_search_fields = {"ObjectType", "OldData", "NewData", "AuditMessage"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -123,7 +123,7 @@ class ClientGroupMember(ITSRestAPIORM.ClientGroupMember, ITSRestAPIORMExtendedFu
         , "BirthDate"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"Name", "EMail", "BirthDate"}
+    unified_search_fields = {"Name", "EMail"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -219,8 +219,6 @@ class ClientPerson(ITSRestAPIORM.ClientPerson, ITSRestAPIORMExtendedFunctions.OR
         , "UserDefinedFields"
         , "PreferredLanguage"
         , "Sex"
-        , "DateOfLastTest"
-        , "BirthDate"
         , "Remarks"}
     archive_field = "Active"
     user_limit_select_field = {}
@@ -257,7 +255,7 @@ class ClientSessionTest(ITSRestAPIORM.ClientSessionTest, ITSRestAPIORMExtendedFu
                      }
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"Status", "HowTheTestIsTaken", "WarningMessage"}
+    unified_search_fields = { "HowTheTestIsTaken", "WarningMessage"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -294,10 +292,6 @@ class ClientSession(ITSRestAPIORM.ClientSession, ITSRestAPIORMExtendedFunctions.
     unified_search_fields = {"Description"
         , "Goal"
         , "SessionState"
-        , "AllowedStartDateTime"
-        , "AllowedEndDateTime"
-        , "StartedAt"
-        , "EndedAt"
         , "Status"
         , "EMailNotificationAdresses"
         , "Remarks"}
@@ -318,9 +312,7 @@ class Report(ITSRestAPIORM.Report, ITSRestAPIORMExtendedFunctions.ORMExtendedFun
         , "InvoiceCode", "CostsInTicks", "ReportLanguage", "DefaultReport", "Active", "TestID", "TestIDs"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"ReportType"
-        , "Description"
-        , "InvoiceCode", "CostsInTicks", "ReportLanguage", "Remarks", "Explanation"}
+    unified_search_fields = {"ReportType", "Description", "InvoiceCode", "CostsInTicks", "ReportLanguage", "Remarks", "Explanation"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -332,10 +324,7 @@ class SecurityCompany(ITSRestAPIORM.SecurityCompany, ITSRestAPIORMExtendedFuncti
     # add additional fields
     identity_field = "ID"
     default_order_by_field = "CompanyName"
-    select_fields = {"ID"
-        , "CompanyName"
-        , "CompanyCountry"
-        , "InternationalVATNr", "VATPercentage", "MailAddress", "VisitingAddress", "InvoiceAddress"
+    select_fields = {"ID", "CompanyName", "CompanyCountry", "InternationalVATNr", "VATPercentage", "MailAddress", "VisitingAddress", "InvoiceAddress"
         , "VATPercentage", "CompanyLogo", "ContactPerson", "ContactPhone", "ContactEMail"
         , "TestTakingDiscount", "CostsPerTestInUnits", "YearlyLicenseDiscount", "YearlyLicenseFee", "InvoiceCurrency"
         , "CurrentCreditLevel", "ConcurrentOpenSessions", "AllowNegativeCredits", "Active", "LicenseStartDate"
@@ -359,13 +348,10 @@ class SecurityCreditGrant(ITSRestAPIORM.SecurityCreditGrant, ITSRestAPIORMExtend
     # add additional fields
     identity_field = "ID"
     default_order_by_field = "GrantedWhen"
-    select_fields = {"ID"
-        , "UserID"
-        , "CompanyID"
-        , "GrantedWhen", "UserDescription", "Paid", "CreditsGranted", "Remarks"}
+    select_fields = {"ID", "UserID"        , "CompanyID"       , "GrantedWhen", "UserDescription", "Paid", "CreditsGranted", "Remarks"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"GrantedWhen", "UserDescription", "CreditsGranted", "Remarks"}
+    unified_search_fields = {"UserDescription", "CreditsGranted", "Remarks"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -383,8 +369,7 @@ class SecurityCreditUsage(ITSRestAPIORM.SecurityCreditUsage, ITSRestAPIORMExtend
                      "SessionName", "UserName"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"InvoiceCode", "OriginalTicks", "DiscountedTicks", "TotalTicks", "UsageDateTime",
-                             "SessionName", "UserName"}
+    unified_search_fields = {"InvoiceCode", "OriginalTicks", "DiscountedTicks", "TotalTicks", "SessionName", "UserName"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -449,7 +434,7 @@ class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.OR
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Email", "UserName", "MailAddress", "VisitingAddress", "InvoiceAddress",
-                             "InformationAddress", "Remarks", "LastLoginDateTime", "EndDateLicense", "StartDateLicense",
+                             "InformationAddress", "Remarks",
                              "CurrentPersonalCreditLevel"}
     archive_field = {}
     user_limit_select_field = {}
@@ -467,7 +452,7 @@ class SecurityWebSessionToken(ITSRestAPIORM.SecurityWebSessionToken,
         , "UserID", "CompanyID", "TokenValidated"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"Token", "TokenValidated"}
+    unified_search_fields = {"Token"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -538,13 +523,7 @@ class Test(ITSRestAPIORM.Test, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctio
         , "Generation"}
     sort_fields = {}
     order_fields = {}
-    unified_search_fields = {"TestName"
-        , "Description"
-        , "Costs"
-        , "TestType"
-        , "Generation"
-        , "CatalogInformation"
-        , "Remarks"}
+    unified_search_fields = {"TestName", "Description", "Costs", "TestType", "Generation", "CatalogInformation", "Remarks"}
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""
@@ -645,8 +624,6 @@ class ViewClientGroupSessionCandidates(ITSRestAPIORM.ViewClientGroupSessionCandi
         , "TitlesAfter"
         , "PreferredLanguage"
         , "Sex"
-        , "DateOfLastTest"
-        , "BirthDate"
         , "Remarks"}
     archive_field = "Active"
     user_limit_select_field = {}
