@@ -2144,6 +2144,9 @@ def translations(langcode):
                     old_data[line]['valueAsOriginal'] = 'N'
                     if old_data[line]['originalValue'] == old_data[line]['value']:
                         old_data[line]['valueAsOriginal'] = 'Y'
+                    old_data[line]['changeDateTime'] = datetime.now().isoformat()
+                    old_data[line]['changedBy'] = str(id_of_user) + " (" + str(company_id) + ")"
+
                     linesChanged = linesChanged + 1
 
                     if linesChanged > 0 and linesChanged % 25 == 0:
