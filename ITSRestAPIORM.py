@@ -593,6 +593,7 @@ class TestScreenTemplate(Base):
     init_value_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     generator_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     generator_pnp_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    generator_summary_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     validation_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     isanswered_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
 
