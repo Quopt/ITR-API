@@ -580,6 +580,7 @@ class TestScreenTemplate(Base):
     ID = Column(UUIDType(binary=False), primary_key=True)
     HTMLContent = Column(UnicodeText, nullable=False, server_default=text("('')"))
     HTMLContentPnP = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    HTMLContentSummary = Column(UnicodeText, nullable=False, server_default=text("('')"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
     Description = Column(Unicode(200), nullable=False, server_default=text("('')"))
     TemplateType = Column(SmallInteger, nullable=False, server_default=text("((0))"))
