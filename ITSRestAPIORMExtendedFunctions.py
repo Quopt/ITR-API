@@ -394,6 +394,7 @@ class ORMExtendedFunctions:
                        user_object.IsTestTakingUser and not user_object.IsOfficeUser, user_object.ID
         else:
             pass
+            # invalid session token. Just ignore and return.
 
     def return_single_object(self, request, required_minimum_access_level, id_to_find, master_database_query = False):
         # get the settings from the request header

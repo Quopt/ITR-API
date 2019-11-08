@@ -1625,7 +1625,8 @@ def logins_get_companies_memberships():
 
         return ITSRestAPIORMExtensions.SecurityCompany().common_paginated_read_request(request,
                                                                                        ITR_minimum_access_levels.test_taking_user,
-                                                                                       'a."ID" in (select distinct b."CompanyID" from "SecurityUsers" as b where b."Email" = \'+ user_id +\')')
+                                                                                       additional_unchecked_where_clause=
+                                                                                       'a."ID" in (select distinct b."CompanyID" from "SecurityUsers" as b where b."Email" = \''+ user_id + '\')')
     else:
         return "User not found or no known token linked to this user", 404
 
