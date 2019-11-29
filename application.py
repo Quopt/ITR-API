@@ -296,6 +296,38 @@ def route_companylogo():
 
     return parValue, 200
 
+@app.route('/activesessions', methods=['GET'])
+def active_sessions():
+    # get the company id and session id from the header
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+        request)
+
+    if office_user:
+        amount_of_sessions = 0
+        amount_of_testrun_sessions = 0
+        server_amount_of_sessions = 0
+        server_amount_of_testrun_sessions = 0
+
+        with ITSRestAPIDB.session_scope("") as session:
+            ITSRestAPILogin.check_for_dead_tokens(session)
+
+            amount_of_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
+                ITSRestAPIORMExtensions.SecurityWebSessionToken.CompanyID == company_id).count()
+            amount_of_testrun_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
+                ITSRestAPIORMExtensions.SecurityWebSessionToken.CompanyID == company_id).filter(ITSRestAPIORMExtensions.SecurityWebSessionToken.IsTestTakingUser).count()
+
+            if master_user:
+                server_amount_of_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).count()
+                server_amount_of_testrun_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
+                    ITSRestAPIORMExtensions.SecurityWebSessionToken.IsTestTakingUser).count()
+
+        if master_user:
+            return "" + str(amount_of_sessions) + "(" + str(amount_of_testrun_sessions) + ")-" + str(server_amount_of_sessions) + "(" + str(server_amount_of_testrun_sessions) + ")", 200
+        else:
+            return "" + str(amount_of_sessions) + "(" + str(amount_of_testrun_sessions) + ")", 200
+    else:
+        return "This API is only available to logged in office users",403
+
 @app.route('/login', methods=['GET'])
 def login():
     # get the user id and password from the header

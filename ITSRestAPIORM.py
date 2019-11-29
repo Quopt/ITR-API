@@ -542,7 +542,7 @@ class SecurityWebSessionToken(Base):
     UserID = Column(Unicode(50), nullable=False)
     CompanyID = Column(UUIDType(binary=False), nullable=False)
     TokenValidated = Column(DateTime(timezone=True), nullable=False, server_default=text("(NOW())"))
-
+    IsTestTakingUser = Column(Boolean, nullable=False, server_default=text("False"))
 
 class SystemParam(Base):
     __tablename__ = 'SystemParam'
