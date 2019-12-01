@@ -143,8 +143,12 @@ def create_session_token(user_id, company_id, login_token_type):
         token = 'W' + uuid.uuid4().hex
         with ITSRestAPIDB.session_scope("") as session:
             temp_user = session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                ITSRestAPIORMExtensions.SecurityUser.ID == user_id).first()
-            test_taking_user = temp_user.IsTestTakingUser
+                ITSRestAPIORMExtensions.SecurityUser.Email == user_id).filter(
+                ITSRestAPIORMExtensions.SecurityUser.CompanyID == company_id).first()
+            try:
+                test_taking_user = temp_user.IsTestTakingUser
+            except:
+                pass
     else:  # password reset token
         token = 'P' + uuid.uuid4().hex
     connection = ITSRestAPIDB.get_db_engine_connection()
