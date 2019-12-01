@@ -137,15 +137,22 @@ def check_if_user_account_is_valid(user_id):
 def create_session_token(user_id, company_id, login_token_type):
     # first create the token and then store it in the database
     # the token is returned as a string
+    test_taking_user = False
+
     if login_token_type == LoginTokenType.regular_session:  # regular internet session
         token = 'W' + uuid.uuid4().hex
+        with ITSRestAPIDB.session_scope("") as session:
+            with ITSRestAPIDB.session_scope("") as session:
+                temp_user = session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                    ITSRestAPIORMExtensions.SecurityUser.ID == user_id).first()
+                test_taking_user = temp_user.IsTestTakingUser
     else:  # password reset token
         token = 'P' + uuid.uuid4().hex
     connection = ITSRestAPIDB.get_db_engine_connection()
     check_for_dead_tokens(connection)
     try:
-        connection.execution_options(isolation_level="AUTOCOMMIT").execute('insert into "SecurityWebSessionTokens" ("Token", "UserID", "CompanyID") values (%s,%s,%s)',
-                       token, user_id, company_id)
+        connection.execution_options(isolation_level="AUTOCOMMIT").execute('insert into "SecurityWebSessionTokens" ("Token", "UserID", "CompanyID", "IsTestTakingUser") values (%s,%s,%s,%s)',
+                       token, user_id, company_id, test_taking_user)
     finally:
         connection.dispose()
 
