@@ -206,7 +206,7 @@ class ORMExtendedFunctions:
         final_select_master = "with TempTable as  ( select ROW_NUMBER() " + temp_orderby + " AS RowNumber, A.* from \"" + temp_table_name + "\" as A " + filter_where_total + ")  select " + \
                               select_fields_text + ", 1 as dbsource from TempTable " + row_selector
         # print("X11")
-        print(final_select)
+        app_log.info(final_select)
         # now construct the total query
         if client_database_id == "":
             qry_session = ITSRestAPIDB.get_db_engine_connection_master()
@@ -226,7 +226,7 @@ class ORMExtendedFunctions:
             except:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-                app_log.info('Query on client failed :  %s', ''.join(' ' + line for line in lines))
+                app_log.error('Query on client failed :  %s', ''.join(' ' + line for line in lines))
             qry_session_master = ITSRestAPIDB.get_db_engine_connection_master()
             try:
                 b = []
@@ -236,7 +236,7 @@ class ORMExtendedFunctions:
             except:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-                app_log.info('Query on master failed :  %s', ''.join(' ' + line for line in lines))
+                app_log.error('Query on master failed :  %s', ''.join(' ' + line for line in lines))
             qry_session_master.dispose()
             c = a + b
             return c
