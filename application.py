@@ -1703,7 +1703,7 @@ def tokens_get():
     else:
         return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
                                                                                            ITR_minimum_access_levels.regular_office_user,
-                                                                                               additional_unchecked_where_clause="\"CompanyID\" = '" + company_id + "'" )
+                                                                                               additional_unchecked_where_clause="\"CompanyID\" = '" + str(company_id) + "'" )
 
 
 @app.route('/tokens/<identity>', methods=['GET', 'POST', 'DELETE'])
