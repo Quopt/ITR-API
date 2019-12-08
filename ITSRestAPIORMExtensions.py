@@ -448,8 +448,8 @@ class SecurityWebSessionToken(ITSRestAPIORM.SecurityWebSessionToken,
     # add additional fields
     identity_field = "Token"
     default_order_by_field = "Token"
-    select_fields = {"Token"
-        , "UserID", "CompanyID", "TokenValidated"}
+    select_fields = { # "Token", do not include the token. Never send this back to the client for security reasons
+        "UserID", "CompanyID", "TokenValidated", "IsTestTakingUser"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Token"}

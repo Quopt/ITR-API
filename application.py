@@ -1695,10 +1695,15 @@ def login_change_password():
 @app.route('/tokens', methods=['GET'])
 def tokens_get():
     app_log.warning('TOKEN LIST RETRIEVED')
-    check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
 
-    return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
+    if master_user:
+        return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
                                                                                            ITR_minimum_access_levels.master_user)
+    else:
+        return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
+                                                                                           ITR_minimum_access_levels.regular_office_user,
+                                                                                               additional_unchecked_where_clause="\"CompanyID\" = '" + company_id + "'" )
 
 
 @app.route('/tokens/<identity>', methods=['GET', 'POST', 'DELETE'])
