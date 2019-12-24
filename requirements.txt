@@ -11,6 +11,6 @@ flask-cors == 3.0.7
 alembic == 0.9.6
 Flask-Cache == 0.13.1
 flask-compress == 1.4.0
-waitress == 1.4.0
+waitress == 1.4.1
 requests == 2.21.0
 cryptography == 2.7
