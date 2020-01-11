@@ -996,7 +996,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                             if not invoicing_ok:
                                 invoicing_ok = localcompany.TestTakingDiscount == 100
                             if not invoicing_ok:
-                                invoicing_ok = localcompany.CurrentCreditLevel >= totalCosts
+                                invoicing_ok = localcompany.CurrentCreditLevel > 0 # in principle this should be >= TotalCosts. But we give the customer a little headroom to view the last test
                             if not invoicing_ok:
                                 invoicing_ok = localcompany.AllowNegativeCredits
                             if invoicing_ok and totalCosts > 0:
