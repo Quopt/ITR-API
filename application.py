@@ -795,7 +795,8 @@ def sessiontests_get_id(sessionid, identity):
                     to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                                  ITR_minimum_access_levels.regular_office_user,
                                                                                                  identity)
-                    if not to_return["Billed"]:
+                    json_obj = json.loads(to_return.data)
+                    if not json_obj["Billed"]:
                         return "The session test is not invoiced yet. Are you out of credits?", 403
         except:
             pass
