@@ -771,11 +771,11 @@ def sessiontests_get_for_session(sessionid):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     additional_where_clause = "SessionID='" + str(sessionid) + "'"
+
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientSessionTest().common_paginated_read_request(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 additional_where_clause)
-
 
 @app.route('/sessiontests/<sessionid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessiontests_get_id(sessionid, identity):
@@ -788,8 +788,9 @@ def sessiontests_get_id(sessionid, identity):
 
         # before the test is returned to the client check if it is billed (but only when the test is done)
         try:
-            if to_return["Status"] >= 30:
-                if not to_return["Billed"]:
+            json_obj = json.loads(to_return.data)
+            if json_obj["Status"] >= 30:
+                if not json_obj["Billed"]:
                     sessionTestPostTrigger(company_id, id_of_user, identity)
                     to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                                  ITR_minimum_access_levels.regular_office_user,
