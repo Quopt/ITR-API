@@ -782,9 +782,24 @@ def sessiontests_get_id(sessionid, identity):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if request.method == 'GET':
-        return ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
+        to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 identity)
+
+        # before the test is returned to the client check if it is billed (but only when the test is done)
+        try:
+            if to_return["Status"] >= 30:
+                if not to_return["Billed"]:
+                    sessionTestPostTrigger(company_id, id_of_user, identity)
+                    to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
+                                                                                                 ITR_minimum_access_levels.regular_office_user,
+                                                                                                 identity)
+                    if not to_return["Billed"]:
+                        return "The session test is not invoiced yet. Are you out of credits?", 403
+        except:
+            pass
+
+        return to_return
     elif request.method == 'POST':
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().change_single_object(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
@@ -981,7 +996,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                             if not invoicing_ok:
                                 invoicing_ok = localcompany.TestTakingDiscount == 100
                             if not invoicing_ok:
-                                invoicing_ok = localcompany.CurrentCreditLevel > totalCosts
+                                invoicing_ok = localcompany.CurrentCreditLevel >= totalCosts
                             if not invoicing_ok:
                                 invoicing_ok = localcompany.AllowNegativeCredits
                             if invoicing_ok and totalCosts > 0:
@@ -1029,7 +1044,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                                 clientsessiontest.Billed = True
 
                     # if this is a commercial test then invoice in currency using the invoice server
-                    # to do
+                    #                     # to do
 
 
                 # score and norm the test if invoicing was successfull
