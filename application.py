@@ -1018,7 +1018,9 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                                 mastersession.add(newinvoicelogM)
 
                                 masterengine = ITSRestAPIDB.get_db_engine_connection_master()
-                                masterengine.execution_options(isolation_level="AUTOCOMMIT").execute('UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" - '+str(totalCosts)+' where "ID" = \''+str(company_id)+'\' ')
+                                qryCredit = 'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" - '+str(totalCosts)+' where "ID" = \''+str(company_id)+'\' '
+                                masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryCredit)
+                                app_log.info('Invoicing credits %s', qryCredit)
 
                                 if not creditunits_low:
                                     creditunits_low = localcompany.CurrentCreditLevel > localcompany.LowCreditWarningLevel and (localcompany.CurrentCreditLevel - totalCosts <= localcompany.LowCreditWarningLevel)
