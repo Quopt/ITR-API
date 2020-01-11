@@ -1401,8 +1401,9 @@ def creditgrants_get_id(identity):
             data_dict = json.loads(data)
 
             masterengine = ITSRestAPIDB.get_db_engine_connection_master()
-            masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(
-                'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" + ' + data_dict["CreditsGranted"] + ' where "ID" = \'' + data_dict["CompanyID"] + '\' ')
+            qryToAdd = 'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" + ' + str(data_dict["CreditsGranted"]) + ' where "ID" = \'' + str(data_dict["CompanyID"]) + '\' '
+            app_log.info('Adding credits ' + qryToAdd)
+            masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryToAdd)
 
         return ITSRestAPIORMExtensions.SecurityCreditGrant().change_single_object(request,
                                                                                   ITR_minimum_access_levels.master_user,
