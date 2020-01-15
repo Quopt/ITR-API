@@ -22,6 +22,7 @@ from email.mime.text import MIMEText
 
 import ITSRestAPISettings
 import requests
+from ITSLogging import *
 
 def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver="", bcc_receiver="", from_sender="",
               files_to_attach=[], reply_to = "", consultant_id="", post_payload="{}"):
@@ -42,7 +43,7 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
                 if new_to_receiver == "":
                     new_to_receiver = str
                 else:
-                    new_to_receiver = new_to_receiver + " , "  + str
+                    new_to_receiver = new_to_receiver + ","  + str.strip()
         to_receiver = new_to_receiver
 
     # Create the container (outer) email message.
@@ -88,12 +89,14 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
     if smtp_user != "":
         s.login(smtp_user, smtp_password)
 
+    total_receiver = to_receiver
     if cc_receiver != "":
-        cc_receiver="," + cc_receiver
+        total_receiver = total_receiver + "," + cc_receiver.strip().replace(" ", "")
     if bcc_receiver != "":
-        bcc_receiver="," + bcc_receiver
+        total_receiver = total_receiver + "," + bcc_receiver.strip().replace(" ", "")
 
     try:
-        s.sendmail(from_sender, to_receiver + cc_receiver + bcc_receiver, msg.as_string())
+        s.sendmail(from_sender, total_receiver.split(","), msg.as_string())
+        app_log.info('Mail send to %s, cc %s, bcc %s. Subject %s, message content is hidden', to_receiver, cc_receiver, bcc_receiver ,mail_subject)
     finally:
         s.quit()
