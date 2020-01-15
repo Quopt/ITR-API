@@ -1232,7 +1232,7 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request):
                 ITSMailer.send_mail('Master','Session %s is ready for reporting' % temp_session.Description,
                                 "The following session has completed : \r\n%s" % temp_session.Description +
                                 "\r\n\r\n%s" % url_to_click,
-                                temp_session.EMailNotificationAdresses, jsonify(temp_session.__dict__))
+                                temp_session.EMailNotificationAdresses)
             removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
             # now check the geo address if there
 
