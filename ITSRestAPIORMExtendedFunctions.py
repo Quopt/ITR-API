@@ -178,7 +178,7 @@ class ORMExtendedFunctions:
         filter_where_total = ""
         if filter_where_single != "":
             if filter_where != "":
-                filter_where_total = "where " + filter_where
+                filter_where_total = "where " + filter_where + " and " + filter_where_single
             else:
                 filter_where_total = "where " + filter_where_single
         else:
@@ -192,7 +192,7 @@ class ORMExtendedFunctions:
                 filter_where_total = "where (" + additional_unchecked_where_clause + ")"
         if filter_where_total == "":
             if where_clause != "":
-                filter_where_total =  " where " +where_clause
+                filter_where_total =  " where " + where_clause
         else:
             if where_clause != "" :
                 filter_where_total = filter_where_total + " and " + where_clause

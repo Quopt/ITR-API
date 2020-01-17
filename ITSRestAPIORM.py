@@ -301,6 +301,7 @@ class ClientSession(Base):
     AllowedEndDateTime = Column(DateTime(timezone=True), nullable=False, server_default=text("('1-1-2100 9:00:00')"))
     StartedAt = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
     EndedAt = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
+    CreateDate = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
     Status = Column(Integer, nullable=False, server_default=text("((1))"))
     Active = Column(Boolean, nullable=False, server_default=text("True"))
     EMailNotificationAdresses = Column(Unicode(200), nullable=False, server_default=text("('')"))

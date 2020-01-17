@@ -286,7 +286,8 @@ class ClientSession(ITSRestAPIORM.ClientSession, ITSRestAPIORMExtendedFunctions.
         , "EMailNotificationAdresses"
         , "EnforceSessionEndDateTime"
         , "EmailNotificationIncludeResults"
-        , "ManagedByUserID"}
+        , "ManagedByUserID"
+        , "CreateDate"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Description"
@@ -551,7 +552,7 @@ class ViewClientSessionTestsWithPerson(ITSRestAPIORM.ViewClientSessionTestsWithP
         , "FirstName"
         , "Initials"
         , "active"
-        , "AllowedStartDateTime", "AllowedEndDateTime", "StartedAt", "EndedAt"}
+        , "AllowedStartDateTime", "AllowedEndDateTime", "StartedAt", "EndedAt", "CreateDate"}
     may_work_with_own_objects_field = ""
 
 
@@ -567,7 +568,7 @@ class ViewClientSessionsWithPerson(ITSRestAPIORM.ViewClientSessionsWithPerson,
         , "LastName"
         , "Initials"
         , "active"
-        , "AllowedStartDateTime", "AllowedEndDateTime", "StartedAt", "EndedAt"}
+        , "AllowedStartDateTime", "AllowedEndDateTime", "StartedAt", "EndedAt", "CreateDate"}
 
     unified_search_fields = {"Description", "EMail", "FirstName", "LastName", "Initials"}
     may_work_with_own_objects_field = "ManagedByUserID"
@@ -614,7 +615,8 @@ class ViewClientGroupSessionCandidates(ITSRestAPIORM.ViewClientGroupSessionCandi
         , "ManagedByUserID"
         , "sessionid"
         , "sessiontype"
-        , "sessionstatus"}
+        , "sessionstatus"
+        , "CreateDate"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"EMail", "FirstName"
