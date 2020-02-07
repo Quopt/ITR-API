@@ -552,15 +552,16 @@ def educations_get_id(identity):
                                                                               identity)
 
 
-@app.route('/generatedreports', methods=['GET'])
-def generatedreports_get():
+@app.route('/generatedreports/<sourceid>', methods=['GET'])
+def generatedreports_get(sourceid):
     check_master_header(request)
+    additional_where_clause = 'LinkedObjectID = \'' + str(uuid.UUID(str(sourceid))) + '\''
     return ITSRestAPIORMExtensions.ClientGeneratedReport().common_paginated_read_request(request,
-                                                                                         ITR_minimum_access_levels.regular_office_user)
+                                                                                         ITR_minimum_access_levels.regular_office_user,
+                                                                                         additional_where_clause)
 
-
-@app.route('/generatedreports/<identity>', methods=['GET', 'POST', 'DELETE'])
-def generatedreports_get_id(identity):
+@app.route('/generatedreports/<sourceid>/<identity>', methods=['GET', 'POST', 'DELETE'])
+def generatedreports_get_id(sourceid, identity):
     check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientGeneratedReport().return_single_object(request,
@@ -1224,6 +1225,7 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request):
         with ITSRestAPIDB.session_scope(company_id) as clientsession:
             temp_session = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
                         ITSRestAPIORMExtensions.ClientSession.ID == data_dict["ID"] ).first()
+
             temp_session.Status =31
             #clientsession.commit()
             url_to_click = request.url_root
