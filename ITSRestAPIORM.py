@@ -123,6 +123,7 @@ class ClientGroupMember(Base):
     Name = Column(Unicode(200), nullable=False)
     EMail = Column(Unicode(200), nullable=False)
     BirthDate = Column(DateTime, nullable=False)
+    Age = Column(Integer, nullable=False, server_default=text("((0))"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
 
     ClientGroup = relationship('ITSRestAPIORMExtensions.ClientGroup', single_parent=True, backref=backref("children", cascade="all,delete"))
@@ -217,6 +218,7 @@ class ClientPerson(Base):
     Remarks = Column(UnicodeText, nullable=False, server_default=text("('')"))
     PreferredLanguage = Column(Unicode(10), nullable=False, server_default=text("('E')"))
     Sex = Column(Integer, nullable=False, server_default=text("((3))"))
+    Age = Column(Integer, nullable=False, server_default=text("((0))"))
     DateOfLastTest = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
     BirthDate = Column(Date, nullable=False, server_default=text("('2000-01-01')"))
     Active = Column(Boolean, nullable=False, server_default=text("True"))

@@ -120,7 +120,8 @@ class ClientGroupMember(ITSRestAPIORM.ClientGroupMember, ITSRestAPIORMExtendedFu
         , "PersonID"
         , "Name"
         , "EMail"
-        , "BirthDate"}
+        , "BirthDate"
+        , "Age"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Name", "EMail"}
@@ -205,6 +206,7 @@ class ClientPerson(ITSRestAPIORM.ClientPerson, ITSRestAPIORMExtendedFunctions.OR
         , "Sex"
         , "DateOfLastTest"
         , "BirthDate"
+        , "Age"
         , "CompanyID"
         , "Active"
         , "ManagedByUserID"}
@@ -610,6 +612,7 @@ class ViewClientGroupSessionCandidates(ITSRestAPIORM.ViewClientGroupSessionCandi
         , "Sex"
         , "DateOfLastTest"
         , "BirthDate"
+        , "Age"
         , "CompanyID"
         , "Active"
         , "ManagedByUserID"

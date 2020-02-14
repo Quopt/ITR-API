@@ -700,7 +700,7 @@ def persons_get_id(identity):
                 return "Person cannot be updated as test taking user", 404
             allowed_fields_to_update = 'DateOfLastTest'
 
-        to_return =  ITSRestAPIORMExtensions.ClientPerson().change_single_object(request,
+        to_return = ITSRestAPIORMExtensions.ClientPerson().change_single_object(request,
                                                                            ITR_minimum_access_levels.test_taking_user,
                                                                            identity, allowed_fields_to_update)
         if fix_password:
@@ -911,6 +911,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                         tempPersonData['Sex'] = json_person_obj['Sex']
                         tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
                         tempPersonData['BirthDate'] = json_person_obj['BirthDate']
+                        tempPersonData['Age'] = json_person_obj['Age']
                         tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
                         data_gathering.PersonData = json.dumps(tempPersonData)
                         data_gathering.PluginData = "{}"
@@ -943,6 +944,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                     tempPersonData['Sex'] = json_person_obj['Sex']
                     tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
                     tempPersonData['BirthDate'] = json_person_obj['BirthDate']
+                    tempPersonData['Age'] = json_person_obj['Age']
                     tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
                     data_gathering.PersonData = json.dumps(tempPersonData)
                     data_gathering.PluginData = "{}"
