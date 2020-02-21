@@ -36,6 +36,25 @@ def get_translation_if_needed(target_language, translation_key, text_to_translat
     except:
         return get_translation(target_language, text_to_translate), True
 
+def get_translation_if_needed_from_file(target_language, translation_key, text_to_translate, app_instance_path, write_when_missing):
+    filename = os.path.join(app_instance_path, 'translations/', target_language + '.json')
+    current_translation = json.load(open(filename, 'r'))
+    try:
+        translation_found = current_translation[translation_key]['value']
+    except:
+        translation_found = text_to_translate
+        if write_when_missing:
+            current_translation[translation_key] = {}
+            current_translation[translation_key]['value'] = get_translation(target_language, translation_found)
+            try:
+                with open(filename, 'w') as translationFile:
+                    translationFile.write(json.dumps(current_translation, indent=1, sort_keys=True))
+                    translationFile.close()
+            except:
+                pass
+
+    return translation_found
+
 def translation_available():
     return ITSRestAPISettings.get_setting_for_customer("",'TRANSLATE_AZURE_KEY', False, "") != ""
 

@@ -368,6 +368,7 @@ class SecurityCompany(Base):
     ContactPerson = Column(Unicode(200), nullable=False)
     ContactPhone = Column(Unicode(50), nullable=False)
     ContactEMail = Column(Unicode(200), nullable=False)
+    CCEMail = Column(UnicodeText, nullable=False, server_default=text("('')"))
     TestTakingDiscount = Column(Integer, nullable=False, server_default=text("((0))"))
     CostsPerTestInUnits = Column(Integer, nullable=False, server_default=text("((0))"))
     YearlyLicenseDiscount = Column(Integer, nullable=False, server_default=text("((0))"))

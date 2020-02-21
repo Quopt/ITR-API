@@ -405,23 +405,26 @@ def send_reset_password():
         # return_obj['ExpirationDateTime'] = now.isoformat()
 
         # and now sent an email to the user
-        filename = os.path.join(app.instance_path, 'translations/', langcode + '.json')
-        current_translation = json.load(open(filename, 'r'))
-        translatedSubject, newTranslationSubject = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Subject', 'Password reset mail', current_translation)
-        translatedMail, newTranslationMail = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Body', "You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : " , current_translation)
+        translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Subject', 'Password reset mail', app.instance_path, True)
+        translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Body', 'You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : ', app.instance_path, True)
 
-        if newTranslationMail or newTranslationSubject:
-            # write the translations into the file
-            current_translation['PasswordResetMail.Subject'] = {}
-            current_translation['PasswordResetMail.Subject']['value'] = translatedSubject
-            current_translation['PasswordResetMail.Body'] = {}
-            current_translation['PasswordResetMail.Body']['value'] = translatedMail
-            try:
-                with open(filename, 'w') as translationFile:
-                    translationFile.write(json.dumps(current_translation, indent=1, sort_keys=True))
-                    translationFile.close()
-            except:
-                pass
+        # filename = os.path.join(app.instance_path, 'translations/', langcode + '.json')
+        # current_translation = json.load(open(filename, 'r'))
+        # translatedSubject, newTranslationSubject = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Subject', 'Password reset mail', current_translation)
+        # translatedMail, newTranslationMail = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Body', "You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : " , current_translation)
+        #
+        # if newTranslationMail or newTranslationSubject:
+        #     # write the translations into the file
+        #     current_translation['PasswordResetMail.Subject'] = {}
+        #     current_translation['PasswordResetMail.Subject']['value'] = translatedSubject
+        #     current_translation['PasswordResetMail.Body'] = {}
+        #     current_translation['PasswordResetMail.Body']['value'] = translatedMail
+        #     try:
+        #         with open(filename, 'w') as translationFile:
+        #             translationFile.write(json.dumps(current_translation, indent=1, sort_keys=True))
+        #             translationFile.close()
+        #     except:
+        #         pass
 
         ITSMailer.send_mail('Master',translatedSubject,
                             translatedMail + "\r\n" +
@@ -782,6 +785,12 @@ def sessiontests_get_for_session(sessionid):
 def sessiontests_get_id(sessionid, identity):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
+
+    try:
+        langcode = request.headers['ITRLang']
+    except:
+        langcode = "en"
+
     if request.method == 'GET':
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
@@ -792,7 +801,7 @@ def sessiontests_get_id(sessionid, identity):
             json_obj = json.loads(to_return.data)
             if json_obj["Status"] >= 30:
                 if not json_obj["Billed"]:
-                    sessionTestPostTrigger(company_id, id_of_user, identity)
+                    sessionTestPostTrigger(company_id, id_of_user, identity, langcode)
                     to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                                  ITR_minimum_access_levels.regular_office_user,
                                                                                                  identity)
@@ -808,7 +817,7 @@ def sessiontests_get_id(sessionid, identity):
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 identity)
         # now save the test session to the anonymous results, but only when it is done
-        sessionTestPostTrigger(company_id, id_of_user, identity)
+        sessionTestPostTrigger(company_id, id_of_user, identity, langcode)
 
         return to_return
     elif request.method == 'DELETE':
@@ -817,7 +826,7 @@ def sessiontests_get_id(sessionid, identity):
                                                                                 identity)
 
 
-def sessionTestPostTrigger(company_id, id_of_user, identity):
+def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
     temp_test = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                             ITR_minimum_access_levels.test_taking_user,
                                                                             identity)
@@ -1061,8 +1070,18 @@ def sessionTestPostTrigger(company_id, id_of_user, identity):
                 if creditunits_low:
                     this_company = mastersession.query(ITSRestAPIORMExtensions.SecurityCompany()).filter(
                         ITSRestAPIORMExtensions.SecurityCompany().ID == company_id)
-                    ITSMailer.send_mail('Master','You are almost out of credits (%s left)' % this_company.CurrentCreditLevel,
-                                        "The credit level has gone below the credit warning level that you have indicated. Please add more credits to your system.",
+
+                    translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode,
+                                                                                         'OutOfCreditsMail.Subject',
+                                                                                         'You are almost out of credits (%s left)',
+                                                                                         app.instance_path, True)
+                    translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode,
+                                                                                      'OutOfCreditsMail.Body',
+                                                                                      'The credit level has gone below the credit warning level that you have indicated. Please add more credits to your system.',
+                                                                                      app.instance_path, True)
+
+                    ITSMailer.send_mail('Master',translatedSubject % this_company.CurrentCreditLevel,
+                                        translatedMail,
                                         this_company.ContactEMail)
 
 @app.route('/sessionteststaking/<sessionid>', methods=['GET'])
@@ -1080,6 +1099,12 @@ def sessionteststaking_get(sessionid):
 def sessionteststaking_get_id(sessionid, identity):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
+
+    try:
+        langcode = request.headers['ITRLang']
+    except:
+        langcode = "en"
+
     if request.method == 'GET':
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                 ITR_minimum_access_levels.test_taking_user,
@@ -1111,7 +1136,7 @@ def sessionteststaking_get_id(sessionid, identity):
                                                                                 identity,
                                                                                 'Results,Scores,TestStart,TestEnd,PercentageOfQuestionsAnswered,TotalTestTime,Status,CurrentPage,TotalPages,PluginData')
 
-        sessionTestPostTrigger(company_id, id_of_user, identity)
+        sessionTestPostTrigger(company_id, id_of_user, identity, langcode)
 
         return to_return
 
@@ -1155,6 +1180,12 @@ def sessions_delete_tests(identity):
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessions_get_id(identity):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+
+    try:
+        langcode = request.headers['ITRLang']
+    except:
+        langcode = "en"
+
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
         to_return = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
@@ -1199,7 +1230,7 @@ def sessions_get_id(identity):
                                                                             identity, allowed_fields_to_update)
 
         # perform the session post trigger
-        sessionPostTrigger(company_id, id_of_user, identity, data_dict, request)
+        sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, langcode)
 
         return to_return
     elif request.method == 'DELETE':
@@ -1219,7 +1250,7 @@ def sessions_get_id(identity):
             return to_return
     # to do : remove the user if no open or active sessions are left, only for POST and DELETE
 
-def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request):
+def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, langcode):
     # send the end session e-mail
     if int(data_dict["Status"]) == 30:
         #clientengine = ITSRestAPIDB.get_db_engine_connection_client(company_id)
@@ -1228,15 +1259,24 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request):
             temp_session = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
                         ITSRestAPIORMExtensions.ClientSession.ID == data_dict["ID"] ).first()
 
-            temp_session.Status =31
+            temp_session.Status=31
             #clientsession.commit()
             url_to_click = request.url_root
             url_to_click = url_to_click.split("api/")[0] + "default.htm"
-            if temp_session.EMailNotificationAdresses.strip() != "":
-                ITSMailer.send_mail('Master','Session %s is ready for reporting' % temp_session.Description,
-                                "The following session has completed : \r\n%s" % temp_session.Description +
-                                "\r\n\r\n%s" % url_to_click,
-                                temp_session.EMailNotificationAdresses)
+            #if temp_session.EMailNotificationAdresses.strip() != "":
+            translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode,
+                                                                                 'SessionReadyMail.Subject',
+                                                                                 'Session %s is ready for reporting',
+                                                                                 app.instance_path, True)
+            translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'SessionReadyMail.Body',
+                                                                              "The following session has completed : \r\n%s",
+                                                                              app.instance_path, True)
+
+            ITSMailer.send_mail(company_id,translatedSubject % temp_session.Description,
+                            translatedMail % temp_session.Description +
+                            "\r\n\r\n%s" % url_to_click,
+                            temp_session.EMailNotificationAdresses)
+
             removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
             # now check the geo address if there
 
@@ -2296,7 +2336,7 @@ def send_mail():
         try:
             ITSMailer.send_mail(company_id, data_dict["Subject"],
                             data_dict["Body"],
-                            data_dict["To"],
+                            temp_cc_mail + data_dict["To"],
                             data_dict["CC"],
                             data_dict["BCC"],
                             data_dict["From"], [] ,
