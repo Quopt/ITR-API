@@ -1398,18 +1398,29 @@ def companies_get_id(identity):
 @app.route('/creditgrants', methods=['GET'])
 def creditgrants_get():
     check_master_header(request)
+    token = request.headers['SessionID']
+    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        user_id, company_id)
 
-    return ITSRestAPIORMExtensions.SecurityCreditGrant().common_paginated_read_request(request,
-                                                                                       ITR_minimum_access_levels.regular_office_user,
+    if master_user:
+        return ITSRestAPIORMExtensions.SecurityCreditGrant().common_paginated_read_request(request,
+                                                                                       ITR_minimum_access_levels.master_user,
                                                                                        "", "", True)
+    else:
+        additional_where_clause = "CompanyID='" + str(company_id) + "'"
+        return ITSRestAPIORMExtensions.SecurityCreditGrant().common_paginated_read_request(request,
+                                                                                       ITR_minimum_access_levels.regular_office_user,
+                                                                                       additional_where_clause, "", True)
 
+    return "You need to be master user, or query the grants for your own organisation", 403
 
 @app.route('/creditgrants/<identity>', methods=['GET', 'POST', 'DELETE'])
 def creditgrants_get_id(identity):
     check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.SecurityCreditGrant().return_single_object(request,
-                                                                                  ITR_minimum_access_levels.regular_office_user,
+                                                                                  ITR_minimum_access_levels.master_user,
                                                                                   identity, True)
     elif request.method == 'POST':
         # increase the companies credit level with the saved credit grant

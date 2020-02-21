@@ -351,7 +351,7 @@ class SecurityCreditGrant(ITSRestAPIORM.SecurityCreditGrant, ITSRestAPIORMExtend
     # add additional fields
     identity_field = "ID"
     default_order_by_field = "GrantedWhen"
-    select_fields = {"ID", "UserID"        , "CompanyID"       , "GrantedWhen", "UserDescription", "Paid", "CreditsGranted", "Remarks"}
+    select_fields = {"ID", "UserID", "CompanyID", "GrantedWhen", "UserDescription", "Paid", "CreditsGranted", "Remarks"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"UserDescription", "CreditsGranted", "Remarks"}
