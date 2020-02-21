@@ -1448,14 +1448,17 @@ def creditusage_get():
 def creditusagespermonth_get():
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        user_id, company_id)
 
-    if company_id != "":
+    if company_id != "" and office_user:
         qry_session = ITSRestAPIDB.get_db_engine_connection_client(company_id)
         try:
             a = []
             a = qry_session.execute(
                 'select date_part( \'year\', "UsageDateTime") as Year, date_part( \'month\', "UsageDateTime") as Month, sum("TotalTicks") as Ticks, sum("DiscountedTicks") as DiscountedTicks ' +
                 'from "SecurityCreditUsage"' +
+                'where "UsageDateTime" >= make_date(CAST(date_part( \'year\', CURRENT_DATE)-2 AS INT), 1, 1)' +
                 'group by date_part( \'year\', "UsageDateTime"), date_part( \'month\', "UsageDateTime") ' +
                 'order by date_part( \'year\', "UsageDateTime") desc, date_part( \'month\', "UsageDateTime") desc ').fetchall()
             if a == []:
@@ -1466,6 +1469,34 @@ def creditusagespermonth_get():
     else:
         return "404", "No valid session token"
 
+
+@app.route('/creditusagespermonthforall/<year>', methods=['GET'])
+def creditusagespermonthforall_get(year):
+    token = request.headers['SessionID']
+    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        user_id, company_id)
+
+    if company_id != "" and master_user:
+        qry_session = ITSRestAPIDB.get_db_engine_connection_master()
+        try:
+            yearfilter = ''
+            if int(year) > 0 :
+               yearfilter = 'where "UsageDateTime" >= make_date(CAST('+year+' AS INT), 1, 1) and "UsageDateTime" <= make_date(CAST('+year+' AS INT), 12, 31) '
+            query = ''' select date_part( 'year', "UsageDateTime") as Year, date_part( 'month', "UsageDateTime") as Month, sum("TotalTicks") as Ticks, sum("DiscountedTicks") as DiscountedTicks, "InvoiceCode", B."CompanyName"
+                    from "SecurityCreditUsage" A left join "SecurityCompanies" B on A."CompanyID" = B."ID" ''' + yearfilter + '''
+                    group by date_part( 'year', "UsageDateTime"), date_part( 'month', "UsageDateTime"), "InvoiceCode", B."CompanyName"
+                    order by date_part( 'year', "UsageDateTime") desc, date_part( 'month', "UsageDateTime") desc, "InvoiceCode", B."CompanyName" '''
+
+            a = []
+            a = qry_session.execute( query ).fetchall()
+            if a == []:
+                a.append({'Year': '2000', 'Month': '1', 'Ticks': '0', 'DiscountedTicks': '0'})
+        finally:
+            qry_session.dispose()
+        return ITSRestAPIDB.query_array_to_jsonify(a)
+    else:
+        return "404", "No valid session token"
 
 @app.route('/creditusages/<identity>', methods=['GET', 'POST', 'DELETE'])
 def creditusage_get_id(identity):
