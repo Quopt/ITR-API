@@ -1878,53 +1878,66 @@ def systemsettings_get_id(identity):
     if include_master_header == "Y":
         if not master_user and request.method != 'GET':
             return "You do not have sufficient rights to make this call", 404
-        #session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_master())()
         sessionid = ""
     else:
         if not organisation_supervisor_user and request.method != 'GET':
             return "You do not have sufficient rights to make this call", 404
         if (not master_user) and (identity.upper() == "MAXNUMBEROFCONSULTANTS") and (request.method != 'GET'):
             return "You do not have sufficient rights to make this call", 404
-        #session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client(company_id))()
         sessionid = company_id
 
     with ITSRestAPIDB.session_scope(sessionid) as session:
         if request.method == 'GET':
-            param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).first()
-            if param is None:
-                return "Parameter not found", 404
+            if identity == "CC_ADDRESS":
+                with ITSRestAPIDB.session_scope("") as master_session:
+                    comp = master_session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                        ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
+                    return comp.CCEMail
             else:
-                if param.ParProtected and (organisation_supervisor_user or master_user):
-                    return param.ParValue
+                param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                    ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).first()
+                if param is None:
+                    return "Parameter not found", 404
                 else:
-                 if not param.ParProtected:
-                    return param.ParValue
-                 else:
-                    return "You do not have sufficient rights to make this call", 404
+                    if param.ParProtected and (organisation_supervisor_user or master_user):
+                        return param.ParValue
+                    else:
+                     if not param.ParProtected:
+                        return param.ParValue
+                     else:
+                        return "You do not have sufficient rights to make this call", 404
         elif request.method == 'POST':
-            param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).first()
             request.get_data()
-            if param is None:
-                param2 = ITSRestAPIORMExtensions.SystemParam()
-                param2.ParameterName = identity
-                param2.ParValue = request.data.decode('utf-8')
-                #check if this parameter is protected
-                param2.ParProtected = False
-                try:
-                    temp_param = ITSHelpers.Empty()
-                    temp_param = json.loads(request.data)
-                    param2.ParProtected = temp_param.ParProtected
-                except:
-                    pass
-                session.add(param2)
-                session.commit()
-                return "Parameter added", 200
+            if identity == "CC_ADDRESS":
+                with ITSRestAPIDB.session_scope("") as master_session:
+                    comp = master_session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                        ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
+                    comp.CCEMail = request.data.decode('utf-8')
+
+                    return "Parameter value updated", 200
             else:
-                param.ParValue = request.data.decode('utf-8')
-                session.commit()
-                return "Parameter value updated", 200
+                param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                    ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).first()
+
+                if param is None:
+                    param2 = ITSRestAPIORMExtensions.SystemParam()
+                    param2.ParameterName = identity
+                    param2.ParValue = request.data.decode('utf-8')
+                    #check if this parameter is protected
+                    param2.ParProtected = False
+                    try:
+                        temp_param = ITSHelpers.Empty()
+                        temp_param = json.loads(request.data)
+                        param2.ParProtected = temp_param.ParProtected
+                    except:
+                        pass
+                    session.add(param2)
+                    session.commit()
+                    return "Parameter added", 200
+                else:
+                    param.ParValue = request.data.decode('utf-8')
+                    session.commit()
+                    return "Parameter value updated", 200
         elif request.method == 'DELETE':
             if not master_user:
                 return "You do not have sufficient rights to make this call", 404
