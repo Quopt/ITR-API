@@ -630,14 +630,16 @@ def nationalities_get_id(identity):
 
 @app.route('/organisations', methods=['GET'])
 def organisations_get():
-    check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+
     return ITSRestAPIORMExtensions.ClientOrganisation().common_paginated_read_request(request,
                                                                                       ITR_minimum_access_levels.regular_office_user)
 
 
 @app.route('/organisations/<identity>', methods=['GET', 'POST', 'DELETE'])
 def organisations_get_id(identity):
-    check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientOrganisation().return_single_object(request,
                                                                                  ITR_minimum_access_levels.regular_office_user,
@@ -1235,7 +1237,6 @@ def sessions_get_id(identity):
         return to_return
     elif request.method == 'DELETE':
         # get the person id for this session first
-        #qry_session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client(company_id))()
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
             sess = qry_session.query(ITSRestAPIORMExtensions.ClientSession).filter(
                 ITSRestAPIORMExtensions.ClientSession.ID == identity).first()
@@ -1248,22 +1249,19 @@ def sessions_get_id(identity):
             sessionPostTriggerDelete(company_id, sess.PersonID)
 
             return to_return
-    # to do : remove the user if no open or active sessions are left, only for POST and DELETE
 
 def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, langcode):
     # send the end session e-mail
     if int(data_dict["Status"]) == 30:
-        #clientengine = ITSRestAPIDB.get_db_engine_connection_client(company_id)
-        #clientsession = sessionmaker(bind=clientengine)()
         with ITSRestAPIDB.session_scope(company_id) as clientsession:
             temp_session = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
                         ITSRestAPIORMExtensions.ClientSession.ID == data_dict["ID"] ).first()
 
             temp_session.Status=31
-            #clientsession.commit()
+
             url_to_click = request.url_root
             url_to_click = url_to_click.split("api/")[0] + "default.htm"
-            #if temp_session.EMailNotificationAdresses.strip() != "":
+
             translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode,
                                                                                  'SessionReadyMail.Subject',
                                                                                  'Session %s is ready for reporting',
@@ -1278,7 +1276,7 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
                             temp_session.EMailNotificationAdresses)
 
             removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
-            # now check the geo address if there
+            # now check the geo address if there TO DO
 
     else:
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
@@ -1382,12 +1380,12 @@ def companies_get():
 def companies_get_id(identity):
     allowTestTakingUser = false
     token = request.headers['SessionID']
+
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+        request)
     if identity == "currentcompany":
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
         identity = company_id
         allowTestTakingUser = true
-    else:
-        check_master_header(request)
 
     if request.method == 'GET':
         if allowTestTakingUser:
@@ -1395,16 +1393,19 @@ def companies_get_id(identity):
                                                                               ITR_minimum_access_levels.test_taking_user,
                                                                               identity, True)
         else:
-            return ITSRestAPIORMExtensions.SecurityCompany().return_single_object(request,
+            if identity == company_id and not master_user:
+                return ITSRestAPIORMExtensions.SecurityCompany().return_single_object(request,
                                                                               ITR_minimum_access_levels.regular_office_user,
                                                                               identity, True)
-    elif request.method == 'POST':
-        check_master_header(request)
+            if master_user:
+                return ITSRestAPIORMExtensions.SecurityCompany().return_single_object(request,
+                                                                                      ITR_minimum_access_levels.regular_office_user,
+                                                                                      identity, True)
+    elif request.method == 'POST' and master_user:
         return ITSRestAPIORMExtensions.SecurityCompany().change_single_object(request,
                                                                               ITR_minimum_access_levels.master_user,
                                                                               identity, "", True)
-    elif request.method == 'DELETE':
-        check_master_header(request)
+    elif request.method == 'DELETE' and master_user:
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
 
         # delete the database
@@ -1434,6 +1435,7 @@ def companies_get_id(identity):
                                                                               ITR_minimum_access_levels.master_user,
                                                                               identity, True)
 
+    return "You need to be master user to make this call with these parameters", 403
 
 @app.route('/creditgrants', methods=['GET'])
 def creditgrants_get():
