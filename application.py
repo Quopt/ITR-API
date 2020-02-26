@@ -2351,7 +2351,7 @@ def send_mail():
         try:
             ITSMailer.send_mail(company_id, data_dict["Subject"],
                             data_dict["Body"],
-                            temp_cc_mail + data_dict["To"],
+                            data_dict["To"],
                             data_dict["CC"],
                             data_dict["BCC"],
                             data_dict["From"], [] ,
