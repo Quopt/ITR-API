@@ -555,13 +555,24 @@ def educations_get_id(identity):
                                                                               identity)
 
 
-@app.route('/generatedreports/<sourceid>', methods=['GET'])
+@app.route('/generatedreports/<sourceid>', methods=['GET', 'DELETE'])
 def generatedreports_get(sourceid):
-    check_master_header(request)
-    additional_where_clause = 'LinkedObjectID = \'' + str(uuid.UUID(str(sourceid))) + '\''
-    return ITSRestAPIORMExtensions.ClientGeneratedReport().common_paginated_read_request(request,
-                                                                                         ITR_minimum_access_levels.regular_office_user,
-                                                                                         additional_where_clause)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+
+    if request.method == 'GET':
+        additional_where_clause = 'LinkedObjectID = \'' + str(uuid.UUID(str(sourceid))) + '\''
+        return ITSRestAPIORMExtensions.ClientGeneratedReport().common_paginated_read_request(request,
+                                                                                             ITR_minimum_access_levels.regular_office_user,
+                                                                                             additional_where_clause)
+    elif request.method == 'DELETE':
+        if office_user:
+            # remove linked stored reports
+            with ITSRestAPIDB.session_scope(company_id) as clientsession:
+                clientsession.query(ITSRestAPIORMExtensions.ClientGeneratedReport).filter(
+                    ITSRestAPIORMExtensions.ClientGeneratedReport.LinkedObjectID == sourceid
+                ).delete()
+        else:
+            return 403, "You do not have the rights to remove generated session reports"
 
 @app.route('/generatedreports/<sourceid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def generatedreports_get_id(sourceid, identity):
@@ -1246,7 +1257,7 @@ def sessions_get_id(identity):
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 identity)
 
-            sessionPostTriggerDelete(company_id, sess.PersonID)
+            sessionPostTriggerDelete(identity, company_id, sess.PersonID)
 
             return to_return
 
@@ -1285,8 +1296,13 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
             if sess:
                 removeUnnecessaryUserLogins(company_id, sess.PersonID)
 
-def sessionPostTriggerDelete(company_id, id_of_user):
+def sessionPostTriggerDelete(session_id, company_id, id_of_user):
     removeUnnecessaryUserLogins(company_id, id_of_user)
+    # remove linked stored reports
+    with ITSRestAPIDB.session_scope(company_id) as clientsession:
+        clientsession.query(ITSRestAPIORMExtensions.ClientGeneratedReport).filter(
+            ITSRestAPIORMExtensions.ClientGeneratedReport.LinkedObjectID == session_id
+         ).delete()
 
 def removeUnnecessaryUserLogins(company_id, id_of_user):
     with ITSRestAPIDB.session_scope(company_id) as clientsession:
