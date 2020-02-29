@@ -1009,25 +1009,46 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                             localtest = mastersession.query(ITSRestAPIORMExtensions.Test).filter(
                                 ITSRestAPIORMExtensions.Test.ID == clientsessiontest.TestID).first()
                         if localtest != None:
+                            # start with the default costs for this test
                             totalCosts = localtest.Costs
                             localcompany = mastersession.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
                                 ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
+
+                            # check if this company has an alternative cost for this test
+                            try:
+                                invoice_data = json.loads(localcompany.PluginData)
+                                if invoice_data['Invoicing'][localtest.InvoiceCode].strip() != "":
+                                    totalCosts = int(invoice_data['Invoicing'][localtest.InvoiceCode].strip())
+                            except:
+                                pass
+
+                            # take the company discount and costs per test into account
+                            if localcompany.CostsPerTestInUnits > 0:
+                                totalCosts = totalCosts + localcompany.CostsPerTestInUnits
                             if localcompany.TestTakingDiscount > 0:
-                                if localcompany.TestTakingDiscount > 100 :
+                                if localcompany.TestTakingDiscount > 100:
                                     localcompany.TestTakingDiscount = 100
-                                totalCosts = totalCosts * ( localcompany.TestTakingDiscount / 100 )
+                                totalCosts = int(totalCosts * ( localcompany.TestTakingDiscount / 100 ))
                             if totalCosts < 0 :
                                 totalCosts = 0
 
+                            # check if the current user has a personal credit pool
+                            consultant = clientsession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                                ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).first()
+
+                            # check if we need invoicing
                             invoicing_ok = localtest.Costs == 0
                             if not invoicing_ok:
                                 invoicing_ok = localcompany.TestTakingDiscount == 100
                             if not invoicing_ok:
-                                invoicing_ok = localcompany.CurrentCreditLevel > 0 # in principle this should be >= TotalCosts. But we give the customer a little headroom to view the last test
-                            if not invoicing_ok:
+                                invoicing_ok = localcompany.CurrentCreditLevel > 0
+                                # in principle this should be >= TotalCosts. But we give the customer a little headroom to view the last test
+                                if consultant.HasPersonalCreditPool:
+                                    invoicing_ok = consultant.CurrentPersonalCreditLevel > 0
+                            if not invoicing_ok and not consultant.HasPersonalCreditPool:
                                 invoicing_ok = localcompany.AllowNegativeCredits
                             if invoicing_ok and totalCosts > 0:
-                                # now execute the query to deduct the CurrentCreditLevel directly in the database (avoiding concurrency issues)
+                                # create the records for invoice logging
                                 if localtest.InvoiceCode == "" or localtest.InvoiceCode is None :
                                  localtest.InvoiceCode = localtest.TestName
                                 newinvoicelog = ITSRestAPIORMExtensions.SecurityCreditUsage()
@@ -1059,11 +1080,17 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                 clientsession.add(newinvoicelog)
                                 mastersession.add(newinvoicelogM)
 
+                                # now execute the query to deduct the CurrentCreditLevel directly in the database (avoiding concurrency issues)
                                 masterengine = ITSRestAPIDB.get_db_engine_connection_master()
                                 qryCredit = 'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" - '+str(totalCosts)+' where "ID" = \''+str(company_id)+'\' '
                                 masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryCredit)
                                 app_log.info('Invoicing credits %s', qryCredit)
+                                # and deduct if from the personal credit pool
+                                if consultant.HasPersonalCreditPool:
+                                    consultant.CurrentPersonalCreditLevel = consultant.CurrentPersonalCreditLevel - totalCosts
+                                    app_log.info('Invoicing credits %s from personal credit pool of %s', qryCredit, consultant.Email)
 
+                                # check if we need to send a credits low email later
                                 if not creditunits_low:
                                     creditunits_low = localcompany.CurrentCreditLevel > localcompany.LowCreditWarningLevel and (localcompany.CurrentCreditLevel - totalCosts <= localcompany.LowCreditWarningLevel)
 
@@ -1071,12 +1098,12 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                 clientsessiontest.Billed = True
 
                     # if this is a commercial test then invoice in currency using the invoice server
-                    #                     # to do
+                    # TO DO
 
 
                 # score and norm the test if invoicing was successfull
                 # this is done on the client. For commercial tests the complete definition is downloaded from the suppliers server.
-                # please note that during test taking this information is NOT available to prevent disclosing test details to the candidates
+                # please note that during test taking this information is NOT available as an option to prevent disclosing test details to the candidates
                 # this means that tests and reports CANNOT be included in the session ready mail.
 
                 # if credit units are low send the out of credits mail
@@ -1093,7 +1120,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                                                                       'The credit level has gone below the credit warning level that you have indicated. Please add more credits to your system.',
                                                                                       app.instance_path, True)
 
-                    ITSMailer.send_mail('Master',translatedSubject % this_company.CurrentCreditLevel,
+                    ITSMailer.send_mail('Master', translatedSubject % this_company.CurrentCreditLevel,
                                         translatedMail,
                                         this_company.ContactEMail)
 
