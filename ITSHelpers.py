@@ -66,7 +66,6 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst, alternatecopym
         lastfolder = os.path.basename(d)
         if os.path.isdir(s):
             if lastfolder[:1] != "." and lastfolder != "instance":
-                #app_log.info("Check folder for changed files from " + s + " to " + d)
                 try:
                     copy_folder_excluding_dot_folders(s, d)
                 except:
