@@ -11,6 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+#
 
 from flask import Flask, jsonify, request, url_for, render_template
 import datetime
@@ -2521,6 +2522,8 @@ def install_publics_itr_api():
                 file_write.write(str(datetime.now()))
             APIRequiresRestart = True
 
+            return "OK", 200
+    return "You are not authorised to refresh the public repositories", 403
 
 @app.route('/installpublics/itr-webclient', methods=['POST'])
 def install_publics_itr_webclient():
@@ -2534,6 +2537,9 @@ def install_publics_itr_webclient():
         newfoldername = ITSRestAPISettings.get_setting('WEBFOLDER')
         if request.method == "POST":
             ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            return "OK", 200
+    return "You are not authorised to refresh the public repositories", 403
+
 
 @app.route('/installpublics/itr-public-api', methods=['POST'])
 def install_publics_itr_public_api():
@@ -2551,6 +2557,8 @@ def install_publics_itr_public_api():
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
                 file_write.write(str(datetime.now()))
+                return "OK", 200
+    return "You are not authorised to refresh the public repositories", 403
 
 
 @app.errorhandler(500)
