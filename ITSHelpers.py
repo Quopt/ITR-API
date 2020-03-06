@@ -57,6 +57,16 @@ def copy_folder(filepath_src, filepath_dst):
         else:
             shutil.copy2(s, d)
 
+def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
+    for item in os.listdir(filepath_src):
+        s = os.path.join(filepath_src, item)
+        d = os.path.join(filepath_dst, item)
+        if os.path.isdir(s):
+            if s[:1] != ".":
+                shutil.copytree(s, d, True, True)
+        else:
+            shutil.copy2(s, d)
+
 def list_folder(filepath):
     a = []
     for root, dirs, files in os.walk(filepath):

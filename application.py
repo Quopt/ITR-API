@@ -23,7 +23,7 @@ import traceback
 import shutil
 from flask_cors import CORS
 from flask_compress import Compress
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta, date
 from waitress import serve
 import time
 
@@ -47,6 +47,8 @@ app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/api')
 app.json_encoder = ITSJsonify.CustomJSONEncoder
 
 startRequestTimer={} # only for debug purposes ! will not work with multiple calls at the same time
+APIRequiresRestart=False
+
 @app.before_request
 def before_request_callback():
     global startRequestTimer
@@ -55,6 +57,7 @@ def before_request_callback():
 @app.teardown_request
 def teardown_request(exception=None):
     global startRequestTimer
+    global APIRequiresRestart
 
     endRequestTimer = time.time()
     try:
@@ -73,6 +76,11 @@ def teardown_request(exception=None):
             pass
     except:
         pass
+
+    # check for restart
+    if APIRequiresRestart:
+        os.execv(sys.executable, ['python3'] + sys.argv)
+
 
 Compress(app)
 if ITSRestAPISettings.get_setting('ENABLE_CORS') == 'Y':
@@ -2125,9 +2133,12 @@ def tests_get_id(identity):
 
             return to_return
     elif request.method == 'POST':
-        check_master_header(request)
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+            request)
+
         if os.path.exists(pathname):
             ITSHelpers.remove_folder(pathname, basepathname)
+
         return ITSRestAPIORMExtensions.Test().change_single_object(request,
                                                                    ITR_minimum_access_levels.test_author,
                                                                    identity)
@@ -2301,11 +2312,6 @@ def translations(langcode):
     filename = os.path.join(app.instance_path, 'translations/', langcode + '.json')
     if request.method == 'GET':
         if os.path.isfile(filename):
-            # old_data = json.load(open(filename, 'r'))
-            # new_data = {}
-            # for line in old_data:
-            #     new_data[line] = old_data[line]
-            #     #print(old_data[line])
             with open(filename, 'r') as translationFile:
                 return translationFile.read(), 200
         else:
@@ -2436,9 +2442,6 @@ def refresh_publics():
             ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-testscreentemplates')
             ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-plugins')
             ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/itr-translations')
-            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-API')
-            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-webclient')
-            ITSGit.clone_or_refresh_repo(app.instance_path,'https://github.com/Quopt/ITR-Public-API')
 
         return "OK", 200
 
@@ -2473,7 +2476,7 @@ def list_publics_file(reponame, filename):
             return 'File not found', 404
 
 @app.route('/installpublics/itr-translations/<filename>', methods=['POST','DELETE'])
-def install_publics_file( filename):
+def install_publics_file(filename):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if master_user:
@@ -2493,6 +2496,58 @@ def install_publics_file( filename):
             except Exception as e:
                 app_log.error('Install publicsls API failed %s', str(e))
                 return "File delete failed. Maybe you do not have sufficient rights on the file system", 404
+
+@app.route('/installpublics/itr-api', methods=['POST'])
+def install_publics_itr_api():
+    global APIRequiresRestart
+
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+        request)
+    if master_user:
+        # force clone now
+        ITSGit.clone_or_refresh_repo(app.instance_path, 'https://github.com/Quopt/ITR-API')
+        # copy into folder
+        srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-API')
+        newfoldername = os.path.join(os.sep, app.root_path)
+        if request.method == "POST":
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            # make sure to restart the API
+            filename = os.path.join(newfoldername, 'api_refresh_date.txt')
+            with open(filename, 'w') as file_write:
+                file_write.write("" + datetime.now())
+            APIRequiresRestart = True
+
+
+@app.route('/installpublics/itr-webclient', methods=['POST'])
+def install_publics_itr_webclient():
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+        request)
+    if master_user:
+        # force clone now
+        ITSGit.clone_or_refresh_repo(app.instance_path, 'https://github.com/Quopt/ITR-webclient')
+        # copy into folder
+        srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-webclient')
+        newfoldername = ITSRestAPISettings.get_setting('WEBFOLDER')
+        if request.method == "POST":
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
+
+@app.route('/installpublics/itr-public-api', methods=['POST'])
+def install_publics_itr_public_api():
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+        request)
+    if master_user:
+        # force clone now
+        ITSGit.clone_or_refresh_repo(app.instance_path, 'https://github.com/Quopt/ITR-Public-API')
+        # copy into folder
+        srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-Public-API')
+        newfoldername = ITSRestAPISettings.get_setting('EXTERNALAPIFOLDER')
+        if request.method == "POST":
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            # make sure to restart the API
+            filename = os.path.join(newfoldername, 'api_refresh_date.txt')
+            with open(filename, 'w') as file_write:
+                file_write.write("" + datetime.now())
+
 
 @app.errorhandler(500)
 def internal_error(error):
