@@ -66,7 +66,7 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
         lastfolder = os.path.basename(d)
         if os.path.isdir(s):
             if lastfolder[:1] != "." and lastfolder != "instance":
-                copy_folder_excluding_dot_folders(s, d, 'sync')
+                copy_folder_excluding_dot_folders(s, d)
         else:
             shutil.copy2(s, d)
 
