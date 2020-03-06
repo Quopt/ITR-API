@@ -80,6 +80,7 @@ def teardown_request(exception=None):
     # check for restart
     if APIRequiresRestart:
         os.execv(sys.executable, ['python3'] + sys.argv)
+        exit()
 
 
 Compress(app)
