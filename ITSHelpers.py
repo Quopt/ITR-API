@@ -72,7 +72,7 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
                 except:
                     app_log.info("Check folder failed.")
         else:
-            if os.path.getmtime(s) != os.path.getmtime(d):
+            if (not os.path.isfile(d)) or os.path.getmtime(s) != os.path.getmtime(d):
               app_log.info("Copy file from " + s + " to " + d)
               try:
                   shutil.copyfile(s, d)
