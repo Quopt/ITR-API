@@ -29,6 +29,7 @@ from waitress import serve
 import time
 import threading
 import signal
+import subprocess
 
 import ITSRestAPILogin
 import ITSMailer
@@ -2561,11 +2562,12 @@ def install_publics_itr_restart():
         request)
     if master_user:
         try:
-            outputtext = subprocess.run(['pip', 'install', "-r", "requirements.txt"], cwd=app.root_path, encoding='utf-8',
-                                        stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-            app_log.info(outputtext)
-        except:
-            app_log.error('Pip -r install requirements.txt failed')
+            os.chdir(app.root_path)
+            app_log.info(app.root_path)
+            outputtext = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
+            app_log.info(outputtext.stdout)
+        except Exception as err:
+            app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
 
         app_log.info('Stopping waitress')
         #ITSHelpers.restart_program()
