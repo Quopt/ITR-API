@@ -2565,7 +2565,9 @@ def install_publics_itr_restart():
     return "You are not authorised to restart the server", 403
 
 
-
+@app.route('/version', methods=['GET'])
+def version():
+    return "ITR API version 6-3-2020", 200
 
 @app.errorhandler(500)
 def internal_error(error):
