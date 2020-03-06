@@ -64,7 +64,7 @@ def sync_folder_excluding_dot_folders(filepath_src, filepath_dst):
         d = os.path.join(filepath_dst, item)
         lastfolder = os.path.basename(d)
         if os.path.isdir(s):
-            if lastfolder[:1] != ".":
+            if lastfolder[:1] != "." and lastfolder[:1] != "instance":
                 sync(s, d, 'sync')
         else:
             shutil.copy2(s, d)
