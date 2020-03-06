@@ -2511,7 +2511,7 @@ def install_publics_itr_api():
         srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-API')
         newfoldername = os.path.join(os.sep, app.root_path)
         if request.method == "POST":
-            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
@@ -2530,7 +2530,7 @@ def install_publics_itr_webclient():
         srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-webclient')
         newfoldername = ITSRestAPISettings.get_setting('WEBFOLDER')
         if request.method == "POST":
-            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
 
 @app.route('/installpublics/itr-public-api', methods=['POST'])
 def install_publics_itr_public_api():
@@ -2543,7 +2543,7 @@ def install_publics_itr_public_api():
         srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-Public-API')
         newfoldername = ITSRestAPISettings.get_setting('EXTERNALAPIFOLDER')
         if request.method == "POST":
-            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
