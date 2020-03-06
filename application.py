@@ -2558,9 +2558,12 @@ def install_publics_itr_restart():
             os.execl(app.root_path, "pip", "install", "-r", "requirements.txt")
         except:
             pass
-        exit()
+
+        app_log.info('Stopping flask')
+        start_waitress()
 
     return "You are not authorised to restart the server", 403
+
 
 
 
@@ -2569,11 +2572,7 @@ def internal_error(error):
     app_log.error("Internal server error 500 : %s", error)
     return "500 error"
 
-
-if __name__ == '__main__':
-    # app.debug = True
-    # MET FLASK app.run()
-    # app.run(debug=True)
+def start_waitress():
     itrport = "443"
     try:
         itrport = str(os.environ['ITRPORT'])
@@ -2598,3 +2597,9 @@ if __name__ == '__main__':
 
     app_log.info("Starting waitress server on port %s with %s threads and queue size of %s and connection limit %s.", itrport, itrthreads, itrqueue, connection_limit)
     serve(app.wsgi_app, threads = itrthreads, listen="*:" + itrport, backlog=itrqueue, connection_limit=connection_limit)
+
+if __name__ == '__main__':
+    # app.debug = True
+    # MET FLASK app.run()
+    # app.run(debug=True)
+    start_waitress()
