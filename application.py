@@ -79,6 +79,10 @@ def teardown_request(exception=None):
 
     # check for restart
     if APIRequiresRestart:
+        try:
+            os.execl(app.root_path, "pip", "install", "-r", "requirements.txt")
+        except:
+            pass
         exit()
 
 
