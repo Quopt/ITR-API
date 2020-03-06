@@ -59,14 +59,14 @@ def copy_folder(filepath_src, filepath_dst):
         else:
             shutil.copy2(s, d)
 
-def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
+def copy_folder_excluding_dot_folders(filepath_src, filepath_dst, alternatecopymethod = False):
     for item in os.listdir(filepath_src):
         s = os.path.join(filepath_src, item)
         d = os.path.join(filepath_dst, item)
         lastfolder = os.path.basename(d)
         if os.path.isdir(s):
             if lastfolder[:1] != "." and lastfolder != "instance":
-                app_log.info("Check folder for changed files from " + s + " to " + d)
+                #app_log.info("Check folder for changed files from " + s + " to " + d)
                 try:
                     copy_folder_excluding_dot_folders(s, d)
                 except:
@@ -75,7 +75,14 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
             if (not os.path.isfile(d)) or os.path.getmtime(s) != os.path.getmtime(d):
               app_log.info("Copy file from " + s + " to " + d)
               try:
-                  shutil.copyfile(s, d)
+                  if alternatecopymethod:
+                   if os.path.isfile(d + ".old"):
+                       os.remove(d + ".old")
+                   shutil.copyfile(s, d + ".bkp")
+                   os.rename(d, d + ".old")
+                   os.rename(d + ".bkp", d )
+                  else:
+                   shutil.copyfile(s, d)
               except:
                   app_log.info("Copy file from " + s + " to " + d + " failed.")
 

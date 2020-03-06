@@ -2508,7 +2508,7 @@ def install_publics_itr_api():
         newfoldername = os.path.join(os.sep, app.root_path)
         if request.method == "POST":
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
-            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername, True)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
