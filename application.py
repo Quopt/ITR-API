@@ -2559,7 +2559,7 @@ def install_publics_itr_restart():
         except:
             pass
 
-        app_log.info('Stopping flask')
+        app_log.info('Restarting waitress')
         start_waitress()
 
     return "You are not authorised to restart the server", 403
