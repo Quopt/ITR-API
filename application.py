@@ -2564,13 +2564,12 @@ def install_publics_itr_restart():
         try:
             os.chdir(app.root_path)
             app_log.info(app.root_path)
-            outputtext = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
-            app_log.info(outputtext.stdout)
+            output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
+            app_log.info(output_text.stdout)
         except Exception as err:
             app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
 
         app_log.info('Stopping waitress')
-        #ITSHelpers.restart_program()
         os._exit(1)
 
     return "You are not authorised to stop the server", 403
