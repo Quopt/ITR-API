@@ -2508,11 +2508,7 @@ def install_publics_itr_api():
         newfoldername = os.path.join(os.sep, app.root_path)
         if request.method == "POST":
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
-            try:
-                ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
-            except:
-                app_log.info("Unexpected error:" + sys.exc_info()[0])
-                raise
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
@@ -2533,7 +2529,7 @@ def install_publics_itr_webclient():
         newfoldername = ITSRestAPISettings.get_setting('WEBFOLDER')
         if request.method == "POST":
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
-            ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
 
         return "OK", 200
     return "You are not authorised to install public repositories", 403
@@ -2551,7 +2547,7 @@ def install_publics_itr_public_api():
         newfoldername = ITSRestAPISettings.get_setting('EXTERNALAPIFOLDER')
         if request.method == "POST":
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
-            ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
