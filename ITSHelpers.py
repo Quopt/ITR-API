@@ -66,12 +66,19 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
         lastfolder = os.path.basename(d)
         if os.path.isdir(s):
             if lastfolder[:1] != "." and lastfolder != "instance":
-                copy_folder_excluding_dot_folders(s, d)
+                app_log.info("Check folder for changed files from " + s + " to " + d)
+                try:
+                    copy_folder_excluding_dot_folders(s, d)
+                except:
+                    app_log.info("Check folder failed.")
         else:
-            try:
-                shutil.copy2(s, d)
-            except:
-                app_log.info("Copy file from " + s + " to " + d + " failed.")
+            if os.path.getmtime(s) != os.path.getmtime(d):
+              app_log.info("Copy file from " + s + " to " + d)
+              try:
+                  shutil.copy2(s, d)
+              except:
+                  app_log.info("Copy file from " + s + " to " + d + " failed.")
+
 
 def list_folder(filepath):
     a = []
