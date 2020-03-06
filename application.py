@@ -27,6 +27,8 @@ from flask_compress import Compress
 from datetime import datetime, timezone, timedelta, date
 from waitress import serve
 import time
+import threading
+import signal
 
 import ITSRestAPILogin
 import ITSMailer
@@ -2549,7 +2551,7 @@ def install_publics_itr_public_api():
             return "OK", 200
     return "You are not authorised to install public repositories", 403
 
-@app.route('/installpublics/itr-restart', methods=['POST'])
+@app.route('/installpublics/itr-stop', methods=['POST'])
 def install_publics_itr_restart():
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
@@ -2559,11 +2561,14 @@ def install_publics_itr_restart():
         except:
             pass
 
-        app_log.info('Restarting waitress')
-        start_waitress()
+        app_log.info('Stopping waitress')
+        #ITSHelpers.restart_program()
+        os._exit(1)
 
-    return "You are not authorised to restart the server", 403
+    return "You are not authorised to stop the server", 403
 
+def terminate(*_):
+    start_waitress()
 
 @app.route('/version', methods=['GET'])
 def version():
@@ -2574,7 +2579,13 @@ def internal_error(error):
     app_log.error("Internal server error 500 : %s", error)
     return "500 error"
 
+waitress_thread = ""
+
 def start_waitress():
+    global waitress_thread
+
+    waitress_thread = threading.current_thread()
+
     itrport = "443"
     try:
         itrport = str(os.environ['ITRPORT'])

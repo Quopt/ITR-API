@@ -13,9 +13,10 @@
 #  limitations under the License.
 
 import string
-import os
+import os, sys, psutil
 import shutil
 from dirsync import sync
+from ITSLogging import app_log
 
 def string_split_to_filepath(string_to_split):
     string_to_split = to_filepath(string_to_split)
@@ -79,3 +80,19 @@ def list_folder(filepath):
 
 class Empty:
     pass
+
+def restart_program():
+    """Restarts the current program, with file objects and descriptors
+       cleanup
+    """
+
+    try:
+        p = psutil.Process(os.getpid())
+        for handler in p.get_open_files() + p.connections():
+            os.close(handler.fd)
+    except:
+        e = sys.exc_info()[0]
+        #app_log.error(e)
+
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
