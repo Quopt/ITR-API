@@ -2507,6 +2507,7 @@ def install_publics_itr_api():
         srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-API')
         newfoldername = os.path.join(os.sep, app.root_path)
         if request.method == "POST":
+            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
             ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
@@ -2527,7 +2528,9 @@ def install_publics_itr_webclient():
         srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-webclient')
         newfoldername = ITSRestAPISettings.get_setting('WEBFOLDER')
         if request.method == "POST":
+            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
             ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
+
         return "OK", 200
     return "You are not authorised to install public repositories", 403
 
@@ -2543,6 +2546,7 @@ def install_publics_itr_public_api():
         srcfoldername = os.path.join(os.sep, app.instance_path, 'cache', 'git', 'ITR-Public-API')
         newfoldername = ITSRestAPISettings.get_setting('EXTERNALAPIFOLDER')
         if request.method == "POST":
+            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
             ITSHelpers.sync_folder_excluding_dot_folders(srcfoldername, newfoldername)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
