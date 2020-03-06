@@ -2561,9 +2561,11 @@ def install_publics_itr_restart():
         request)
     if master_user:
         try:
-            os.execl(app.root_path, "pip", "install", "-r", "requirements.txt")
+            outputtext = subprocess.run(['pip', 'install', "-r", "requirements.txt"], cwd=app.root_path, encoding='utf-8',
+                                        stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            app_log.info(outputtext)
         except:
-            pass
+            app_log.error('Pip -r install requirements.txt failed')
 
         app_log.info('Stopping waitress')
         #ITSHelpers.restart_program()
