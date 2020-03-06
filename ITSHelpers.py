@@ -15,6 +15,7 @@
 import string
 import os
 import shutil
+from dirsync import sync
 
 def string_split_to_filepath(string_to_split):
     string_to_split = to_filepath(string_to_split)
@@ -53,17 +54,18 @@ def copy_folder(filepath_src, filepath_dst):
         s = os.path.join(filepath_src, item)
         d = os.path.join(filepath_dst, item)
         if os.path.isdir(s):
-            shutil.copytree(s, d, True, True)
+            shutil.copytree(s, d)
         else:
             shutil.copy2(s, d)
 
-def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
+def sync_folder_excluding_dot_folders(filepath_src, filepath_dst):
     for item in os.listdir(filepath_src):
         s = os.path.join(filepath_src, item)
         d = os.path.join(filepath_dst, item)
+        lastfolder = os.path.basename(d)
         if os.path.isdir(s):
-            if s[:1] != ".":
-                shutil.copytree(s, d, True, True)
+            if lastfolder[:1] != ".":
+                sync(s, d, 'sync')
         else:
             shutil.copy2(s, d)
 
