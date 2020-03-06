@@ -2515,7 +2515,7 @@ def install_publics_itr_api():
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
-                file_write.write(str)datetime.now()))
+                file_write.write(str(datetime.now()))
             APIRequiresRestart = True
 
 
@@ -2547,7 +2547,7 @@ def install_publics_itr_public_api():
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
-                file_write.write(str)datetime.now()))
+                file_write.write(str(datetime.now()))
 
 
 @app.errorhandler(500)
