@@ -68,6 +68,7 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst):
             if lastfolder[:1] != "." and lastfolder != "instance":
                 copy_folder_excluding_dot_folders(s, d)
         else:
+            app_log.info("Copy file from " + s + " to "+ d)
             shutil.copy2(s, d)
 
 def list_folder(filepath):
