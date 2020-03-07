@@ -2515,6 +2515,16 @@ def install_publics_itr_api():
             with open(filename, 'w') as file_write:
                 file_write.write(str(datetime.now()))
 
+            # install new requirements if set
+            try:
+                os.chdir(app.root_path)
+                app_log.info(app.root_path)
+                output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
+                                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
+                app_log.info(output_text.stdout)
+            except Exception as err:
+                app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
+
             return "OK", 200
     return "You are not authorised to install public repositories", 403
 
