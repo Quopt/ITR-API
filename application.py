@@ -2640,7 +2640,7 @@ waitress_thread = ""
 
 def start_waitress():
     global waitress_thread
-    init_app_log(app.instance_path)
+    init_app_log()
 
     waitress_thread = threading.current_thread()
 
