@@ -27,6 +27,17 @@ filemode = 'a' if os.path.exists(log_file) else 'w'
 ttylog = logging.StreamHandler(sys.stdout)
 its_logging_initialised = False
 
+# always init the logger, not all python versions allow for configuration and then we will lose logging
+log_handler = RotatingFileHandler(log_file, mode=filemode, maxBytes=5 * 1024 * 1024,
+ backupCount=log_handler_backup_count, encoding=None, delay=0)
+log_handler.setFormatter(log_formatter)
+log_handler.setLevel(logging.INFO)
+ttylog.setLevel(logging.INFO)
+ttylog.setFormatter(log_formatter)
+app_log.setLevel(logging.INFO)
+app_log.addHandler(log_handler)
+app_log.addHandler(ttylog)
+
 def init():
     global log_handler_backup_count, ttylog, app_log, its_logging_initialised, filemode, log_file
 
@@ -49,11 +60,9 @@ def init():
     log_handler.setFormatter(log_formatter)
     log_handler.setLevel(logging.INFO)
 
-    #ttylog = logging.StreamHandler(sys.stdout)
     ttylog.setLevel(logging.INFO)
     ttylog.setFormatter(log_formatter)
 
-    #app_log = logging.getLogger('root')
     app_log.setLevel(logging.INFO)
 
     app_log.addHandler(log_handler)
