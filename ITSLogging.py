@@ -21,15 +21,16 @@ import ITSRestAPISettings
 # define all properties otherwise we will have cyclic dependencies on imports
 log_formatter = logging.Formatter('ITR %(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
 app_log = logging.getLogger('root')
-log_file = 'instance/log/ITR_API.log';
+log_file = 'ITR_API.log'
 log_handler_backup_count = 10
 filemode = 'a' if os.path.exists(log_file) else 'w'
 ttylog = logging.StreamHandler(sys.stdout)
 its_logging_initialised = False
 
-def init():
-    global log_handler_backup_count, ttylog, app_log, its_logging_initialised, filemode
+def init(basepath):
+    global log_handler_backup_count, ttylog, app_log, its_logging_initialised, filemode, log_file
 
+    log_file = os.path.join(basepath, 'log', log_file)
     if not os.path.exists(os.path.dirname(log_file)):
         os.makedirs(os.path.dirname(log_file))
 
@@ -61,9 +62,9 @@ def init():
 
     its_logging_initialised = True
 
-def init_app_log():
+def init_app_log(basepath):
     global its_logging_initialised
     if not its_logging_initialised:
-        init()
+        init(basepath)
 
 
