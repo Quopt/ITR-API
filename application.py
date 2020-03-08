@@ -2623,7 +2623,7 @@ def log(logid, startlogdatetime):
                             scan_index -= 1
                     except:
                         scan_index -= 1
-                scan_index += 1
+                scan_index += 2
                 return jsonify(lines_to_scan[-(len(lines_to_scan)-scan_index-1):]), 200
 
         except:
