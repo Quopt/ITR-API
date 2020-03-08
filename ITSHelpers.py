@@ -84,7 +84,7 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst, alternatecopym
                    os.rename(d, d + ".old")
                    os.rename(d + ".bkp", d )
                   else:
-                   shutil.copyfile(s, d)
+                   shutil.copy2(s, d)
               except:
                   app_log.info("Copy file from " + s + " to " + d + " failed.")
 
