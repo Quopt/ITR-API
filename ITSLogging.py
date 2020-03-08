@@ -16,29 +16,54 @@ import logging
 from logging.handlers import RotatingFileHandler
 import sys
 import os
+import ITSRestAPISettings
 
+# define all properties otherwise we will have cyclic dependencies on imports
 log_formatter = logging.Formatter('ITR %(asctime)s %(levelname)s %(funcName)s(%(lineno)d) %(message)s')
-
-logFile = 'instance/log/ITR_API.log';
-
-if not os.path.exists(os.path.dirname(logFile)):
-    os.makedirs(os.path.dirname(logFile))
-
-filemode = 'a' if os.path.exists(logFile) else 'w'
-
-my_handler = RotatingFileHandler(logFile, mode=filemode, maxBytes=5 * 1024 * 1024,
-                                 backupCount=2, encoding=None, delay=0)
-my_handler.setFormatter(log_formatter)
-my_handler.setLevel(logging.INFO)
-
-ttylog = logging.StreamHandler(sys.stdout)
-ttylog.setLevel(logging.INFO)
-ttylog.setFormatter(log_formatter)
-
 app_log = logging.getLogger('root')
-app_log.setLevel(logging.INFO)
+log_file = 'instance/log/ITR_API.log';
+log_handler_backup_count = 10
+filemode = 'a' if os.path.exists(log_file) else 'w'
+ttylog = logging.StreamHandler(sys.stdout)
+its_logging_initialised = False
 
-app_log.addHandler(my_handler)
-app_log.addHandler(ttylog)
+def init():
+    global log_handler_backup_count, ttylog, app_log, its_logging_initialised, filemode
+
+    if not os.path.exists(os.path.dirname(log_file)):
+        os.makedirs(os.path.dirname(log_file))
+
+    try:
+        log_handler_backup_count = ITSRestAPISettings.get_setting_for_customer("","LOG_HANDLER_BACKUP_COUNT",False,"")
+    except:
+        log_handler_backup_count = ""
+
+    if log_handler_backup_count == "":
+        log_handler_backup_count = 10
+        ITSRestAPISettings.write_setting("","LOG_HANDLER_BACKUP_COUNT","10",True)
+    else:
+        log_handler_backup_count = int(log_handler_backup_count)
+
+    log_handler = RotatingFileHandler(log_file, mode=filemode, maxBytes=5 * 1024 * 1024,
+                                     backupCount=log_handler_backup_count, encoding=None, delay=0)
+    log_handler.setFormatter(log_formatter)
+    log_handler.setLevel(logging.INFO)
+
+    #ttylog = logging.StreamHandler(sys.stdout)
+    ttylog.setLevel(logging.INFO)
+    ttylog.setFormatter(log_formatter)
+
+    #app_log = logging.getLogger('root')
+    app_log.setLevel(logging.INFO)
+
+    app_log.addHandler(log_handler)
+    app_log.addHandler(ttylog)
+
+    its_logging_initialised = True
+
+def init_app_log():
+    global its_logging_initialised
+    if not its_logging_initialised:
+        init()
 
 

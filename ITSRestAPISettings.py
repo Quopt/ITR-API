@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 # helper module to manage settings
-import application
 import os
 import ITSRestAPIDB
 import ITSRestAPIORMExtensions
@@ -24,9 +23,9 @@ import ITSHelpers
 settings_loaded = False
 settings_cache = {}
 
-
 def get_setting(setting_name, defaultval = ""):
     global settings_loaded
+    import application
 
     if not settings_loaded:
         application.app.config.from_pyfile('application.cfg')
@@ -57,7 +56,7 @@ def write_setting(customer_id, setting_name, setting_value, par_protected):
         else:
             param.ParValue = setting_value
 
-def get_setting_for_customer (customer_id, setting_name, check_master_db_too, consultant_id):
+def get_setting_for_customer(customer_id, setting_name, check_master_db_too, consultant_id):
     global settings_cache
 
     setting_value = get_setting(setting_name)

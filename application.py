@@ -39,7 +39,7 @@ import ITSRestAPIDB
 import ITSRestAPISettings
 import ITSJsonify
 from ITSRestAPIORMExtendedFunctions import *
-from ITSLogging import *
+from ITSLogging import app_log, log_handler_backup_count, log_file, init_app_log, log_formatter
 from ITSPrefixMiddleware import *
 import ITSTranslate
 import ITSHelpers
@@ -2584,12 +2584,51 @@ def install_publics_itr_restart():
 
     return "You are not authorised to stop the server", 403
 
-def terminate(*_):
-    start_waitress()
-
 @app.route('/version', methods=['GET'])
 def version():
-    return "ITR API version 6-3-2020", 200
+    return "ITR API 8-mar-2020", 200
+
+@app.route('/log/<logid>/<startlogdatetime>', methods=['GET'])
+def log(logid, startlogdatetime):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+        request)
+    if master_user:
+        try:
+            log_id = int(logid)
+            if len(startlogdatetime) > 20:
+                startlogdatetime = startlogdatetime[:20]
+            start_datetime = startlogdatetime.upper()
+
+            log_filename = log_file
+            if log_id > 0:
+                log_filename = log_filename + "." + str(log_id)
+
+            if start_datetime == "LAST":
+                # retrieve last 100 lines in the log
+                return jsonify(open(log_filename,"r").readlines()[-100:]), 200
+            elif start_datetime == "ALL":
+                # retrieve all log lines
+                return jsonify(open(log_filename,"r").readlines()), 200
+            else:
+                lines_to_scan = open(log_filename,"r").readlines()
+                scan_index = len(lines_to_scan)-1
+                border = datetime.strptime(start_datetime, log_formatter.default_time_format)
+                line_found = False
+                while scan_index > 0 and not line_found:
+                    try:
+                        line_border = datetime.strptime(lines_to_scan[scan_index][4:23], log_formatter.default_time_format)
+                        if line_border < border:
+                            line_found = True
+                        else:
+                            scan_index -= 1
+                    except:
+                        scan_index -= 1
+                return jsonify(lines_to_scan[-(len(lines_to_scan)-scan_index-1):]), 200
+
+        except:
+            return "You are not authorised to retrieve server log files using these parameters. It may also be that the log file is not present yet", 403
+
+    return "You are not authorised to retrieve server log files", 403
 
 @app.errorhandler(500)
 def internal_error(error):
@@ -2600,6 +2639,7 @@ waitress_thread = ""
 
 def start_waitress():
     global waitress_thread
+    init_app_log()
 
     waitress_thread = threading.current_thread()
 
