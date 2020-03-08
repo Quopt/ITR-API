@@ -2623,7 +2623,7 @@ def log(logid, startlogdatetime):
                             scan_index -= 1
                     except:
                         scan_index -= 1
-                return jsonify(lines_to_scan[-(len(lines_to_scan)-scan_index-1):]), 200
+                return jsonify(lines_to_scan[-(len(lines_to_scan)-scan_index):]), 200
 
         except:
             return "You are not authorised to retrieve server log files using these parameters. It may also be that the log file is not present yet", 403
