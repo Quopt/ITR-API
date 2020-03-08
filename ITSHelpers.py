@@ -74,8 +74,8 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst, alternatecopym
             if (not os.path.isfile(d)) or os.path.getmtime(s) != os.path.getmtime(d):
               app_log.info("Copy file from " + s + " to " + d)
               #ensure destination folder is there
-              if not os.path.exists(d):
-                  os.makedirs(d)
+              if not os.path.exists(os.path.basename(d)):
+                  os.makedirs(os.path.basename(d))
               try:
                   if alternatecopymethod:
                    if os.path.isfile(d + ".old"):
