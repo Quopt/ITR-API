@@ -28,7 +28,7 @@ ttylog = logging.StreamHandler(sys.stdout)
 its_logging_initialised = False
 
 def init():
-    global log_handler_backup_count, ttylog, app_log, its_logging_initialised, filemode
+    global log_handler_backup_count, ttylog, app_log, its_logging_initialised, filemode, log_file
 
     if not os.path.exists(os.path.dirname(log_file)):
         os.makedirs(os.path.dirname(log_file))
