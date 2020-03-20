@@ -200,10 +200,10 @@ def getWWW(request):
     return ip_address
 
 def getWWWForToken(request):
-    tempwww = getWWW(request)
+    tempwww = getWWW(request).replace(".","_").replace(":","_")
 
     try:
-      tempwww = tempwww.split("//")[1].replace(".","_").replace(":","_")
+      tempwww = tempwww.split("//")[1]
     except:
       pass
 
