@@ -24,6 +24,7 @@ from copy import deepcopy
 import datetime
 import secrets
 import string
+import pyotp
 
 from ITSLogging import *
 
@@ -51,18 +52,20 @@ def login_user(user_id, user_password, company_id=""):
     password = ""
     connection = ITSRestAPIDB.get_db_engine_connection_master()
     number_of_companies = 0
+    found_company_id = ""
+    is_test_taking_user = True
 
     # check user id and password against the database
     try:
         if company_id != "":
             app_log.info('Verifying company ids for  %s', user_id)
             result = connection.execute(
-                'select "CompanyID", "ID", "Password" from "SecurityUsers" where "Email" = %s and "CompanyID" = %s and "EndDateLicense" > now()',
+                'select "CompanyID", "ID", "Password", "IsTestTakingUser" from "SecurityUsers" where "Email" = %s and "CompanyID" = %s and "EndDateLicense" > now()',
                 user_id, company_id)
         else:
             app_log.info('Fetching company ids for  %s', user_id)
             result = connection.execute(
-                'select "CompanyID", "ID", "Password"  from "SecurityUsers" where "Email" = %s and "EndDateLicense" > now()',
+                'select "CompanyID", "ID", "Password", "IsTestTakingUser"  from "SecurityUsers" where "Email" = %s and "EndDateLicense" > now()',
                 user_id)
         for recs in result:
             temp_user_guid = recs[1]
@@ -72,8 +75,10 @@ def login_user(user_id, user_password, company_id=""):
                 number_of_companies = number_of_companies + 1
                 last_logged_in_user_id = user_id
                 last_logged_in_company_id = recs[0]
+                found_company_id = recs[0]
                 user_guid = recs[1]
                 password = recs[2]
+                is_test_taking_user = recs[3]
 
     except:
         pass
@@ -89,23 +94,44 @@ def login_user(user_id, user_password, company_id=""):
             password_ok = True
         if password_ok :
             result = connection.execution_options(isolation_level="AUTOCOMMIT").execute('update "SecurityUsers" set "LastLoginDateTime" = now() where "Email" = %s and "Password" = %s and "CompanyID" = %s',
-                    user_id, user_password, last_logged_in_company_id)
+                    user_id, user_password, found_company_id)
             connection.dispose()
             connection = ITSRestAPIDB.get_db_engine_connection_client(last_logged_in_company_id)
             result = connection.execution_options(isolation_level="AUTOCOMMIT").execute(
                 'update "SecurityUsers" set "LastLoginDateTime" = now() where "Email" = %s ', user_id)
             connection.dispose()
-            return LoginUserResult.ok
+            return LoginUserResult.ok, found_company_id, is_test_taking_user
         else:
             connection.dispose()
-            return LoginUserResult.user_not_found
+            return LoginUserResult.user_not_found, found_company_id, is_test_taking_user
     if number_of_companies > 1:
         connection.dispose()
-        return LoginUserResult.multiple_companies_found
+        return LoginUserResult.multiple_companies_found, found_company_id, is_test_taking_user
 
     connection.dispose()
-    return LoginUserResult.user_not_found
+    return LoginUserResult.user_not_found, found_company_id, is_test_taking_user
 
+def get_user_secret(user_id, company_id, create_when_needed):
+    connection = ITSRestAPIDB.get_db_engine_connection()
+    mfa_secret = ""
+    try:
+        result = connection.execute(
+            'select "otp_secret" from "SecurityUsers" where "Email" = %s and "CompanyID" = %s',
+            user_id, company_id)
+
+        for recs in result:
+            mfa_secret = recs[0]
+
+        if mfa_secret == "" and create_when_needed:
+            # if the secret is not there generate and store it
+            mfa_secret = pyotp.random_base32()
+            result = connection.execute(
+                'update "SecurityUsers" set "otp_secret" = %s where "Email" = %s and "CompanyID" = %s',
+                mfa_secret, user_id, company_id)
+
+        return True, mfa_secret
+    except:
+        return False, ""
 
 def check_if_user_account_is_valid(user_id):
     # check if this is correct according to the database
@@ -183,6 +209,12 @@ def check_session_token(token_id):
         connection.dispose()
     return number_of_tokens == 1
 
+def delete_session_token(token_id):
+    connection = ITSRestAPIDB.get_db_engine_connection()
+    try:
+        connection.execution_options(isolation_level="AUTOCOMMIT").execute('delete from "SecurityWebSessionTokens" where "Token" = %s', token_id)
+    finally:
+        connection.dispose()
 
 def check_for_dead_tokens(connection):
     connection.execute(

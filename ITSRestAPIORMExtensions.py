@@ -337,8 +337,7 @@ class SecurityCompany(ITSRestAPIORM.SecurityCompany, ITSRestAPIORMExtendedFuncti
     unified_search_fields = {"CompanyName"
         , "CompanyCountry"
         , "InternationalVATNr", "MailAddress", "VisitingAddress", "InvoiceAddress"
-        , "ContactPerson", "ContactPhone", "ContactEMail"
-                             }
+        , "ContactPerson", "ContactPhone", "ContactEMail" }
     archive_field = {}
     user_limit_select_field = {}
     may_work_with_own_objects_field = ""

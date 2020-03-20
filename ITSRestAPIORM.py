@@ -383,6 +383,7 @@ class SecurityCompany(Base):
     AdditionalSessionFields = Column(UnicodeText, nullable=False, server_default=text("('')"))
     AllowNegativeCredits = Column(Boolean, nullable=False, server_default=text("True"))
     Active = Column(Boolean, nullable=False, server_default=text("True"))
+    MFAEnabled = Column(Boolean, nullable=False, server_default=text("False"))
     LicenseStartDate = Column(DateTime(timezone=True), nullable=False, server_default=text("('2000-01-01 04:00:00 -1:00')"))
     LicenseEndDate = Column(DateTime(timezone=True), nullable=False, server_default=text("('1-1-2100')"))
     NoPublicTests = Column(Boolean, nullable=False, server_default=text("False"))

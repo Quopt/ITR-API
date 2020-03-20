@@ -30,6 +30,7 @@ import time
 import threading
 import signal
 import subprocess
+import pyotp
 
 import ITSRestAPILogin
 import ITSMailer
@@ -353,7 +354,7 @@ def login():
              user_company = tempCompany.ID
 
     # check them against the database and return whether or not OK
-    login_result = ITSRestAPILogin.login_user(user_id, user_password, user_company)
+    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password, user_company)
 
     # login failed
     if login_result == ITSRestAPILogin.LoginUserResult.user_not_found:
@@ -367,24 +368,116 @@ def login():
         token = ITSRestAPILogin.create_session_token(user_id, user_company,
                                                      ITSRestAPILogin.LoginTokenType.regular_session)
     else:
-        token = ITSRestAPILogin.create_session_token(user_id, ITSRestAPILogin.last_logged_in_company_id,
+        token = ITSRestAPILogin.create_session_token(user_id, found_company_id,
                                                  ITSRestAPILogin.LoginTokenType.regular_session)
 
     app_log.info('Token assigned to %s %s %s %s %s', user_id, ip_address, www, request.host, token)
 
-    now = datetime.now() + timedelta(0, 600);
+    now = datetime.now() + timedelta(0, 600)
     return_obj = {}
-    return_obj['SessionID'] = token;
+    return_obj['SessionID'] = token
     return_obj['ExpirationDateTime'] = now.isoformat()
-    return_obj['CompanyID'] = ITSRestAPILogin.last_logged_in_company_id
+    return_obj['CompanyID'] = found_company_id
+    return_obj['MFAStatus'] = "NA" # MFA status can be NA (for not applicable), CODE to request additional login code, and QR for registering the QR code as the common secret
+
     if login_result == ITSRestAPILogin.LoginUserResult.ok:
         # return a JSON that has Session, SessionID, multiple companies found = not present, ExpirationDateTime date time + 10 minutes (server based)
-        return_obj['MultipleCompaniesFound'] = 'N';
+        return_obj['MultipleCompaniesFound'] = 'N'
+
+        if not is_test_taking_user:
+            # check if the company has MFA enabled
+            with ITSRestAPIDB.session_scope("") as session:
+                tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                    ITSRestAPIORMExtensions.SecurityCompany.ID == found_company_id).first()
+
+                if tempCompany.MFAEnabled:
+                    # remove the current session token, a new token will be created after entering the MFA token or QR code
+                    ITSRestAPILogin.delete_session_token(token)
+                    return_obj['SessionID'] = ""
+                    # check if the user already has a secret, if not the client must display a scan facility to register the shared secret
+                    return_obj['MFAStatus'] = "QR"
+                    user_secret_valid, user_secret = ITSRestAPILogin.get_user_secret(user_id, found_company_id, False)
+                    if user_secret_valid and user_secret != "":
+                        # If the user already has a secret then inform the client that the secret needs to be entered
+                        return_obj['MFAStatus'] = "CODE"
+                else:
+                    pass
     if login_result == ITSRestAPILogin.LoginUserResult.multiple_companies_found:
         # return a JSON that has Session, SessionID, multiple companies found = T, ExpirationDateTime date time + 10 minutes (server based)
-        return_obj['MultipleCompaniesFound'] = 'Y';
+        return_obj['MultipleCompaniesFound'] = 'Y'
     return json.dumps(return_obj)
 
+@app.route('/login/qrcode', methods=['GET'])
+def get_qr_code():
+    # when the user is logged in a QR code for registering the shared secret can be requested
+    user_id = request.headers['UserID']
+    user_password = request.headers['Password']
+    user_company = request.headers['CompanyID']
+    ip_address = getIP(request)  # we need to check for ip in the future
+    www = getWWW(request).split("//")[1].replace(".","_").replace(":","_")
+
+    app_log.info('QR code for MFA login requested for %s %s %s %s', user_id, ip_address, www, request.host)
+
+    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password, user_company)
+
+    if login_result == ITSRestAPILogin.LoginUserResult.ok:
+        # now return the QR code
+        user_secret_valid, user_secret = ITSRestAPILogin.get_user_secret(user_id, user_company, True)
+        if user_secret_valid:
+            # turn this into qr code on client
+            return 'otpauth://totp/{0}:{1}?secret={2}&issuer={0}'.format(www, user_id, user_secret)
+        else:
+            return 'User secret cannot be retrieved', 401
+    else:
+        # this will block a thread. A better solution would be nicer off course
+        time.sleep(0.1)
+        return 'User not found or password not valid', 401
+
+@app.route('/login/mfacode', methods=['POST'])
+def process_mfa_code():
+    # log the user in with the userid, password, mfa code, and company id
+    # get the user id and password from the header
+    user_id = request.headers['UserID']
+    user_password = request.headers['Password']
+    user_mfa_code = request.headers['MFACode'].replace(" ","")
+    user_company = request.headers['CompanyID']
+    ip_address = getIP(request)  # we need to check for ip in the future
+    www = getWWW(request).split("//")[1].replace(".","_").replace(":","_")
+
+    app_log.info('MFA login started for %s %s %s %s', user_id, ip_address, www, request.host)
+
+    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password, user_company)
+
+    if login_result == ITSRestAPILogin.LoginUserResult.ok and not is_test_taking_user:
+        # first check user id and password
+        token = ITSRestAPILogin.create_session_token(user_id, found_company_id,
+                                                     ITSRestAPILogin.LoginTokenType.regular_session)
+
+        # now check the token
+        token_ok = False
+
+        user_secret_valid, user_secret = ITSRestAPILogin.get_user_secret(user_id, user_company, True)
+        totp = pyotp.TOTP(user_secret)
+        token_ok = totp.verify(user_mfa_code)
+
+        if token_ok and user_secret != "":
+            app_log.info('MFA token assigned to %s %s %s %s %s', user_id, ip_address, www, request.host, token)
+
+            now = datetime.now() + timedelta(0, 600);
+            return_obj = {}
+            return_obj['SessionID'] = token;
+            return_obj['ExpirationDateTime'] = now.isoformat()
+            return_obj['CompanyID'] = found_company_id
+            return_obj['MFAStatus'] = "OK"
+            return json.dumps(return_obj)
+        else:
+            # this will block a thread. A better solution would be nicer off course
+            time.sleep(0.1)
+            return 'Token not valid or expired, please try again', 401
+    else:
+        # this will block a thread. A better solution would be nicer off course
+        time.sleep(0.1)
+        return 'User not found or password not valid', 401
 
 @app.route('/sendresetpassword', methods=['POST'])
 def send_reset_password():
@@ -1838,7 +1931,8 @@ def login_change_password():
             oldPW = temp_param["old_password"]
             newPW = temp_param["new_password"]
 
-            if ITSRestAPILogin.login_user(user_id, oldPW, company_id) in (ITSRestAPILogin.LoginUserResult.ok, ITSRestAPILogin.LoginUserResult.multiple_companies_found):
+            login_result, found_company_id = ITSRestAPILogin.login_user(user_id, oldPW, company_id)
+            if login_result in (ITSRestAPILogin.LoginUserResult.ok, ITSRestAPILogin.LoginUserResult.multiple_companies_found):
                 ITSRestAPILogin.update_user_password(user_id, newPW)
                 return "The password has been changed", 200
             else:
