@@ -62,11 +62,21 @@ def teardown_request(exception=None):
     global startRequestTimer
 
     endRequestTimer = time.time()
+    company_id = "x"
+    user_id = "x"
+    ip_address = "x.x.x.x"
     try:
-        app_log.info('Method called %s %s Timing %s', request.path, request.method, str(endRequestTimer - startRequestTimer[request.path]))
+        ip_address = getIP(request)
+        user_id = request.headers['SessionID']
+        company_id = request.headers['CompanyID']
+    except:
+        pass
+
+    try:
+        app_log.info('Method called %s %s %s %s %s Timing %s', request.path, request.method, company_id, user_id, ip_address, str(endRequestTimer - startRequestTimer[request.path]))
         del startRequestTimer[request.path]
     except:
-        app_log.info('Method called %s %s', request.path, request.method)
+        app_log.info('Method called %s %s %s %s %s', request.path, request.method, company_id, user_id, ip_address)
 
     #stop all open database connections
     try:
@@ -145,16 +155,12 @@ def check_master_header(request):
         master_header = "N"
         try:
             master_header = request.headers['MASTER']
-            if request.headers['MASTER'] == "Y":
-                request.headers['MASTER'] = "N"
         except:
             pass
 
         include_master_header = "N"
         try:
             include_master_header = request.headers['IncludeMaster']
-            if request.headers['IncludeMaster'] == "Y":
-                request.headers['IncludeMaster'] = "N"
         except:
             pass
 
@@ -162,16 +168,6 @@ def check_master_header(request):
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
-
-        if master_user:
-            try:
-                request.headers['MASTER'] = master_header
-            except:
-                pass
-            try:
-                request.headers['IncludeMaster'] = include_master_header
-            except:
-                pass
 
         return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager
     except:
@@ -367,13 +363,14 @@ def login():
         return 'User not found or password not valid', 401
 
     # the user is there so assign a session token
-    ip_address = getIP(request)
     if user_company != "" :
         token = ITSRestAPILogin.create_session_token(user_id, user_company,
                                                      ITSRestAPILogin.LoginTokenType.regular_session)
     else:
         token = ITSRestAPILogin.create_session_token(user_id, ITSRestAPILogin.last_logged_in_company_id,
                                                  ITSRestAPILogin.LoginTokenType.regular_session)
+
+    app_log.info('Token assigned to %s %s %s %s %s', user_id, ip_address, www, request.host, token)
 
     now = datetime.now() + timedelta(0, 600);
     return_obj = {}
@@ -714,7 +711,7 @@ def persons_get_id(identity):
         allowed_fields_to_update.remove("Password")
         allowed_fields_to_update = ",".join(allowed_fields_to_update)
         if test_taking_user and not office_user:
-            #check if the offered session is for this person
+            # check if the offered session is for this person
             request.get_data()
             data = request.data
             data_dict = json.loads(data)
