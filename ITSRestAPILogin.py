@@ -177,7 +177,7 @@ def check_session_token(token_id):
 
         if number_of_tokens == 1:
             connection.execution_options(isolation_level="AUTOCOMMIT").execute(
-                'update "SecurityWebSessionTokens" set "TokenValidated" = now() where "Token" = %s',
+                'update "SecurityWebSessionTokens" set "TokenValidated" = now() where "Token" = %s and "TokenValidated"::time < ( now()::time - INTERVAL \'59 secs\' )',
                 token_id)
     finally:
         connection.dispose()

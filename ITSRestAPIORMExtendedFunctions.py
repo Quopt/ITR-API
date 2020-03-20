@@ -350,51 +350,57 @@ class ORMExtendedFunctions:
                 record_filter.append(additional_filter)
 
         # find out the user settings and if they may work with own objects only
-        token = request.headers['SessionID']
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
-        company_id = ITSRestAPILogin.get_company_with_session_token(token)
-        # load the user via the ORM
-        user_object = ITSRestAPIORMExtensions.SecurityUser()
-        #qry_session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_master())()
-        if company_id != "":
-            with ITSRestAPIDB.session_scope("") as qry_session:
-                user_object = qry_session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                    ITSRestAPIORMExtensions.SecurityUser.Email == user_id).filter(
-                    ITSRestAPIORMExtensions.SecurityUser.CompanyID == company_id).order_by(ITSRestAPIORMExtensions.SecurityUser.IsTestTakingUser).first()
+        try:
+          token = request.headers['SessionID']
+          company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+          company_id = ITSRestAPILogin.get_company_with_session_token(token)
+          # load the user via the ORM
+          user_object = ITSRestAPIORMExtensions.SecurityUser()
+          # qry_session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_master())()
+          if company_id != "":
+              with ITSRestAPIDB.session_scope("") as qry_session:
+                  user_object = qry_session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                      ITSRestAPIORMExtensions.SecurityUser.Email == user_id).filter(
+                      ITSRestAPIORMExtensions.SecurityUser.CompanyID == company_id).order_by(
+                      ITSRestAPIORMExtensions.SecurityUser.IsTestTakingUser).first()
 
-                proceed = True
-                if required_minimum_access_level == ITR_minimum_access_levels.master_user:
-                    proceed = user_object.IsMasterUser == True
-                if required_minimum_access_level == ITR_minimum_access_levels.test_taking_user:
-                    pass  # accessible to any logged in user
-                if required_minimum_access_level == ITR_minimum_access_levels.regular_office_user:
-                    proceed = not user_object.IsTestTakingUser == True  # accessible to anybody that is no test taking user
-                if required_minimum_access_level == ITR_minimum_access_levels.organisation_supervisor:
-                    proceed = user_object.IsOrganisationSupervisor == True
-                if required_minimum_access_level == ITR_minimum_access_levels.test_author:
-                    proceed = user_object.IsTestAuthor == True
-                if required_minimum_access_level == ITR_minimum_access_levels.password_manager:
-                    proceed = user_object.IsPasswordManager == True
-                if required_minimum_access_level == ITR_minimum_access_levels.report_author:
-                    proceed = user_object.IsReportAuthor == True
-                if required_minimum_access_level == ITR_minimum_access_levels.data_researcher:
-                    proceed = user_object.IsResearcher == True
-                if required_minimum_access_level == ITR_minimum_access_levels.test_screen_template_author:
-                    proceed = user_object.IsTestScreenTemplateAuthor == True
-                if required_minimum_access_level == ITR_minimum_access_levels.translator:
-                    proceed = user_object.IsTranslator == True
-                if master_only:
-                    master_only = user_object.IsMasterUser == True  # master database can only be queried directly by master users
-                limit_by_user_id = ""
-                if user_object.MayWorkWithOwnObjectsOnly == True and object_to_query.may_work_with_own_objects_field != "":
-                    limit_by_user_id = str(user_object.ID)
+                  proceed = True
+                  if required_minimum_access_level == ITR_minimum_access_levels.master_user:
+                      proceed = user_object.IsMasterUser == True
+                  if required_minimum_access_level == ITR_minimum_access_levels.test_taking_user:
+                      pass  # accessible to any logged in user
+                  if required_minimum_access_level == ITR_minimum_access_levels.regular_office_user:
+                      proceed = not user_object.IsTestTakingUser == True  # accessible to anybody that is no test taking user
+                  if required_minimum_access_level == ITR_minimum_access_levels.organisation_supervisor:
+                      proceed = user_object.IsOrganisationSupervisor == True
+                  if required_minimum_access_level == ITR_minimum_access_levels.test_author:
+                      proceed = user_object.IsTestAuthor == True
+                  if required_minimum_access_level == ITR_minimum_access_levels.password_manager:
+                      proceed = user_object.IsPasswordManager == True
+                  if required_minimum_access_level == ITR_minimum_access_levels.report_author:
+                      proceed = user_object.IsReportAuthor == True
+                  if required_minimum_access_level == ITR_minimum_access_levels.data_researcher:
+                      proceed = user_object.IsResearcher == True
+                  if required_minimum_access_level == ITR_minimum_access_levels.test_screen_template_author:
+                      proceed = user_object.IsTestScreenTemplateAuthor == True
+                  if required_minimum_access_level == ITR_minimum_access_levels.translator:
+                      proceed = user_object.IsTranslator == True
+                  if master_only:
+                      master_only = user_object.IsMasterUser == True  # master database can only be queried directly by master users
+                  limit_by_user_id = ""
+                  if user_object.MayWorkWithOwnObjectsOnly == True and object_to_query.may_work_with_own_objects_field != "":
+                      limit_by_user_id = str(user_object.ID)
 
-                return company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, \
-                       page_size, proceed, record_filter, sort_fields, start_page, include_client, \
-                       user_object.IsTestTakingUser and not user_object.IsOfficeUser, user_object.ID
-        else:
-            pass
-            # invalid session token. Just ignore and return.
+                  return company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, \
+                         page_size, proceed, record_filter, sort_fields, start_page, include_client, \
+                         user_object.IsTestTakingUser and not user_object.IsOfficeUser, user_object.ID
+          else:
+                  pass
+                  # invalid session token. Just ignore and return.
+        except:
+            pass # invalid token, ignore
+
+
 
     def return_single_object(self, request, required_minimum_access_level, id_to_find, master_database_query = False):
         # get the settings from the request header
