@@ -199,6 +199,16 @@ def getWWW(request):
        return ""  
     return ip_address
 
+def getWWWForToken(request):
+    tempwww = getWWW(request)
+
+    try:
+      tempwww = tempwww.split("//")[1].replace(".","_").replace(":","_")
+    except:
+      pass
+
+    return tempwww
+
 # API implementations
 @app.route('/')
 def hello_world():
@@ -414,7 +424,7 @@ def get_qr_code():
     user_password = request.headers['Password']
     user_company = request.headers['CompanyID']
     ip_address = getIP(request)  # we need to check for ip in the future
-    www = getWWW(request).split("//")[1].replace(".","_").replace(":","_")
+    www = getWWWForToken(request)
 
     app_log.info('QR code for MFA login requested for %s %s %s %s', user_id, ip_address, www, request.host)
 
@@ -442,7 +452,7 @@ def process_mfa_code():
     user_mfa_code = request.headers['MFACode'].replace(" ","")
     user_company = request.headers['CompanyID']
     ip_address = getIP(request)  # we need to check for ip in the future
-    www = getWWW(request).split("//")[1].replace(".","_").replace(":","_")
+    www = getWWWForToken(request)
 
     app_log.info('MFA login started for %s %s %s %s', user_id, ip_address, www, request.host)
 
