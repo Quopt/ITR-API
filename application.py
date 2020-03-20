@@ -200,7 +200,7 @@ def getWWW(request):
     return ip_address
 
 def getWWWForToken(request):
-    tempwww = getWWW(request).replace(".","_").replace(":","_")
+    tempwww = request.host.replace(".","_").replace(":","_")
 
     try:
       tempwww = tempwww.split("//")[1]
