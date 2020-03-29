@@ -1943,7 +1943,7 @@ def login_change_password():
             oldPW = temp_param["old_password"]
             newPW = temp_param["new_password"]
 
-            login_result, found_company_id = ITSRestAPILogin.login_user(user_id, oldPW, company_id)
+            login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, oldPW, company_id)
             if login_result in (ITSRestAPILogin.LoginUserResult.ok, ITSRestAPILogin.LoginUserResult.multiple_companies_found):
                 ITSRestAPILogin.update_user_password(user_id, newPW)
                 return "The password has been changed", 200
