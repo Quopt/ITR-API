@@ -597,6 +597,13 @@ def clientauditlog_get():
                                                                                   ITR_minimum_access_levels.regular_office_user)
 
 
+@app.route('/audittrail/object/<identity>', methods=['GET'])
+def clientauditlog_get_for_object():
+    check_master_header(request)
+
+    return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
+                                                                                  ITR_minimum_access_levels.regular_office_user)
+
 @app.route('/audittrail/<identity>', methods=['GET', 'POST', 'DELETE'])
 def clientauditlog_get_id(identity):
     check_master_header(request)
@@ -952,6 +959,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                                                             ITR_minimum_access_levels.test_taking_user,
                                                                             identity)
     json_obj = json.loads(temp_test.data)
+
     if int(json_obj["Status"]) >= 30:
         # save as anonymous data
         temp_dict = json_obj["Results"]
@@ -981,6 +989,22 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
 
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
             with ITSRestAPIDB.session_scope("") as qry_session_master:
+                # first save an audit trail record
+                new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
+                new_audit_trail.ID = uuid.uuid4()
+                new_audit_trail.ObjectID = identity
+                new_audit_trail.SessionID = str(json_obj["SessionID"])
+                new_audit_trail.CompanyID = company_id
+                new_audit_trail.UserID = id_of_user
+                new_audit_trail.ObjectType = 2 #2 = sessiontest
+                new_audit_trail.OldData = ""
+                new_audit_trail.NewData = str(json_obj["CurrentPage"])
+                new_audit_trail.AuditMessage = "Session test finished"
+                new_audit_trail.MessageID = 3 #3 = sessiontest finished
+                new_audit_trail.CreateDate = datetime.now(timezone.utc)
+                qry_session.add(new_audit_trail)
+
+                # get the test definition
                 temp_testdef = qry_session.query(ITSRestAPIORMExtensions.Test).filter(
                     ITSRestAPIORMExtensions.Test.ID == json_obj['TestID']).first()
                 if temp_testdef is None:
@@ -1231,6 +1255,22 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                     ITSMailer.send_mail('Master', translatedSubject % this_company.CurrentCreditLevel,
                                         translatedMail,
                                         this_company.ContactEMail)
+    else:
+        with ITSRestAPIDB.session_scope(company_id) as qry_session:
+            # always save an audit trail record
+            new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
+            new_audit_trail.ID = uuid.uuid4()
+            new_audit_trail.ObjectID = identity
+            new_audit_trail.SessionID = str(json_obj["SessionID"])
+            new_audit_trail.CompanyID = company_id
+            new_audit_trail.UserID = id_of_user
+            new_audit_trail.ObjectType = 2  # 2 = sessiontest
+            new_audit_trail.OldData = ""
+            new_audit_trail.NewData = str(json_obj["CurrentPage"])
+            new_audit_trail.AuditMessage = "Session test updated"
+            new_audit_trail.MessageID = 2 #2 = sessiontest updated
+            new_audit_trail.CreateDate = datetime.now(timezone.utc)
+            qry_session.add(new_audit_trail)
 
 @app.route('/sessionteststaking/<sessionid>', methods=['GET'])
 # copy of sessiontests point only for test taking users
@@ -1422,12 +1462,42 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
                             temp_session.EMailNotificationAdresses)
 
             removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
-            # now check the geo address if there TO DO
+
+            # Save an audit trail record
+            new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
+            new_audit_trail.ID = uuid.uuid4()
+            new_audit_trail.ObjectID = identity
+            new_audit_trail.SessionID = identity
+            new_audit_trail.CompanyID = company_id
+            new_audit_trail.UserID = id_of_user
+            new_audit_trail.ObjectType = 1  # 1 = session
+            new_audit_trail.OldData = ""
+            new_audit_trail.NewData = str(temp_session.Status)
+            new_audit_trail.AuditMessage = "Session updated"
+            new_audit_trail.MessageID = 1  # 1 = session updated
+            new_audit_trail.CreateDate = datetime.now(timezone.utc)
+            clientsession.add(new_audit_trail)
 
     else:
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
             sess = qry_session.query(ITSRestAPIORMExtensions.ClientSession).filter(
                 ITSRestAPIORMExtensions.ClientSession.ID == identity).first()
+
+            # Save an audit trail record
+            new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
+            new_audit_trail.ID = uuid.uuid4()
+            new_audit_trail.ObjectID = identity
+            new_audit_trail.SessionID = identity
+            new_audit_trail.CompanyID = company_id
+            new_audit_trail.UserID = id_of_user
+            new_audit_trail.ObjectType = 1  # 1 = session
+            new_audit_trail.OldData = ""
+            new_audit_trail.NewData = str(sess.Status)
+            new_audit_trail.AuditMessage = "Session updated"
+            new_audit_trail.MessageID = 1  # 1 = session updated
+            new_audit_trail.CreateDate = datetime.now(timezone.utc)
+            qry_session.add(new_audit_trail)
+
             if sess:
                 removeUnnecessaryUserLogins(company_id, sess.PersonID)
 
@@ -1437,6 +1507,9 @@ def sessionPostTriggerDelete(session_id, company_id, id_of_user):
     with ITSRestAPIDB.session_scope(company_id) as clientsession:
         clientsession.query(ITSRestAPIORMExtensions.ClientGeneratedReport).filter(
             ITSRestAPIORMExtensions.ClientGeneratedReport.LinkedObjectID == session_id
+         ).delete()
+        clientsession.query(ITSRestAPIORMExtensions.ClientAuditLog).filter(
+            ITSRestAPIORMExtensions.ClientAuditLog.SessionID == session_id
          ).delete()
 
 def removeUnnecessaryUserLogins(company_id, id_of_user):
