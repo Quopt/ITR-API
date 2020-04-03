@@ -998,8 +998,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 new_audit_trail.UserID = id_of_user
                 new_audit_trail.ObjectType = 2 #2 = sessiontest
                 new_audit_trail.OldData = ""
-                new_audit_trail.NewData = str(json_obj["CurrentPage"])
-                new_audit_trail.AuditMessage = "Session test finished"
+                new_audit_trail.NewData = '{ "CurrentPage": '+ str(json_obj["CurrentPage"]) + ' }'
+                new_audit_trail.AuditMessage = "Session test finished at page %%CurrentPage%%"
                 new_audit_trail.MessageID = 3 #3 = sessiontest finished
                 new_audit_trail.CreateDate = datetime.now(timezone.utc)
                 qry_session.add(new_audit_trail)
@@ -1266,8 +1266,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
             new_audit_trail.UserID = id_of_user
             new_audit_trail.ObjectType = 2  # 2 = sessiontest
             new_audit_trail.OldData = ""
-            new_audit_trail.NewData = str(json_obj["CurrentPage"])
-            new_audit_trail.AuditMessage = "Session test updated"
+            new_audit_trail.NewData = '{ "CurrentPage": '+ str(json_obj["CurrentPage"]) + ' }'
+            new_audit_trail.AuditMessage = "Session test updated for page %%CurrentPage%%"
             new_audit_trail.MessageID = 2 #2 = sessiontest updated
             new_audit_trail.CreateDate = datetime.now(timezone.utc)
             qry_session.add(new_audit_trail)
@@ -1472,8 +1472,8 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
             new_audit_trail.UserID = id_of_user
             new_audit_trail.ObjectType = 1  # 1 = session
             new_audit_trail.OldData = ""
-            new_audit_trail.NewData = str(temp_session.Status)
-            new_audit_trail.AuditMessage = "Session updated"
+            new_audit_trail.NewData = '{ "SessionStatus": ' + str(temp_session.Status) + '}'
+            new_audit_trail.AuditMessage = "Session updated to status %%SessionStatus%%"
             new_audit_trail.MessageID = 1  # 1 = session updated
             new_audit_trail.CreateDate = datetime.now(timezone.utc)
             clientsession.add(new_audit_trail)
@@ -1492,8 +1492,8 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
             new_audit_trail.UserID = id_of_user
             new_audit_trail.ObjectType = 1  # 1 = session
             new_audit_trail.OldData = ""
-            new_audit_trail.NewData = str(sess.Status)
-            new_audit_trail.AuditMessage = "Session updated"
+            new_audit_trail.NewData = '{ "SessionStatus": ' + str(sess.Status) + '}'
+            new_audit_trail.AuditMessage = "Session updated to status %%SessionStatus%%"
             new_audit_trail.MessageID = 1  # 1 = session updated
             new_audit_trail.CreateDate = datetime.now(timezone.utc)
             qry_session.add(new_audit_trail)
