@@ -598,11 +598,24 @@ def clientauditlog_get():
 
 
 @app.route('/audittrail/object/<identity>', methods=['GET'])
-def clientauditlog_get_for_object():
+def clientauditlog_get_for_object(identity):
     check_master_header(request)
 
+    additional_where_clause = 'ObjectID = \'' + str(uuid.UUID(str(identity))) + '\''
+
     return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
-                                                                                  ITR_minimum_access_levels.regular_office_user)
+                                                                                  ITR_minimum_access_levels.regular_office_user,
+                                                                                  additional_where_clause)
+
+@app.route('/audittrail/session/<identity>', methods=['GET'])
+def clientauditlog_get_for_session(identity):
+    check_master_header(request)
+
+    additional_where_clause = 'SessionID = \'' + str(uuid.UUID(str(identity))) + '\''
+
+    return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
+                                                                                  ITR_minimum_access_levels.regular_office_user,
+                                                                                  additional_where_clause)
 
 @app.route('/audittrail/<identity>', methods=['GET', 'POST', 'DELETE'])
 def clientauditlog_get_id(identity):
@@ -949,6 +962,28 @@ def sessiontests_get_id(sessionid, identity):
 
         return to_return
     elif request.method == 'DELETE':
+        with ITSRestAPIDB.session_scope(company_id) as qry_session:
+            temp_test = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
+                                                                                         ITR_minimum_access_levels.test_taking_user,
+                                                                                         identity)
+            json_obj = json.loads(temp_test.data)
+
+            # save an audit trail record
+            new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
+            new_audit_trail.ID = uuid.uuid4()
+            new_audit_trail.ObjectID = identity
+            new_audit_trail.SessionID = str(json_obj["SessionID"])
+            new_audit_trail.CompanyID = company_id
+            new_audit_trail.UserID = id_of_user
+            new_audit_trail.ObjectType = 2 #2 = sessiontest
+            new_audit_trail.OldData = ""
+            new_audit_trail.NewData = '{ "TestID": '+ str(json_obj["TestID"]) + ' }'
+            new_audit_trail.AuditMessage = "Session test deleted from session"
+            new_audit_trail.MessageID = 4 #4 = sessiontest delete
+            new_audit_trail.CreateDate = datetime.now(timezone.utc)
+            qry_session.add(new_audit_trail)
+
+
         return ITSRestAPIORMExtensions.ClientSessionTest().delete_single_object(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 identity)
@@ -998,8 +1033,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 new_audit_trail.UserID = id_of_user
                 new_audit_trail.ObjectType = 2 #2 = sessiontest
                 new_audit_trail.OldData = ""
-                new_audit_trail.NewData = '{ "CurrentPage": '+ str(json_obj["CurrentPage"]) + ' }'
-                new_audit_trail.AuditMessage = "Session test finished at page %%CurrentPage%%"
+                new_audit_trail.NewData = '{ "CurrentPage": ' + str(json_obj["CurrentPage"]) + ', "TestID" : "' + str(json_obj["TestID"]) + '" }'
+                new_audit_trail.AuditMessage = "Session test finished or viewed for test %%TestID%% at page %%CurrentPage%%"
                 new_audit_trail.MessageID = 3 #3 = sessiontest finished
                 new_audit_trail.CreateDate = datetime.now(timezone.utc)
                 qry_session.add(new_audit_trail)
@@ -1266,8 +1301,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
             new_audit_trail.UserID = id_of_user
             new_audit_trail.ObjectType = 2  # 2 = sessiontest
             new_audit_trail.OldData = ""
-            new_audit_trail.NewData = '{ "CurrentPage": '+ str(json_obj["CurrentPage"]) + ' }'
-            new_audit_trail.AuditMessage = "Session test updated for page %%CurrentPage%%"
+            new_audit_trail.NewData = '{ "CurrentPage": '+ str(json_obj["CurrentPage"]) + ', "TestID" : "'+ str(json_obj["TestID"]) +'" }'
+            new_audit_trail.AuditMessage = "Session test updated for test %%TestID%% for page %%CurrentPage%%"
             new_audit_trail.MessageID = 2 #2 = sessiontest updated
             new_audit_trail.CreateDate = datetime.now(timezone.utc)
             qry_session.add(new_audit_trail)
@@ -1360,6 +1395,22 @@ def sessions_delete_tests(identity):
                 qry_session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
                     ITSRestAPIORMExtensions.ClientSessionTest.SessionID == identity).filter(
                     ITSRestAPIORMExtensions.ClientSessionTest.Status == 10).delete()
+
+                # save an audit trail record
+                new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
+                new_audit_trail.ID = uuid.uuid4()
+                new_audit_trail.ObjectID = identity
+                new_audit_trail.SessionID = identity
+                new_audit_trail.CompanyID = company_id
+                new_audit_trail.UserID = id_of_user
+                new_audit_trail.ObjectType = 2  # 2 = sessiontest
+                new_audit_trail.OldData = ""
+                new_audit_trail.NewData = ""
+                new_audit_trail.AuditMessage = "Session update : all ready tests will be redefined"
+                new_audit_trail.MessageID = 5  # 4 = sessiontest list refresh
+                new_audit_trail.CreateDate = datetime.now(timezone.utc)
+                qry_session.add(new_audit_trail)
+
             return "OK", 200
         else:
             return 403, "you do not have the rights to delete tests from the session"

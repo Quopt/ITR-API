@@ -41,7 +41,8 @@ class ClientAuditLog(ITSRestAPIORM.ClientAuditLog, ITSRestAPIORMExtendedFunction
         , "AuditMessage"
         , "MessageID"
         , "CreateDate"
-        , "SessionID"}
+        , "SessionID"
+        , "NewData"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"ObjectType", "OldData", "NewData", "AuditMessage"}
