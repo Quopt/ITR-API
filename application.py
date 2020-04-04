@@ -53,6 +53,12 @@ app.json_encoder = ITSJsonify.CustomJSONEncoder
 
 startRequestTimer={} # only for debug purposes ! will not work with multiple calls at the same time
 
+# fix for relative path not being picked up on windows 2019 / python 3.8
+app_instance_path_global = os.path.join(os.sep, app.root_path, app.instance_path)
+def app_instance_path():
+    global app_instance_path_global
+    return app_instance_path_global
+
 @app.before_request
 def before_request_callback():
     global startRequestTimer
@@ -513,10 +519,10 @@ def send_reset_password():
         # return_obj['ExpirationDateTime'] = now.isoformat()
 
         # and now sent an email to the user
-        translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Subject', 'Password reset mail', app_instance_path, True)
-        translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Body', 'You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : ', app_instance_path, True)
+        translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Subject', 'Password reset mail', app_instance_path(), True)
+        translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Body', 'You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : ', app_instance_path(), True)
 
-        # filename = os.path.join(app_instance_path, 'translations/', langcode + '.json')
+        # filename = os.path.join(app_instance_path(), 'translations/', langcode + '.json')
         # current_translation = json.load(open(filename, 'r'))
         # translatedSubject, newTranslationSubject = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Subject', 'Password reset mail', current_translation)
         # translatedMail, newTranslationMail = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Body', "You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : " , current_translation)
@@ -1281,11 +1287,11 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                     translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode,
                                                                                          'OutOfCreditsMail.Subject',
                                                                                          'You are almost out of credits (%s left)',
-                                                                                         app_instance_path, True)
+                                                                                         app_instance_path(), True)
                     translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode,
                                                                                       'OutOfCreditsMail.Body',
                                                                                       'The credit level has gone below the credit warning level that you have indicated. Please add more credits to your system.',
-                                                                                      app_instance_path, True)
+                                                                                      app_instance_path(), True)
 
                     ITSMailer.send_mail('Master', translatedSubject % this_company.CurrentCreditLevel,
                                         translatedMail,
@@ -1502,10 +1508,10 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
             translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode,
                                                                                  'SessionReadyMail.Subject',
                                                                                  'Session %s is ready for reporting',
-                                                                                 app_instance_path, True)
+                                                                                 app_instance_path(), True)
             translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'SessionReadyMail.Body',
                                                                               "The following session has completed : \r\n%s",
-                                                                              app_instance_path, True)
+                                                                              app_instance_path(), True)
 
             ITSMailer.send_mail(company_id,translatedSubject % temp_session.Description,
                             translatedMail % temp_session.Description +
@@ -1591,8 +1597,8 @@ def reportdefinition_get():
 
 @app.route('/reportdefinitions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def reportdefinition_get_id(identity):
-    basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path, 'cache'))
-    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path, 'cache', ITSHelpers.string_split_to_filepath(identity)))
+    basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache'))
+    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
     include_master = False
     try:
         include_master = request.headers['IncludeMaster'] == "Y"
@@ -1703,7 +1709,7 @@ def companies_get_id(identity):
                 ITSRestAPIORMExtensions.SecurityCreditUsage.CompanyID == identity).delete()
 
         # delete any stored files
-        folder_to_delete = os.path.join(os.sep, app_instance_path, 'media', str(identity) )
+        folder_to_delete = os.path.join(os.sep, app_instance_path(), 'media', str(identity) )
         shutil.rmtree(folder_to_delete, ignore_errors=True)
 
         return ITSRestAPIORMExtensions.SecurityCompany().delete_single_object(request,
@@ -2231,8 +2237,8 @@ def screentemplates_get():
 
 @app.route('/screentemplates/<identity>', methods=['GET', 'POST', 'DELETE'])
 def screentemplates_get_id(identity):
-    basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path, 'cache'))
-    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path, 'cache', ITSHelpers.string_split_to_filepath(identity)))
+    basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache'))
+    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
     try:
         include_master = request.headers['IncludeMaster'] == "Y"
     except:
@@ -2291,8 +2297,8 @@ def tests_get():
 
 @app.route('/tests/<identity>', methods=['GET', 'POST', 'DELETE'])
 def tests_get_id(identity):
-    basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path, 'cache'))
-    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path, 'cache', ITSHelpers.string_split_to_filepath(identity)))
+    basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache'))
+    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
     if request.method == 'GET':
         cachefilename = "test.json"
         # test taking users may request all test definitions since they need them for test taking, but will get limited fields back to protect scoring and norming rules
@@ -2386,17 +2392,17 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname = os.path.dirname(
-        os.path.join(os.sep, app_instance_path, 'media', str(company_id),
+        os.path.join(os.sep, app_instance_path(), 'media', str(company_id),
                      ITSHelpers.string_split_to_filepath(maintainingObjectIdentity)))
     basepathname = os.path.dirname(
-        os.path.join(os.sep, app_instance_path, 'media', str(company_id)))
+        os.path.join(os.sep, app_instance_path(), 'media', str(company_id)))
     # check if path exists, if not try the master path
     if (not os.path.isdir(pathname)) or masterFiles:
         pathname = os.path.dirname(
-            os.path.join(os.sep, app_instance_path, 'media', 'master',
+            os.path.join(os.sep, app_instance_path(), 'media', 'master',
                      ITSHelpers.string_split_to_filepath(maintainingObjectIdentity)))
         basepathname = os.path.dirname(
-            os.path.join(os.sep, app_instance_path, 'media', 'master'))
+            os.path.join(os.sep, app_instance_path(), 'media', 'master'))
     fileType = fileType.upper()
     if fileType != "ALL":
         pathname = pathname + os.sep + fileType
@@ -2421,14 +2427,14 @@ def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_d
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname_src = os.path.dirname(
-        os.path.join(os.sep, app_instance_path, 'media', str(company_id),
+        os.path.join(os.sep, app_instance_path(), 'media', str(company_id),
                      ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_src)))
     if maintainingObjectIdentity_dst.upper() == "MASTER":
-        pathname_dst = os.path.dirname(os.path.join(os.sep, app_instance_path, 'media', 'master',
+        pathname_dst = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'media', 'master',
                          ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_src) ))
     else:
         pathname_dst = os.path.dirname(
-            os.path.join(os.sep, app_instance_path, 'media', str(company_id),
+            os.path.join(os.sep, app_instance_path(), 'media', str(company_id),
                      ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_dst)))
 
     if master_user or organisation_supervisor_user or author_user:
@@ -2457,7 +2463,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
                 user_id, company_id)
     fileType = fileType.upper()
     pathname = os.path.dirname(
-        os.path.join(os.sep, app_instance_path, 'media', str(company_id),
+        os.path.join(os.sep, app_instance_path(), 'media', str(company_id),
                      ITSHelpers.string_split_to_filepath(maintainingObjectIdentity))) + os.sep + fileType
     filename = pathname + os.sep + ITSHelpers.to_filename(fileId)
 
@@ -2465,7 +2471,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
         # if the file is not found try the master folder
         if not os.path.exists(filename):
             pathname = os.path.dirname(
-                os.path.join(os.sep, app_instance_path, 'media', 'master',
+                os.path.join(os.sep, app_instance_path(), 'media', 'master',
                              ITSHelpers.string_split_to_filepath(maintainingObjectIdentity))) + os.sep + fileType
             filename = pathname + os.sep + ITSHelpers.to_filename(fileId)
 
@@ -2514,7 +2520,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
 
 @app.route('/translations', methods=['GET'])
 def list_available_translations():
-    pathname = os.path.dirname(os.path.join(app_instance_path, 'translations/'))
+    pathname = os.path.dirname(os.path.join(app_instance_path(), 'translations/'))
     # check for master database existence. if not init the system for a smoother first time user experience
     #session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_master())()
     with ITSRestAPIDB.session_scope("") as session:
@@ -2534,7 +2540,7 @@ def translations(langcode):
     if langcode == "":
         langcode = "en"
     langcode = langcode.lower()
-    filename = os.path.join(app_instance_path, 'translations/', langcode + '.json')
+    filename = os.path.join(app_instance_path(), 'translations/', langcode + '.json')
     if request.method == 'GET':
         if os.path.isfile(filename):
             with open(filename, 'r') as translationFile:
@@ -2662,11 +2668,11 @@ def refresh_publics():
                 clone_needed = True
 
         if clone_needed:
-            ITSGit.clone_or_refresh_repo(app_instance_path,'https://github.com/Quopt/itr-reporttemplates')
-            ITSGit.clone_or_refresh_repo(app_instance_path,'https://github.com/Quopt/itr-testtemplates')
-            ITSGit.clone_or_refresh_repo(app_instance_path,'https://github.com/Quopt/itr-testscreentemplates')
-            ITSGit.clone_or_refresh_repo(app_instance_path,'https://github.com/Quopt/itr-plugins')
-            ITSGit.clone_or_refresh_repo(app_instance_path,'https://github.com/Quopt/itr-translations')
+            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-reporttemplates')
+            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-testtemplates')
+            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-testscreentemplates')
+            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-plugins')
+            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-translations')
 
         return "OK", 200
 
@@ -2678,8 +2684,8 @@ def list_publics(reponame):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if master_user:
-        #app_log.info("List publics %s %s", str(app_instance_path), str(reponame))
-        tempfile = ITSGit.list_repo_files(app_instance_path, reponame)
+        #app_log.info("List publics %s %s", str(app_instance_path()), str(reponame))
+        tempfile = ITSGit.list_repo_files(app_instance_path(), reponame)
         return tempfile , 200
 
 @app.route('/listpublics/<reponame>/<filename>', methods=['GET'])
@@ -2688,7 +2694,7 @@ def list_publics_file(reponame, filename):
         request)
     if master_user:
         short_repo_name = reponame.split('/')[-1]
-        newfilename = os.path.join(os.sep, app_instance_path, 'cache', 'git', short_repo_name, filename)
+        newfilename = os.path.join(os.sep, app_instance_path(), 'cache', 'git', short_repo_name, filename)
         if os.path.exists(newfilename):
             raw_bytes = ""
             with open(newfilename, 'rb') as r:
@@ -2706,8 +2712,8 @@ def install_publics_file(filename):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
         request)
     if master_user:
-        srcfilename = os.path.join(os.sep, app_instance_path, 'cache', 'git', 'itr-translations', filename)
-        newfilename = os.path.join(os.sep, app_instance_path, 'translations', filename)
+        srcfilename = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'itr-translations', filename)
+        newfilename = os.path.join(os.sep, app_instance_path(), 'translations', filename)
         if request.method == "POST":
             try:
                 shutil.copyfile(srcfilename, newfilename)
@@ -2731,9 +2737,9 @@ def install_publics_itr_api():
         request)
     if master_user:
         # force clone now
-        ITSGit.clone_or_refresh_repo(app_instance_path, 'https://github.com/Quopt/ITR-API')
+        ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/ITR-API')
         # copy into folder
-        srcfoldername = os.path.join(os.sep, app_instance_path, 'cache', 'git', 'ITR-API')
+        srcfoldername = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'ITR-API')
         newfoldername = os.path.join(os.sep, app.root_path)
         if request.method == "POST":
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
@@ -2762,9 +2768,9 @@ def install_publics_itr_webclient():
         request)
     if master_user:
         # force clone now
-        ITSGit.clone_or_refresh_repo(app_instance_path, 'https://github.com/Quopt/ITR-webclient')
+        ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/ITR-webclient')
         # copy into folder
-        srcfoldername = os.path.join(os.sep, app_instance_path, 'cache', 'git', 'ITR-webclient')
+        srcfoldername = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'ITR-webclient')
         newfoldername = ITSRestAPISettings.get_setting('WEBFOLDER')
         if request.method == "POST":
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
@@ -2780,9 +2786,9 @@ def install_publics_itr_public_api():
         request)
     if master_user:
         # force clone now
-        ITSGit.clone_or_refresh_repo(app_instance_path, 'https://github.com/Quopt/ITR-Public-API')
+        ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/ITR-Public-API')
         # copy into folder
-        srcfoldername = os.path.join(os.sep, app_instance_path, 'cache', 'git', 'ITR-Public-API')
+        srcfoldername = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'ITR-Public-API')
         newfoldername = ITSRestAPISettings.get_setting('EXTERNALAPIFOLDER')
         if request.method == "POST":
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
@@ -2901,8 +2907,4 @@ if __name__ == '__main__':
     # app.debug = True
     # MET FLASK app.run()
     # app.run(debug=True)
-
-    # fix for relative path not being picked up on windows 2019 / python 3.8
-    app_instance_path = os.path.join(os.sep, app.root_path, app.instance_path)
-    
     start_waitress()
