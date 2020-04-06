@@ -134,7 +134,7 @@ class ORMExtendedFunctions:
                     else:
                         order_by = order_by + ", A.\"" + sort_line_field_only + "\""
                     if len(sort_line.split(' ')) > 1:
-                        order_by  = order_by + " DESC "
+                        order_by = order_by + " DESC "
         if order_by == "":
             if self.default_order_by_field != "":
                 for line in self.default_order_by_field.split(','):
@@ -273,13 +273,14 @@ class ORMExtendedFunctions:
         object_to_query = self
 
         company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, page_size, proceed, record_filter, sort_fields, start_page, include_client, is_test_taking_user, user_id = self.check_and_parse_request_parameters(
-            additional_filter, object_to_query, request, required_minimum_access_level)
+            additional_filter, object_to_query, request, required_minimum_access_level, force_masterdb)
 
         # and now take action
         if proceed and company_id != "":
             # and now execute the query
             if master_only or force_masterdb:
                 company_id = ""
+                include_master = True
 
             qry_result = object_to_query.paginated_query_no_orm(company_id, start_page, page_size, filter_expression,
                                                                 record_filter, sort_fields, include_archived,
@@ -289,9 +290,8 @@ class ORMExtendedFunctions:
         else:
             return "Invalid or expired token", 404
 
-    @staticmethod
-    def check_and_parse_request_parameters(additional_filter, object_to_query, request,
-                                           required_minimum_access_level):
+    def check_and_parse_request_parameters(self, additional_filter, object_to_query, request,
+                                           required_minimum_access_level, force_master_db = False):
         start_page = 0
         page_size = 20
         filter_expression = ""
@@ -364,6 +364,7 @@ class ORMExtendedFunctions:
                       ITSRestAPIORMExtensions.SecurityUser.CompanyID == company_id).order_by(
                       ITSRestAPIORMExtensions.SecurityUser.IsTestTakingUser).first()
 
+                  # now check if this call can proceed
                   proceed = True
                   if required_minimum_access_level == ITR_minimum_access_levels.master_user:
                       proceed = user_object.IsMasterUser == True
@@ -391,6 +392,22 @@ class ORMExtendedFunctions:
                   if user_object.MayWorkWithOwnObjectsOnly == True and object_to_query.may_work_with_own_objects_field != "":
                       limit_by_user_id = str(user_object.ID)
 
+                  # and now check if the master of client db is requested and if this is actually allowed
+                  if proceed:
+                      if include_master:
+                          if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_nobody :
+                              include_master = false
+                              if not force_master_db:
+                                  app_log.error("MASTER database requested but revoked from security point of view. No rights.")
+                          if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_master_users :
+                              include_master = user_object.IsMasterUser
+                              if not include_master and not force_master_db:
+                                app_log.error("MASTER database requested but revoked from security point of view. No rights.")
+                          if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_all_regular_office_users :
+                              include_master = user_object.IsOfficeUser
+                              if not include_master and not force_master_db:
+                                app_log.error("MASTER database requested but revoked from security point of view. No rights.")
+
                   return company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, \
                          page_size, proceed, record_filter, sort_fields, start_page, include_client, \
                          user_object.IsTestTakingUser and not user_object.IsOfficeUser, user_object.ID
@@ -407,7 +424,7 @@ class ORMExtendedFunctions:
         object_to_query = self
 
         company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, page_size, proceed, record_filter, sort_fields, start_page, include_client, is_test_taking_user, user_id = self.check_and_parse_request_parameters(
-            "", object_to_query, request, required_minimum_access_level)
+            "", object_to_query, request, required_minimum_access_level, master_database_query)
 
         # and now take action
         if proceed and company_id != "":
@@ -492,7 +509,7 @@ class ORMExtendedFunctions:
         object_to_query = self
 
         company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, page_size, proceed, record_filter, sort_fields, start_page, include_client, is_test_taking_user, user_id = self.check_and_parse_request_parameters(
-            "", object_to_query, request, required_minimum_access_level)
+            "", object_to_query, request, required_minimum_access_level, force_master)
 
         # and now take action
         if proceed and company_id != "":
@@ -576,7 +593,7 @@ class ORMExtendedFunctions:
         object_to_query = self
 
         company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, page_size, proceed, record_filter, sort_fields, start_page, include_client, is_test_taking_user, user_id  = self.check_and_parse_request_parameters(
-            "", object_to_query, request, required_minimum_access_level)
+            "", object_to_query, request, required_minimum_access_level, force_master)
 
         # and now take action
         if proceed and company_id != "":

@@ -28,6 +28,11 @@ import json
 from xml.etree import ElementTree
 import optparse
 
+class ITR_master_db_accessible(Enum):
+    for_all_users = 1
+    for_all_regular_office_users = 2
+    for_master_users = 3
+    for_nobody = 4
 
 class ClientAuditLog(ITSRestAPIORM.ClientAuditLog, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -51,6 +56,8 @@ class ClientAuditLog(ITSRestAPIORM.ClientAuditLog, ITSRestAPIORMExtendedFunction
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class ClientBatteries(ITSRestAPIORM.ClientBattery, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -77,6 +84,8 @@ class ClientBatteries(ITSRestAPIORM.ClientBattery, ITSRestAPIORMExtendedFunction
     pass_through_fields = {"BatteryTests", "BatteryReports", "PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_all_regular_office_users
 
 class ClientEducation(ITSRestAPIORM.ClientEducation, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -94,6 +103,8 @@ class ClientEducation(ITSRestAPIORM.ClientEducation, ITSRestAPIORMExtendedFuncti
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_all_regular_office_users
 
 class ClientGeneratedReport(ITSRestAPIORM.ClientGeneratedReport, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -112,6 +123,8 @@ class ClientGeneratedReport(ITSRestAPIORM.ClientGeneratedReport, ITSRestAPIORMEx
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class ClientGroupMember(ITSRestAPIORM.ClientGroupMember, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -132,6 +145,8 @@ class ClientGroupMember(ITSRestAPIORM.ClientGroupMember, ITSRestAPIORMExtendedFu
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class ClientGroup(ITSRestAPIORM.ClientGroup, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -151,6 +166,8 @@ class ClientGroup(ITSRestAPIORM.ClientGroup, ITSRestAPIORMExtendedFunctions.ORME
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class ClientNationality(ITSRestAPIORM.ClientNationality, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -168,6 +185,8 @@ class ClientNationality(ITSRestAPIORM.ClientNationality, ITSRestAPIORMExtendedFu
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_all_regular_office_users
 
 class ClientOrganisation(ITSRestAPIORM.ClientOrganisation, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -186,6 +205,8 @@ class ClientOrganisation(ITSRestAPIORM.ClientOrganisation, ITSRestAPIORMExtended
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class ClientPerson(ITSRestAPIORM.ClientPerson, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -231,6 +252,8 @@ class ClientPerson(ITSRestAPIORM.ClientPerson, ITSRestAPIORMExtendedFunctions.OR
 
     fields_to_be_removed = {"Password"}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class ClientSessionTest(ITSRestAPIORM.ClientSessionTest, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -265,6 +288,8 @@ class ClientSessionTest(ITSRestAPIORM.ClientSessionTest, ITSRestAPIORMExtendedFu
     fields_to_be_removed = {}
     pass_through_fields = {"Results", "Scores", "PluginData"}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class ClientSession(ITSRestAPIORM.ClientSession, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -305,6 +330,8 @@ class ClientSession(ITSRestAPIORM.ClientSession, ITSRestAPIORMExtendedFunctions.
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class Report(ITSRestAPIORM.Report, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -323,6 +350,8 @@ class Report(ITSRestAPIORM.Report, ITSRestAPIORMExtendedFunctions.ORMExtendedFun
     pass_through_fields = {"PluginData", "ReportGraphs"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_all_regular_office_users
 
 class SecurityCompany(ITSRestAPIORM.SecurityCompany, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -346,6 +375,8 @@ class SecurityCompany(ITSRestAPIORM.SecurityCompany, ITSRestAPIORMExtendedFuncti
     fields_to_be_removed = {}
     pass_through_fields = {"AdditionalPersonFields", "AdditionalGroupFields", "AdditionalSessionFields", "PluginData"}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class SecurityCreditGrant(ITSRestAPIORM.SecurityCreditGrant, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -360,6 +391,8 @@ class SecurityCreditGrant(ITSRestAPIORM.SecurityCreditGrant, ITSRestAPIORMExtend
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class SecurityCreditUsage(ITSRestAPIORM.SecurityCreditUsage, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -378,6 +411,8 @@ class SecurityCreditUsage(ITSRestAPIORM.SecurityCreditUsage, ITSRestAPIORMExtend
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class SecurityDataGathering(ITSRestAPIORM.SecurityDataGathering, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -406,6 +441,9 @@ class SecurityDataGathering(ITSRestAPIORM.SecurityDataGathering, ITSRestAPIORMEx
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
+
 class SecurityTemplate(ITSRestAPIORM.SecurityTemplate, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
     identity_field = "ID"
@@ -421,6 +459,8 @@ class SecurityTemplate(ITSRestAPIORM.SecurityTemplate, ITSRestAPIORMExtendedFunc
     pass_through_fields = {"PluginData"}
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_all_regular_office_users
 
 class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -445,6 +485,8 @@ class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.OR
     fields_to_be_removed = {"Password"}
     pass_through_fields = {"PluginData"}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class SecurityWebSessionToken(ITSRestAPIORM.SecurityWebSessionToken,
                               ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
@@ -461,6 +503,8 @@ class SecurityWebSessionToken(ITSRestAPIORM.SecurityWebSessionToken,
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class SystemParam(ITSRestAPIORM.SystemParam, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -476,6 +520,8 @@ class SystemParam(ITSRestAPIORM.SystemParam, ITSRestAPIORMExtendedFunctions.ORME
     may_work_with_own_objects_field = ""
     fields_to_be_removed = {}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_master_users
 
 class TestScreenTemplate(ITSRestAPIORM.TestScreenTemplate, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -500,6 +546,8 @@ class TestScreenTemplate(ITSRestAPIORM.TestScreenTemplate, ITSRestAPIORMExtended
     GeneratorScriptJson = ""
     ValidationScriptJson = ""
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_all_users
 
 class Test(ITSRestAPIORM.Test, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     # add additional fields
@@ -536,6 +584,8 @@ class Test(ITSRestAPIORM.Test, ITSRestAPIORMExtendedFunctions.ORMExtendedFunctio
                            "PluginData", "RequiredParsPerson", "RequiredParsSession", "RequiredParsGroup",
                            "RequiredParsOrganisation"}
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_all_users
 
 class ViewClientSessionTestsWithPerson(ITSRestAPIORM.ViewClientSessionTestsWithPerson,
                                        ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
@@ -558,6 +608,9 @@ class ViewClientSessionTestsWithPerson(ITSRestAPIORM.ViewClientSessionTestsWithP
     may_work_with_own_objects_field = ""
 
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
+
 class ViewClientSessionsWithPerson(ITSRestAPIORM.ViewClientSessionsWithPerson,
                                    ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
     identity_field = "ID"
@@ -575,6 +628,8 @@ class ViewClientSessionsWithPerson(ITSRestAPIORM.ViewClientSessionsWithPerson,
     unified_search_fields = {"Description", "EMail", "FirstName", "LastName", "Initials"}
     may_work_with_own_objects_field = "ManagedByUserID"
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class ViewClientGroupSessions(ITSRestAPIORM.ViewClientGroupSessions,
                               ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
@@ -593,6 +648,8 @@ class ViewClientGroupSessions(ITSRestAPIORM.ViewClientGroupSessions,
     unified_search_fields = {"Description"}
     may_work_with_own_objects_field = "ManagedByUserID"
 
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody
 
 class ViewClientGroupSessionCandidates(ITSRestAPIORM.ViewClientGroupSessionCandidates,
                                        ITSRestAPIORMExtendedFunctions.ORMExtendedFunctions):
@@ -633,3 +690,6 @@ class ViewClientGroupSessionCandidates(ITSRestAPIORM.ViewClientGroupSessionCandi
     archive_field = "Active"
     user_limit_select_field = {}
     may_work_with_own_objects_field = "ManagedByUserID"
+
+    # setting for access rights to master db
+    master_db_accessible = ITR_master_db_accessible.for_nobody

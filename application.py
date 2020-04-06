@@ -171,12 +171,15 @@ def check_master_header(request):
         except:
             pass
 
+        if master_header == "N" and include_master_header == "Y":
+            master_header = "Y"
+
         token = request.headers['SessionID']
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
-        return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager
+        return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header
     except:
         pass
 
@@ -320,7 +323,7 @@ def route_companylogo():
 @app.route('/activesessions', methods=['GET'])
 def active_sessions():
     # get the company id and session id from the header
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
 
     if office_user:
@@ -597,16 +600,12 @@ def logout():
 
 @app.route('/audittrail', methods=['GET'])
 def clientauditlog_get():
-    check_master_header(request)
-
     return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
                                                                                   ITR_minimum_access_levels.regular_office_user)
 
 
 @app.route('/audittrail/object/<identity>', methods=['GET'])
 def clientauditlog_get_for_object(identity):
-    check_master_header(request)
-
     additional_where_clause = 'ObjectID = \'' + str(uuid.UUID(str(identity))) + '\''
 
     return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
@@ -615,8 +614,6 @@ def clientauditlog_get_for_object(identity):
 
 @app.route('/audittrail/session/<identity>', methods=['GET'])
 def clientauditlog_get_for_session(identity):
-    check_master_header(request)
-
     additional_where_clause = 'SessionID = \'' + str(uuid.UUID(str(identity))) + '\''
 
     return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
@@ -625,8 +622,6 @@ def clientauditlog_get_for_session(identity):
 
 @app.route('/audittrail/<identity>', methods=['GET', 'POST', 'DELETE'])
 def clientauditlog_get_id(identity):
-    check_master_header(request)
-
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientAuditLog().return_single_object(request,
                                                                              ITR_minimum_access_levels.regular_office_user,
@@ -654,12 +649,10 @@ def batteries_get_id(identity):
                                                                               ITR_minimum_access_levels.regular_office_user,
                                                                               identity)
     elif request.method == 'POST':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.ClientBatteries().change_single_object(request,
                                                                               ITR_minimum_access_levels.regular_office_user,
                                                                               identity)
     elif request.method == 'DELETE':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.ClientBatteries().delete_single_object(request,
                                                                               ITR_minimum_access_levels.regular_office_user,
                                                                               identity)
@@ -678,12 +671,10 @@ def educations_get_id(identity):
                                                                               ITR_minimum_access_levels.regular_office_user,
                                                                               identity)
     elif request.method == 'POST':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.ClientEducation().change_single_object(request,
                                                                               ITR_minimum_access_levels.regular_office_user,
                                                                               identity)
     elif request.method == 'DELETE':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.ClientEducation().delete_single_object(request,
                                                                               ITR_minimum_access_levels.regular_office_user,
                                                                               identity)
@@ -691,7 +682,7 @@ def educations_get_id(identity):
 
 @app.route('/generatedreports/<sourceid>', methods=['GET', 'DELETE'])
 def generatedreports_get(sourceid):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(request)
 
     if request.method == 'GET':
         additional_where_clause = 'LinkedObjectID = \'' + str(uuid.UUID(str(sourceid))) + '\''
@@ -710,7 +701,6 @@ def generatedreports_get(sourceid):
 
 @app.route('/generatedreports/<sourceid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def generatedreports_get_id(sourceid, identity):
-    check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientGeneratedReport().return_single_object(request,
                                                                                     ITR_minimum_access_levels.regular_office_user,
@@ -727,14 +717,12 @@ def generatedreports_get_id(sourceid, identity):
 
 @app.route('/groups', methods=['GET'])
 def groups_get():
-    check_master_header(request)
     return ITSRestAPIORMExtensions.ClientGroup().common_paginated_read_request(request,
                                                                                ITR_minimum_access_levels.regular_office_user)
 
 
 @app.route('/groups/<identity>', methods=['GET', 'POST', 'DELETE'])
 def groups_get_id(identity):
-    check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientGroup().return_single_object(request,
                                                                           ITR_minimum_access_levels.regular_office_user,
@@ -762,12 +750,10 @@ def nationalities_get_id(identity):
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 identity)
     elif request.method == 'POST':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.ClientNationality().change_single_object(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 identity)
     elif request.method == 'DELETE':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.ClientNationality().delete_single_object(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
                                                                                 identity)
@@ -775,16 +761,12 @@ def nationalities_get_id(identity):
 
 @app.route('/organisations', methods=['GET'])
 def organisations_get():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
-
     return ITSRestAPIORMExtensions.ClientOrganisation().common_paginated_read_request(request,
                                                                                       ITR_minimum_access_levels.regular_office_user)
 
 
 @app.route('/organisations/<identity>', methods=['GET', 'POST', 'DELETE'])
 def organisations_get_id(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
-
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientOrganisation().return_single_object(request,
                                                                                  ITR_minimum_access_levels.regular_office_user,
@@ -801,14 +783,13 @@ def organisations_get_id(identity):
 
 @app.route('/persons', methods=['GET'])
 def persons_get():
-    check_master_header(request)
     return ITSRestAPIORMExtensions.ClientPerson().common_paginated_read_request(request,
                                                                                 ITR_minimum_access_levels.regular_office_user)
 
 
 @app.route('/persons/<identity>', methods=['GET', 'POST', 'DELETE'])
 def persons_get_id(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(request)
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
         to_return = ITSRestAPIORMExtensions.ClientPerson().return_single_object(request,
@@ -878,7 +859,7 @@ def persons_get_id(identity):
 
 @app.route('/persons/<identity>/password', methods=['GET'])
 def persons_get_id_password(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(request)
 
     if is_password_manager:
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
@@ -892,35 +873,29 @@ def persons_get_id_password(identity):
 
 @app.route('/sessiontests', methods=['GET'])
 def sessiontests_get():
-    check_master_header(request)
     return ITSRestAPIORMExtensions.ClientSessionTest().common_paginated_read_request(request,
                                                                                      ITR_minimum_access_levels.regular_office_user)
 
 @app.route('/sessiontestsview', methods=['GET'])
 def sessiontestsview_get():
-    check_master_header(request)
     a = ITSRestAPIORMExtensions.ViewClientSessionTestsWithPerson().common_paginated_read_request(request,
                                                                                      ITR_minimum_access_levels.regular_office_user)
     return a
 
 @app.route('/sessionsview', methods=['GET'])
 def sessionsview_get():
-    check_master_header(request)
     a = ITSRestAPIORMExtensions.ViewClientSessionsWithPerson().common_paginated_read_request(request,
                                                                                      ITR_minimum_access_levels.regular_office_user)
     return a
 
 @app.route('/groupsessionsview', methods=['GET'])
 def groupsessionsview_get():
-    check_master_header(request)
     a = ITSRestAPIORMExtensions.ViewClientGroupSessions().common_paginated_read_request(request,
                                                                                      ITR_minimum_access_levels.regular_office_user)
     return a
 
 @app.route('/sessiontests/<sessionid>', methods=['GET'])
 def sessiontests_get_for_session(sessionid):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
-        request)
     additional_where_clause = "SessionID='" + str(sessionid) + "'"
 
     if request.method == 'GET':
@@ -930,7 +905,7 @@ def sessiontests_get_for_session(sessionid):
 
 @app.route('/sessiontests/<sessionid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessiontests_get_id(sessionid, identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
 
     try:
@@ -1316,7 +1291,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
 @app.route('/sessionteststaking/<sessionid>', methods=['GET'])
 # copy of sessiontests point only for test taking users
 def sessionteststaking_get(sessionid):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     additional_where_clause = 'PersID=\'' + str(id_of_user) +"',SessionID='" + str(sessionid) + "'"
     return ITSRestAPIORMExtensions.ClientSessionTest().common_paginated_read_request(request,
@@ -1326,7 +1301,7 @@ def sessionteststaking_get(sessionid):
 
 @app.route('/sessionteststaking/<sessionid>/<identity>', methods=['GET', 'POST'])
 def sessionteststaking_get_id(sessionid, identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
 
     try:
@@ -1371,7 +1346,8 @@ def sessionteststaking_get_id(sessionid, identity):
 
 @app.route('/sessions', methods=['GET'])
 def sessions_get():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
 
     additional_where_clause = ""
     if test_taking_user and not office_user :
@@ -1383,8 +1359,6 @@ def sessions_get():
 
 @app.route('/sessions/<identity>/groupmembers', methods=['GET'])
 def sessions_groupmembers(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
-
     additional_where_clause = 'parentsessionid=\'' + str(identity) + '\''
     return ITSRestAPIORMExtensions.ViewClientGroupSessionCandidates().common_paginated_read_request(request,
                                                                      ITR_minimum_access_levels.regular_office_user,
@@ -1394,7 +1368,8 @@ def sessions_groupmembers(identity):
 @app.route('/sessions/<identity>/deletealltests', methods=['DELETE'])
 def sessions_delete_tests(identity):
     # delete all tests from this session that have not been started yet
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
     if request.method == 'DELETE':
         if office_user:
             with ITSRestAPIDB.session_scope(company_id) as qry_session:
@@ -1424,8 +1399,8 @@ def sessions_delete_tests(identity):
 
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessions_get_id(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
-
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
     try:
         langcode = request.headers['ITRLang']
     except:
@@ -1633,14 +1608,12 @@ def reportdefinition_get_id(identity):
 
             return to_return
     elif request.method == 'POST':
-        check_master_header(request)
         if os.path.exists(pathname):
             ITSHelpers.remove_folder(pathname, basepathname)
         return ITSRestAPIORMExtensions.Report().change_single_object(request,
                                                                      ITR_minimum_access_levels.report_author,
                                                                      identity)
     elif request.method == 'DELETE':
-        check_master_header(request)
         if os.path.exists(pathname):
             ITSHelpers.remove_folder(pathname, basepathname)
         return ITSRestAPIORMExtensions.Report().delete_single_object(request,
@@ -1649,8 +1622,6 @@ def reportdefinition_get_id(identity):
 
 @app.route('/companies', methods=['GET'])
 def companies_get():
-    check_master_header(request)
-
     return ITSRestAPIORMExtensions.SecurityCompany().common_paginated_read_request(request,
                                                                                    ITR_minimum_access_levels.master_user,
                                                                                    "","",
@@ -1662,7 +1633,7 @@ def companies_get_id(identity):
     allowTestTakingUser = false
     token = request.headers['SessionID']
 
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if identity == "currentcompany":
         identity = company_id
@@ -1720,7 +1691,6 @@ def companies_get_id(identity):
 
 @app.route('/creditgrants', methods=['GET'])
 def creditgrants_get():
-    check_master_header(request)
     token = request.headers['SessionID']
     company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
@@ -1740,7 +1710,6 @@ def creditgrants_get():
 
 @app.route('/creditgrants/<identity>', methods=['GET', 'POST', 'DELETE'])
 def creditgrants_get_id(identity):
-    check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.SecurityCreditGrant().return_single_object(request,
                                                                                   ITR_minimum_access_levels.master_user,
@@ -1773,7 +1742,6 @@ def creditgrants_get_id(identity):
 
 @app.route('/creditusages', methods=['GET'])
 def creditusage_get():
-    check_master_header(request)
     return ITSRestAPIORMExtensions.SecurityCreditUsage().common_paginated_read_request(request,
                                                                                        ITR_minimum_access_levels.regular_office_user)
 
@@ -1834,7 +1802,6 @@ def creditusagespermonthforall_get(year):
 
 @app.route('/creditusages/<identity>', methods=['GET', 'POST', 'DELETE'])
 def creditusage_get_id(identity):
-    check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.SecurityCreditUsage().return_single_object(request,
                                                                                   ITR_minimum_access_levels.regular_office_user,
@@ -1851,7 +1818,6 @@ def creditusage_get_id(identity):
 
 @app.route('/datagathering', methods=['GET'])
 def datagathering_get():
-    check_master_header(request)
     return ITSRestAPIORMExtensions.SecurityDataGathering().common_paginated_read_request(request,
                                                                                        ITR_minimum_access_levels.data_researcher)
 
@@ -1859,17 +1825,14 @@ def datagathering_get():
 @app.route('/datagathering/<identity>', methods=['GET', 'POST', 'DELETE'])
 def datagathering_get_id(identity):
     if request.method == 'GET':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.SecurityDataGathering().return_single_object(request,
                                                                                   ITR_minimum_access_levels.data_researcher,
                                                                                   identity)
     elif request.method == 'POST':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.SecurityDataGathering().change_single_object(request,
                                                                                   ITR_minimum_access_levels.data_researcher,
                                                                                   identity)
     elif request.method == 'DELETE':
-        check_master_header(request)
         return ITSRestAPIORMExtensions.SecurityDataGathering().delete_single_object(request,
                                                                                   ITR_minimum_access_levels.data_researcher,
                                                                                   identity)
@@ -1877,15 +1840,12 @@ def datagathering_get_id(identity):
 
 @app.route('/rightstemplates', methods=['GET'])
 def rightstemplates_get():
-    check_master_header(request)
-
     return ITSRestAPIORMExtensions.SecurityTemplate().common_paginated_read_request(request,
                                                                                     ITR_minimum_access_levels.regular_office_user)
 
 
 @app.route('/rightstemplates/<identity>', methods=['GET', 'POST', 'DELETE'])
 def rightstemplates_get_id(identity):
-    check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.SecurityTemplate().return_single_object(request,
                                                                                ITR_minimum_access_levels.regular_office_user,
@@ -1918,7 +1878,8 @@ def logins_get_id(identity):
         identity = id_of_user
         #master_db_query = True
     else:
-        check_master_header(request)
+        if not organisation_supervisor_user and not master_user:
+            return "You are not allowed to change other users settings", 403
 
     if request.method == 'GET':
         to_return = ITSRestAPIORMExtensions.SecurityUser().return_single_object(request,
@@ -1962,7 +1923,7 @@ def logins_get_id(identity):
             consultant = clientsession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
                 ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).first()
             AllowedFieldsToChange = [col.name for col in ITSRestAPIORMExtensions.SecurityUser.__table__.columns]
-            if not consultant.IsMasterUser:
+            if not consultant.IsMasterUser and not consultant.IsOrganisationSupervisor:
                 AllowedFieldsToChange.remove('IsMasterUser')
                 if not consultant.IsTestTakingUser :
                     AllowedFieldsToChange.remove('IsTestTakingUser')
@@ -1986,7 +1947,9 @@ def logins_get_id(identity):
                     AllowedFieldsToChange.remove('MayOrderCredits')
                 if consultant.MayWorkWithBatteriesOnly :
                     AllowedFieldsToChange.remove('MayWorkWithBatteriesOnly')
-
+            if consultant.IsOrganisationSupervisor:
+                AllowedFieldsToChange.remove('IsMasterUser')
+                
             # encrypt the API key if present
             request.get_data()
             if is_password_manager:
@@ -2024,7 +1987,7 @@ def logins_get_id(identity):
             # save the user to the clients database
             return ITSRestAPIORMExtensions.SecurityUser().change_single_object(request,
                                                                            ITR_minimum_access_levels.regular_office_user,
-                                                                           identity, ",".join(AllowedFieldsToChange) )
+                                                                           identity, ",".join(AllowedFieldsToChange))
     elif request.method == 'DELETE':
         ITSRestAPIORMExtensions.SecurityUser().delete_single_object(request,
                                                                     ITR_minimum_access_levels.regular_office_user,
@@ -2047,7 +2010,8 @@ def logins_get_companies_memberships():
         return ITSRestAPIORMExtensions.SecurityCompany().common_paginated_read_request(request,
                                                                                        ITR_minimum_access_levels.test_taking_user,
                                                                                        additional_unchecked_where_clause=
-                                                                                       'a."ID" in (select distinct b."CompanyID" from "SecurityUsers" as b where b."Email" = \''+ user_id + '\')')
+                                                                                       'a."ID" in (select distinct b."CompanyID" from "SecurityUsers" as b where b."Email" = \''+ user_id + '\')',
+                                                                                       force_masterdb=True)
     else:
         return "User not found or no known token linked to this user", 404
 
@@ -2085,7 +2049,8 @@ def login_change_password():
 @app.route('/tokens', methods=['GET'])
 def tokens_get():
     app_log.warning('TOKEN LIST RETRIEVED')
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
 
     if master_user:
         return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
@@ -2093,12 +2058,12 @@ def tokens_get():
     else:
         return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
                                                                                            ITR_minimum_access_levels.regular_office_user,
-                                                                                               additional_unchecked_where_clause="\"CompanyID\" = '" + str(company_id) + "'" )
+                                                                                               additional_unchecked_where_clause="\"CompanyID\" = '" + str(company_id) + "'" ,
+                                                                                               force_masterdb=True)
 
 
 @app.route('/tokens/<identity>', methods=['GET', 'POST', 'DELETE'])
 def tokens_get_id(identity):
-    check_master_header(request)
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.SecurityWebSessionToken().return_single_object(request,
                                                                                       ITR_minimum_access_levels.master_user,
@@ -2114,8 +2079,7 @@ def tokens_get_id(identity):
 
 @app.route('/tokens/<identity>/<newcompany>', methods=['POST'])
 def token_change_company(identity, newcompany):
-
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
 
     if master_user:
@@ -2146,7 +2110,8 @@ def systemsettings_get():
 
 @app.route('/systemsettings/<identity>', methods=['GET', 'POST', 'DELETE'])
 def systemsettings_get_id(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
 
     if not office_user:
         return "You do not have sufficient rights to make this call", 404
@@ -2273,7 +2238,6 @@ def screentemplates_get_id(identity):
 
             return to_return
     elif request.method == 'POST':
-        check_master_header(request)
         if os.path.exists(pathname):
             ITSHelpers.remove_folder(pathname, basepathname)
         temp = ITSRestAPIORMExtensions.TestScreenTemplate().change_single_object(request,
@@ -2281,7 +2245,6 @@ def screentemplates_get_id(identity):
                                                                                  identity)
         return temp
     elif request.method == 'DELETE':
-        check_master_header(request)
         if os.path.exists(pathname):
             ITSHelpers.remove_folder(pathname, basepathname)
         return ITSRestAPIORMExtensions.TestScreenTemplate().delete_single_object(request,
@@ -2364,9 +2327,6 @@ def tests_get_id(identity):
 
             return to_return
     elif request.method == 'POST':
-        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
-            request)
-
         if os.path.exists(pathname):
             ITSHelpers.remove_folder(pathname, basepathname)
 
@@ -2374,7 +2334,6 @@ def tests_get_id(identity):
                                                                    ITR_minimum_access_levels.test_author,
                                                                    identity)
     elif request.method == 'DELETE':
-        check_master_header(request)
         if os.path.exists(pathname):
             ITSHelpers.remove_folder(pathname, basepathname)
         return ITSRestAPIORMExtensions.Test().delete_single_object(request,
@@ -2620,7 +2579,8 @@ def translate_string(sourcelangcode, targetlangcode):
 
 @app.route('/sendmail', methods=['POST'])
 def send_mail():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
 
     if office_user:
         request.get_data()
@@ -2645,7 +2605,7 @@ def send_mail():
 
 @app.route('/refreshpublics', methods=['POST'])
 def refresh_publics():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     clone_needed = False
 
@@ -2681,7 +2641,7 @@ def refresh_publics():
 
 @app.route('/listpublics/<reponame>', methods=['GET'])
 def list_publics(reponame):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         #app_log.info("List publics %s %s", str(app_instance_path()), str(reponame))
@@ -2690,7 +2650,7 @@ def list_publics(reponame):
 
 @app.route('/listpublics/<reponame>/<filename>', methods=['GET'])
 def list_publics_file(reponame, filename):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         short_repo_name = reponame.split('/')[-1]
@@ -2709,7 +2669,7 @@ def list_publics_file(reponame, filename):
 
 @app.route('/installpublics/itr-translations/<filename>', methods=['POST','DELETE'])
 def install_publics_file(filename):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         srcfilename = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'itr-translations', filename)
@@ -2733,7 +2693,7 @@ def install_publics_file(filename):
 def install_publics_itr_api():
     global APIRequiresRestart
 
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         # force clone now
@@ -2764,7 +2724,7 @@ def install_publics_itr_api():
 
 @app.route('/installpublics/itr-webclient', methods=['POST'])
 def install_publics_itr_webclient():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         # force clone now
@@ -2782,7 +2742,7 @@ def install_publics_itr_webclient():
 
 @app.route('/installpublics/itr-public-api', methods=['POST'])
 def install_publics_itr_public_api():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         # force clone now
@@ -2802,7 +2762,7 @@ def install_publics_itr_public_api():
 
 @app.route('/installpublics/itr-stop', methods=['POST'])
 def install_publics_itr_restart():
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         try:
@@ -2824,7 +2784,7 @@ def version():
 
 @app.route('/log/<logid>/<startlogdatetime>', methods=['GET'])
 def log(logid, startlogdatetime):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager = check_master_header(
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
         try:
