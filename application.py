@@ -1001,7 +1001,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
         temp_session = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
                                                                                     ITR_minimum_access_levels.test_taking_user,
                                                                                     json_obj['SessionID'])
-
+        json_person_obj = json.loads(temp_person.data)
+        json_session_obj = json.loads(temp_session.data)
 
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
             with ITSRestAPIDB.session_scope("") as qry_session_master:
@@ -1029,8 +1030,6 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 temp_company = qry_session_master.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
                         ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
 
-                json_person_obj = json.loads(temp_person.data)
-                json_session_obj = json.loads(temp_session.data)
                 json_group_obj = ""
                 temp_group = {}
                 tempPersonData = {}
@@ -1182,7 +1181,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
 
                             # check if the current user has a personal credit pool
                             consultant = clientsession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                                ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).first()
+                                ITSRestAPIORMExtensions.SecurityUser.ID == json_session_obj['ManagedByUserID'] ).first()
 
                             # check if we need invoicing
                             invoicing_ok = localtest.Costs == 0
@@ -1191,8 +1190,11 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                             if not invoicing_ok:
                                 invoicing_ok = localcompany.CurrentCreditLevel > 0
                                 # in principle this should be >= TotalCosts. But we give the customer a little headroom to view the last test
-                                if consultant.HasPersonalCreditPool:
-                                    invoicing_ok = consultant.CurrentPersonalCreditLevel > 0
+                                try:
+                                    if consultant.HasPersonalCreditPool:
+                                        invoicing_ok = consultant.CurrentPersonalCreditLevel > 0
+                                except:
+                                    pass
                             if not invoicing_ok and not consultant.HasPersonalCreditPool:
                                 invoicing_ok = localcompany.AllowNegativeCredits
                             if invoicing_ok and totalCosts > 0:
@@ -1234,9 +1236,12 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                 masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryCredit)
                                 app_log.info('Invoicing credits %s', qryCredit)
                                 # and deduct if from the personal credit pool
-                                if consultant.HasPersonalCreditPool:
-                                    consultant.CurrentPersonalCreditLevel = consultant.CurrentPersonalCreditLevel - totalCosts
-                                    app_log.info('Invoicing credits %s from personal credit pool of %s', qryCredit, consultant.Email)
+                                try:
+                                    if consultant.HasPersonalCreditPool:
+                                        consultant.CurrentPersonalCreditLevel = consultant.CurrentPersonalCreditLevel - totalCosts
+                                        app_log.info('Invoicing credits %s from personal credit pool of %s', qryCredit, consultant.Email)
+                                except:
+                                    pass
 
                                 # check if we need to send a credits low email later
                                 if not creditunits_low:
