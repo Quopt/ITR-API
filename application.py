@@ -46,23 +46,28 @@ import ITSTranslate
 import ITSHelpers
 import ITSGit
 import ITSEncrypt
+from ITSCache import check_in_cache, add_to_cache, reset_cache
 
 app = Flask(__name__, instance_relative_config=True)
 app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/api')
 app.json_encoder = ITSJsonify.CustomJSONEncoder
 
-startRequestTimer={} # only for debug purposes ! will not work with multiple calls at the same time
+startRequestTimer = {}  # only for debug purposes ! will not work with multiple calls at the same time
 
 # fix for relative path not being picked up on windows 2019 / python 3.8
 app_instance_path_global = os.path.join(os.sep, app.root_path, app.instance_path)
+
+
 def app_instance_path():
     global app_instance_path_global
     return app_instance_path_global
+
 
 @app.before_request
 def before_request_callback():
     global startRequestTimer
     startRequestTimer[request.path] = time.time()
+
 
 @app.teardown_request
 def teardown_request(exception=None):
@@ -80,21 +85,22 @@ def teardown_request(exception=None):
         pass
 
     try:
-        app_log.info('Method called %s %s %s %s %s Timing %s', request.path, request.method, company_id, user_id, ip_address, str(endRequestTimer - startRequestTimer[request.path]))
+        app_log.info('Method called %s %s %s %s %s Timing %s', request.path, request.method, company_id, user_id,
+                     ip_address, str(endRequestTimer - startRequestTimer[request.path]))
         del startRequestTimer[request.path]
     except:
         app_log.info('Method called %s %s %s %s %s', request.path, request.method, company_id, user_id, ip_address)
 
-    #stop all open database connections
-    try:
-     for key, dbengine in ITSRestAPIDB.db_engines_created.items():
-        try:
-            #dbengine.dispose()
-            pass
-        except:
-            pass
-    except:
-        pass
+    # stop all open database connections
+    # try:
+    #  for key, dbengine in ITSRestAPIDB.db_engines_created.items():
+    #     try:
+    #         dbengine.dispose()
+    #         pass
+    #     except:
+    #         pass
+    # except:
+    #     pass
 
 
 Compress(app)
@@ -183,42 +189,46 @@ def check_master_header(request):
     except:
         pass
 
+
 def getIP(request):
     ip_address = ""
     try:
-     ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
     except:
-     try:
-      ip_address = request.environ['REMOTE_ADDR']
-     except: 
-       return ""  
+        try:
+            ip_address = request.environ['REMOTE_ADDR']
+        except:
+            return ""
     return ip_address
+
 
 def getWWW(request):
     ip_address = ""
     try:
-     ip_address = request.environ['HTTP_X_FORWARDED_HOST']
+        ip_address = request.environ['HTTP_X_FORWARDED_HOST']
     except:
-     try:
-      ip_address = request.environ['HTTP_ORIGIN']
-     except: 
-      try:
-       ip_address = request.environ['HOST']
-      except:
-       return ""  
+        try:
+            ip_address = request.environ['HTTP_ORIGIN']
+        except:
+            try:
+                ip_address = request.environ['HOST']
+            except:
+                return ""
     return ip_address
+
 
 def getWWWForToken(request):
     tempwww = request.host
-    tempwww = tempwww.replace(".","_").replace(":","_")
+    tempwww = tempwww.replace(".", "_").replace(":", "_")
 
     try:
-     if tempwww.find("//") > 0:
-      tempwww = tempwww.split("//")[1]
+        if tempwww.find("//") > 0:
+            tempwww = tempwww.split("//")[1]
     except:
-      pass
+        pass
 
     return tempwww
+
 
 # API implementations
 @app.route('/')
@@ -235,35 +245,42 @@ def route_test():
 def route_test401():
     return 'Not authorised', 401
 
+
 @app.route('/copyright')
 def route_copyright():
     user_company = ""
 
     # try to check the request.host against the know administrative ids in the database to determine the company id
     wwwid = request.host.lower()
-    with ITSRestAPIDB.session_scope("") as session:
-        tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
-            ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
-        if tempCompany is not None:
-            user_company = str(tempCompany.ID)
+    return_obj = check_in_cache("copyright."+wwwid)
+    if return_obj is None:
+        with ITSRestAPIDB.session_scope("") as session:
+            tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
+            if tempCompany is not None:
+                user_company = str(tempCompany.ID)
 
-    parValue = ""
+        parValue = ""
 
-    try:
-     with ITSRestAPIDB.session_scope(user_company, False) as session:
-        if request.method == 'GET':
-            param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                ITSRestAPIORMExtensions.SystemParam.ParameterName == "COPYRIGHT").first()
-            parValue = param.ParValue
-    except:
-        with ITSRestAPIDB.session_scope("") as Msession:
-            if request.method == 'GET':
-                param = Msession.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                    ITSRestAPIORMExtensions.SystemParam.ParameterName == "COPYRIGHT").first()
-            if param is not None:
-                parValue = param.ParValue
+        try:
+            with ITSRestAPIDB.session_scope(user_company, False) as session:
+                if request.method == 'GET':
+                    param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                        ITSRestAPIORMExtensions.SystemParam.ParameterName == "COPYRIGHT").first()
+                    parValue = param.ParValue
+        except:
+            with ITSRestAPIDB.session_scope("") as Msession:
+                if request.method == 'GET':
+                    param = Msession.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                        ITSRestAPIORMExtensions.SystemParam.ParameterName == "COPYRIGHT").first()
+                if param is not None:
+                    parValue = param.ParValue
 
-    return parValue, 200
+        add_to_cache("copyright."+wwwid, parValue)
+        return parValue, 200
+    else:
+        return return_obj, 200
+
 
 @app.route('/companyname')
 def route_companyname():
@@ -271,29 +288,35 @@ def route_companyname():
 
     # try to check the request.host against the know administrative ids in the database to determine the company id
     wwwid = request.host.lower()
-    with ITSRestAPIDB.session_scope("") as session:
-        tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
-            ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
-        if tempCompany is not None:
-            user_company = str(tempCompany.ID)
+    return_obj = check_in_cache("companyname."+wwwid)
+    if return_obj is None:
+        with ITSRestAPIDB.session_scope("") as session:
+            tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
+            if tempCompany is not None:
+                user_company = str(tempCompany.ID)
 
-    parValue = ""
+        parValue = ""
 
-    try:
-     with ITSRestAPIDB.session_scope(user_company, False) as session:
-        if request.method == 'GET':
-            param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                ITSRestAPIORMExtensions.SystemParam.ParameterName == "COMPANYNAME").first()
-            parValue = param.ParValue
-    except:
-        with ITSRestAPIDB.session_scope("") as Msession:
-            if request.method == 'GET':
-                param = Msession.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                    ITSRestAPIORMExtensions.SystemParam.ParameterName == "COMPANYNAME").first()
-            if param is not None:
-                parValue = param.ParValue
+        try:
+            with ITSRestAPIDB.session_scope(user_company, False) as session:
+                if request.method == 'GET':
+                    param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                        ITSRestAPIORMExtensions.SystemParam.ParameterName == "COMPANYNAME").first()
+                    parValue = param.ParValue
+        except:
+            with ITSRestAPIDB.session_scope("") as Msession:
+                if request.method == 'GET':
+                    param = Msession.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                        ITSRestAPIORMExtensions.SystemParam.ParameterName == "COMPANYNAME").first()
+                if param is not None:
+                    parValue = param.ParValue
 
-    return parValue, 200
+        add_to_cache("companyname." + wwwid, parValue)
+        return parValue, 200
+    else:
+        return return_obj, 200
+
 
 @app.route('/companylogo')
 def route_companylogo():
@@ -301,24 +324,29 @@ def route_companylogo():
 
     # try to check the request.host against the know administrative ids in the database to determine the company id
     wwwid = request.host.lower()
-    with ITSRestAPIDB.session_scope("") as session:
-        tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
-            ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
-        if tempCompany is not None:
-            user_company = str(tempCompany.ID)
+    return_obj = check_in_cache("companylogo."+wwwid)
+    if return_obj is None:
+        with ITSRestAPIDB.session_scope("") as session:
+            tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
+            if tempCompany is not None:
+                user_company = str(tempCompany.ID)
 
-    parValue = ""
+        parValue = ""
 
-    try:
-     with ITSRestAPIDB.session_scope(user_company, False) as session:
-        if request.method == 'GET':
-            param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                ITSRestAPIORMExtensions.SystemParam.ParameterName == "COMPANYLOGO").first()
-            parValue = param.ParValue
-    except:
-        pass
+        try:
+            with ITSRestAPIDB.session_scope(user_company, False) as session:
+                if request.method == 'GET':
+                    param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                        ITSRestAPIORMExtensions.SystemParam.ParameterName == "COMPANYLOGO").first()
+                    parValue = param.ParValue
+        except:
+            pass
 
-    return parValue, 200
+        add_to_cache("companylogo." + wwwid, parValue)
+        return parValue, 200
+    else:
+        return return_obj, 200
 
 @app.route('/activesessions', methods=['GET'])
 def active_sessions():
@@ -338,19 +366,23 @@ def active_sessions():
             amount_of_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
                 ITSRestAPIORMExtensions.SecurityWebSessionToken.CompanyID == company_id).count()
             amount_of_testrun_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
-                ITSRestAPIORMExtensions.SecurityWebSessionToken.CompanyID == company_id).filter(ITSRestAPIORMExtensions.SecurityWebSessionToken.IsTestTakingUser).count()
+                ITSRestAPIORMExtensions.SecurityWebSessionToken.CompanyID == company_id).filter(
+                ITSRestAPIORMExtensions.SecurityWebSessionToken.IsTestTakingUser).count()
 
             if master_user:
                 server_amount_of_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).count()
-                server_amount_of_testrun_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
+                server_amount_of_testrun_sessions = session.query(
+                    ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
                     ITSRestAPIORMExtensions.SecurityWebSessionToken.IsTestTakingUser).count()
 
         if master_user:
-            return "" + str(amount_of_sessions) + "(" + str(amount_of_testrun_sessions) + ")-" + str(server_amount_of_sessions) + "(" + str(server_amount_of_testrun_sessions) + ")", 200
+            return "" + str(amount_of_sessions) + "(" + str(amount_of_testrun_sessions) + ")-" + str(
+                server_amount_of_sessions) + "(" + str(server_amount_of_testrun_sessions) + ")", 200
         else:
             return "" + str(amount_of_sessions) + "(" + str(amount_of_testrun_sessions) + ")", 200
     else:
-        return "This API is only available to logged in office users",403
+        return "This API is only available to logged in office users", 403
+
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -372,10 +404,11 @@ def login():
             tempCompany = session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
                 ITSRestAPIORMExtensions.SecurityCompany.AdministrativeID == wwwid).first()
             if tempCompany is not None:
-             user_company = tempCompany.ID
+                user_company = tempCompany.ID
 
     # check them against the database and return whether or not OK
-    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password, user_company)
+    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password,
+                                                                                     user_company)
 
     # login failed
     if login_result == ITSRestAPILogin.LoginUserResult.user_not_found:
@@ -385,12 +418,12 @@ def login():
         return 'User not found or password not valid', 401
 
     # the user is there so assign a session token
-    if user_company != "" :
+    if user_company != "":
         token = ITSRestAPILogin.create_session_token(user_id, user_company,
                                                      ITSRestAPILogin.LoginTokenType.regular_session)
     else:
         token = ITSRestAPILogin.create_session_token(user_id, found_company_id,
-                                                 ITSRestAPILogin.LoginTokenType.regular_session)
+                                                     ITSRestAPILogin.LoginTokenType.regular_session)
 
     app_log.info('Token assigned to %s %s %s %s %s', user_id, ip_address, www, request.host, token)
 
@@ -399,7 +432,8 @@ def login():
     return_obj['SessionID'] = token
     return_obj['ExpirationDateTime'] = now.isoformat()
     return_obj['CompanyID'] = found_company_id
-    return_obj['MFAStatus'] = "NA" # MFA status can be NA (for not applicable), CODE to request additional login code, and QR for registering the QR code as the common secret
+    return_obj[
+        'MFAStatus'] = "NA"  # MFA status can be NA (for not applicable), CODE to request additional login code, and QR for registering the QR code as the common secret
 
     if login_result == ITSRestAPILogin.LoginUserResult.ok:
         # return a JSON that has Session, SessionID, multiple companies found = not present, ExpirationDateTime date time + 10 minutes (server based)
@@ -428,6 +462,7 @@ def login():
         return_obj['MultipleCompaniesFound'] = 'Y'
     return json.dumps(return_obj)
 
+
 @app.route('/login/qrcode', methods=['GET'])
 def get_qr_code():
     # when the user is logged in a QR code for registering the shared secret can be requested
@@ -439,7 +474,8 @@ def get_qr_code():
 
     app_log.info('QR code for MFA login requested for %s %s %s %s', user_id, ip_address, www, request.host)
 
-    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password, user_company)
+    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password,
+                                                                                     user_company)
 
     if login_result == ITSRestAPILogin.LoginUserResult.ok:
         # now return the QR code
@@ -454,20 +490,22 @@ def get_qr_code():
         time.sleep(0.1)
         return 'User not found or password not valid', 401
 
+
 @app.route('/login/mfacode', methods=['POST'])
 def process_mfa_code():
     # log the user in with the userid, password, mfa code, and company id
     # get the user id and password from the header
     user_id = request.headers['UserID']
     user_password = request.headers['Password']
-    user_mfa_code = request.headers['MFACode'].replace(" ","")
+    user_mfa_code = request.headers['MFACode'].replace(" ", "")
     user_company = request.headers['CompanyID']
     ip_address = getIP(request)  # we need to check for ip in the future
     www = getWWWForToken(request)
 
     app_log.info('MFA login started for %s %s %s %s', user_id, ip_address, www, request.host)
 
-    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password, user_company)
+    login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, user_password,
+                                                                                     user_company)
 
     if login_result == ITSRestAPILogin.LoginUserResult.ok and not is_test_taking_user:
         # first check user id and password
@@ -500,6 +538,7 @@ def process_mfa_code():
         time.sleep(0.1)
         return 'User not found or password not valid', 401
 
+
 @app.route('/sendresetpassword', methods=['POST'])
 def send_reset_password():
     # send a mail with the reset password to the known email adress. If there is no known email adress return an error 404
@@ -522,8 +561,12 @@ def send_reset_password():
         # return_obj['ExpirationDateTime'] = now.isoformat()
 
         # and now sent an email to the user
-        translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Subject', 'Password reset mail', app_instance_path(), True)
-        translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Body', 'You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : ', app_instance_path(), True)
+        translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Subject',
+                                                                             'Password reset mail', app_instance_path(),
+                                                                             True)
+        translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'PasswordResetMail.Body',
+                                                                          'You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : ',
+                                                                          app_instance_path(), True)
 
         # filename = os.path.join(app_instance_path(), 'translations/', langcode + '.json')
         # current_translation = json.load(open(filename, 'r'))
@@ -543,7 +586,7 @@ def send_reset_password():
         #     except:
         #         pass
 
-        ITSMailer.send_mail('Master',translatedSubject,
+        ITSMailer.send_mail('Master', translatedSubject,
                             translatedMail + "\r\n" +
                             url_base + "/default.html?Token=" + token + "&Path=PasswordReset", user_id)
 
@@ -559,7 +602,7 @@ def reset_password():
     url_base = request.headers['BaseURL']
     langcode = request.headers['ITRLang']
     new_password = request.headers['Password']
-    app_log.info('Resetpassword %s ',  user_id)
+    app_log.info('Resetpassword %s ', user_id)
 
     # check if we know this user
     if ITSRestAPILogin.check_if_user_account_is_valid(user_id) != ITSRestAPILogin.LoginUserResult.user_not_found:
@@ -578,7 +621,7 @@ def reset_password():
 @app.route('/checktoken', methods=['POST'])
 def check_token():
     token = request.headers['SessionID']
-    app_log.info('Checktoken %s ',  token)
+    app_log.info('Checktoken %s ', token)
 
     if ITSRestAPILogin.check_session_token(token):
         return "Token is valid", 200
@@ -589,7 +632,7 @@ def check_token():
 @app.route('/logout', methods=['POST'])
 def logout():
     token = request.headers['SessionID']
-    app_log.info('Logout %s ',  token)
+    app_log.info('Logout %s ', token)
 
     if ITSRestAPILogin.check_session_token(token):
         ITSRestAPILogin.delete_session_token(token)
@@ -612,6 +655,7 @@ def clientauditlog_get_for_object(identity):
                                                                                   ITR_minimum_access_levels.regular_office_user,
                                                                                   additional_where_clause)
 
+
 @app.route('/audittrail/session/<identity>', methods=['GET'])
 def clientauditlog_get_for_session(identity):
     additional_where_clause = 'SessionID = \'' + str(uuid.UUID(str(identity))) + '\''
@@ -619,6 +663,7 @@ def clientauditlog_get_for_session(identity):
     return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
                                                                                   ITR_minimum_access_levels.regular_office_user,
                                                                                   additional_where_clause)
+
 
 @app.route('/audittrail/<identity>', methods=['GET', 'POST', 'DELETE'])
 def clientauditlog_get_id(identity):
@@ -682,7 +727,8 @@ def educations_get_id(identity):
 
 @app.route('/generatedreports/<sourceid>', methods=['GET', 'DELETE'])
 def generatedreports_get(sourceid):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
 
     if request.method == 'GET':
         additional_where_clause = 'LinkedObjectID = \'' + str(uuid.UUID(str(sourceid))) + '\''
@@ -698,6 +744,7 @@ def generatedreports_get(sourceid):
                 ).delete()
         else:
             return 403, "You do not have the rights to remove generated session reports"
+
 
 @app.route('/generatedreports/<sourceid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def generatedreports_get_id(sourceid, identity):
@@ -789,12 +836,13 @@ def persons_get():
 
 @app.route('/persons/<identity>', methods=['GET', 'POST', 'DELETE'])
 def persons_get_id(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
         to_return = ITSRestAPIORMExtensions.ClientPerson().return_single_object(request,
-                                                                           ITR_minimum_access_levels.test_taking_user,
-                                                                           identity)
+                                                                                ITR_minimum_access_levels.test_taking_user,
+                                                                                identity)
         if test_taking_user and not office_user:
             try:
                 if str(to_return["ID"]) != str(id_of_user):
@@ -818,7 +866,9 @@ def persons_get_id(identity):
         fix_password = False
         allowed_fields_to_update = [col.name for col in ITSRestAPIORMExtensions.ClientPerson.__table__.columns]
         if office_user:
-            new_password = ITSRestAPILogin.create_or_update_testrun_user(data_dict['ID'], company_id, data_dict['EMail'], data_dict['Password'], data_dict['Active'], False)
+            new_password = ITSRestAPILogin.create_or_update_testrun_user(data_dict['ID'], company_id,
+                                                                         data_dict['EMail'], data_dict['Password'],
+                                                                         data_dict['Active'], False)
             fix_password = (old_password != new_password and new_password != "") or old_password != ""
         allowed_fields_to_update.remove("Password")
         allowed_fields_to_update = ",".join(allowed_fields_to_update)
@@ -827,13 +877,13 @@ def persons_get_id(identity):
             request.get_data()
             data = request.data
             data_dict = json.loads(data)
-            if str(data_dict["ID"]) != str(id_of_user) :
+            if str(data_dict["ID"]) != str(id_of_user):
                 return "Person cannot be updated as test taking user", 404
             allowed_fields_to_update = 'DateOfLastTest'
 
         to_return = ITSRestAPIORMExtensions.ClientPerson().change_single_object(request,
-                                                                           ITR_minimum_access_levels.test_taking_user,
-                                                                           identity, allowed_fields_to_update)
+                                                                                ITR_minimum_access_levels.test_taking_user,
+                                                                                identity, allowed_fields_to_update)
         if fix_password:
             with ITSRestAPIDB.session_scope(company_id) as session:
                 tempPerson = session.query(ITSRestAPIORMExtensions.ClientPerson).filter(
@@ -854,12 +904,14 @@ def persons_get_id(identity):
                     ITSRestAPIORMExtensions.ClientSession.PersonID == identity).delete()
 
                 return ITSRestAPIORMExtensions.ClientPerson().delete_single_object(request,
-                                                                           ITR_minimum_access_levels.regular_office_user,
-                                                                           identity)
+                                                                                   ITR_minimum_access_levels.regular_office_user,
+                                                                                   identity)
+
 
 @app.route('/persons/<identity>/password', methods=['GET'])
 def persons_get_id_password(identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(request)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
 
     if is_password_manager:
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
@@ -876,23 +928,27 @@ def sessiontests_get():
     return ITSRestAPIORMExtensions.ClientSessionTest().common_paginated_read_request(request,
                                                                                      ITR_minimum_access_levels.regular_office_user)
 
+
 @app.route('/sessiontestsview', methods=['GET'])
 def sessiontestsview_get():
     a = ITSRestAPIORMExtensions.ViewClientSessionTestsWithPerson().common_paginated_read_request(request,
-                                                                                     ITR_minimum_access_levels.regular_office_user)
+                                                                                                 ITR_minimum_access_levels.regular_office_user)
     return a
+
 
 @app.route('/sessionsview', methods=['GET'])
 def sessionsview_get():
     a = ITSRestAPIORMExtensions.ViewClientSessionsWithPerson().common_paginated_read_request(request,
-                                                                                     ITR_minimum_access_levels.regular_office_user)
+                                                                                             ITR_minimum_access_levels.regular_office_user)
     return a
+
 
 @app.route('/groupsessionsview', methods=['GET'])
 def groupsessionsview_get():
     a = ITSRestAPIORMExtensions.ViewClientGroupSessions().common_paginated_read_request(request,
-                                                                                     ITR_minimum_access_levels.regular_office_user)
+                                                                                        ITR_minimum_access_levels.regular_office_user)
     return a
+
 
 @app.route('/sessiontests/<sessionid>', methods=['GET'])
 def sessiontests_get_for_session(sessionid):
@@ -900,8 +956,9 @@ def sessiontests_get_for_session(sessionid):
 
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.ClientSessionTest().common_paginated_read_request(request,
-                                                                                ITR_minimum_access_levels.regular_office_user,
-                                                                                additional_where_clause)
+                                                                                         ITR_minimum_access_levels.regular_office_user,
+                                                                                         additional_where_clause)
+
 
 @app.route('/sessiontests/<sessionid>/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessiontests_get_id(sessionid, identity):
@@ -915,8 +972,8 @@ def sessiontests_get_id(sessionid, identity):
 
     if request.method == 'GET':
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
-                                                                                ITR_minimum_access_levels.regular_office_user,
-                                                                                identity)
+                                                                                     ITR_minimum_access_levels.regular_office_user,
+                                                                                     identity)
 
         # before the test is returned to the client check if it is billed (but only when the test is done)
         try:
@@ -936,8 +993,8 @@ def sessiontests_get_id(sessionid, identity):
         return to_return
     elif request.method == 'POST':
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().change_single_object(request,
-                                                                                ITR_minimum_access_levels.regular_office_user,
-                                                                                identity)
+                                                                                     ITR_minimum_access_levels.regular_office_user,
+                                                                                     identity)
         # now save the test session to the anonymous results, but only when it is done
         sessionTestPostTrigger(company_id, id_of_user, identity, langcode)
 
@@ -956,14 +1013,13 @@ def sessiontests_get_id(sessionid, identity):
             new_audit_trail.SessionID = str(json_obj["SessionID"])
             new_audit_trail.CompanyID = company_id
             new_audit_trail.UserID = id_of_user
-            new_audit_trail.ObjectType = 2 #2 = sessiontest
+            new_audit_trail.ObjectType = 2  # 2 = sessiontest
             new_audit_trail.OldData = ""
-            new_audit_trail.NewData = '{ "TestID": '+ str(json_obj["TestID"]) + ' }'
+            new_audit_trail.NewData = '{ "TestID": ' + str(json_obj["TestID"]) + ' }'
             new_audit_trail.AuditMessage = "Session test deleted from session"
-            new_audit_trail.MessageID = 4 #4 = sessiontest delete
+            new_audit_trail.MessageID = 4  # 4 = sessiontest delete
             new_audit_trail.CreateDate = datetime.now(timezone.utc)
             qry_session.add(new_audit_trail)
-
 
         return ITSRestAPIORMExtensions.ClientSessionTest().delete_single_object(request,
                                                                                 ITR_minimum_access_levels.regular_office_user,
@@ -972,8 +1028,8 @@ def sessiontests_get_id(sessionid, identity):
 
 def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
     temp_test = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
-                                                                            ITR_minimum_access_levels.test_taking_user,
-                                                                            identity)
+                                                                                 ITR_minimum_access_levels.test_taking_user,
+                                                                                 identity)
     json_obj = json.loads(temp_test.data)
 
     if int(json_obj["Status"]) >= 30:
@@ -981,17 +1037,16 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
         temp_dict = json_obj["Results"]
         for toplevelitem in temp_dict:
             try:
-             for secondlevelitem in temp_dict[toplevelitem]:
-                for thirdlevelitem in temp_dict[toplevelitem][secondlevelitem]:
-                    if thirdlevelitem == "Anonimise":
-                        try:
-                            if temp_dict[toplevelitem][secondlevelitem][thirdlevelitem]:
-                                json_obj["Results"][toplevelitem][secondlevelitem]["Value"] = "*ANONIMISED*"
-                        except:
-                            pass
+                for secondlevelitem in temp_dict[toplevelitem]:
+                    for thirdlevelitem in temp_dict[toplevelitem][secondlevelitem]:
+                        if thirdlevelitem == "Anonimise":
+                            try:
+                                if temp_dict[toplevelitem][secondlevelitem][thirdlevelitem]:
+                                    json_obj["Results"][toplevelitem][secondlevelitem]["Value"] = "*ANONIMISED*"
+                            except:
+                                pass
             except:
-             pass
-
+                pass
 
         # save to the central server system
         # get the person, session, group and test data
@@ -1013,11 +1068,12 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 new_audit_trail.SessionID = str(json_obj["SessionID"])
                 new_audit_trail.CompanyID = company_id
                 new_audit_trail.UserID = id_of_user
-                new_audit_trail.ObjectType = 2 #2 = sessiontest
+                new_audit_trail.ObjectType = 2  # 2 = sessiontest
                 new_audit_trail.OldData = ""
-                new_audit_trail.NewData = '{ "CurrentPage": ' + str(json_obj["CurrentPage"]) + ', "TestID" : "' + str(json_obj["TestID"]) + '" }'
+                new_audit_trail.NewData = '{ "CurrentPage": ' + str(json_obj["CurrentPage"]) + ', "TestID" : "' + str(
+                    json_obj["TestID"]) + '" }'
                 new_audit_trail.AuditMessage = "Session test finished or viewed for test %%TestID%% at page %%CurrentPage%%"
-                new_audit_trail.MessageID = 3 #3 = sessiontest finished
+                new_audit_trail.MessageID = 3  # 3 = sessiontest finished
                 new_audit_trail.CreateDate = datetime.now(timezone.utc)
                 qry_session.add(new_audit_trail)
 
@@ -1025,23 +1081,23 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 temp_testdef = qry_session.query(ITSRestAPIORMExtensions.Test).filter(
                     ITSRestAPIORMExtensions.Test.ID == json_obj['TestID']).first()
                 if temp_testdef is None:
-                         temp_testdef = qry_session_master.query(ITSRestAPIORMExtensions.Test).filter(
-                             ITSRestAPIORMExtensions.Test.ID == json_obj['TestID']).first()
+                    temp_testdef = qry_session_master.query(ITSRestAPIORMExtensions.Test).filter(
+                        ITSRestAPIORMExtensions.Test.ID == json_obj['TestID']).first()
                 temp_company = qry_session_master.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
-                        ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
+                    ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
 
                 json_group_obj = ""
                 temp_group = {}
                 tempPersonData = {}
 
                 # console test program to get to for example the anonise flag
-                #app = Flask(__name__, instance_relative_config=True)
-                #app.app_context()
-                #qry_session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client('015e1e32-4377-4a10-8312-4d4be357cc3c', False))()
-                #temp_object = qry_session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(ITSRestAPIORMExtensions.ClientSessionTest.SessionID == '5834452d-c4e8-4d53-a701-c9cc6bca96c5').first()
-                #temp_dict = json.loads(temp_object.Results) # of json_obj["Results"]
-                #temp_dict['Question1']['Antwoord']['Anonimise']
-                #for toplevelitem in temp_dict:
+                # app = Flask(__name__, instance_relative_config=True)
+                # app.app_context()
+                # qry_session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client('015e1e32-4377-4a10-8312-4d4be357cc3c', False))()
+                # temp_object = qry_session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(ITSRestAPIORMExtensions.ClientSessionTest.SessionID == '5834452d-c4e8-4d53-a701-c9cc6bca96c5').first()
+                # temp_dict = json.loads(temp_object.Results) # of json_obj["Results"]
+                # temp_dict['Question1']['Antwoord']['Anonimise']
+                # for toplevelitem in temp_dict:
                 #    for secondlevelitem in temp_dict[toplevelitem]:
                 #        for thirdlevelitem in temp_dict[toplevelitem][secondlevelitem]:
                 #            if thirdlevelitem == "Anonimise":
@@ -1054,12 +1110,12 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 #                except:
                 #                    pass
 
-
                 if json_session_obj['GroupSessionID'] != '00000000-0000-0000-0000-000000000000':
                     try:
                         temp_group = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
-                                                                                                ITR_minimum_access_levels.test_taking_user,
-                                                                                                json_session_obj['GroupSessionID'])
+                                                                                                  ITR_minimum_access_levels.test_taking_user,
+                                                                                                  json_session_obj[
+                                                                                                      'GroupSessionID'])
                         json_group_obj = json.loads(temp_group.data)
                         json_group_obj['PluginData'] = ""
                     except:
@@ -1067,37 +1123,37 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
 
                 # check if a data gathering id for this test is already present
                 with ITSRestAPIDB.session_scope("") as qry_session:
-                        # save to the local master database
-                        data_gathering = qry_session.query(ITSRestAPIORMExtensions.SecurityDataGathering).filter(
-                                    ITSRestAPIORMExtensions.SecurityDataGathering.SessionID == json_obj['SessionID']).filter(
-                                    ITSRestAPIORMExtensions.SecurityDataGathering.TestID == json_obj['TestID']).first()
-                        if data_gathering == None:
-                          data_gathering = ITSRestAPIORMExtensions.SecurityDataGathering()
-                          data_gathering.ID = uuid.uuid4()
-                        data_gathering.CompanyID = company_id
-                        data_gathering.SessionID = json_obj['SessionID']
-                        data_gathering.TestID = json_obj['TestID']
-                        tempPersonData['Sex'] = json_person_obj['Sex']
-                        tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
-                        tempPersonData['BirthDate'] = json_person_obj['BirthDate']
-                        tempPersonData['Age'] = json_person_obj['Age']
-                        tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
-                        data_gathering.PersonData = json.dumps(tempPersonData)
-                        data_gathering.PluginData = "{}"
-                        data_gathering.GroupData = json.dumps(json_group_obj)
-                        data_gathering.SessionData = json.dumps(json_session_obj)
-                        data_gathering.TestData = json.dumps(json_obj)
+                    # save to the local master database
+                    data_gathering = qry_session.query(ITSRestAPIORMExtensions.SecurityDataGathering).filter(
+                        ITSRestAPIORMExtensions.SecurityDataGathering.SessionID == json_obj['SessionID']).filter(
+                        ITSRestAPIORMExtensions.SecurityDataGathering.TestID == json_obj['TestID']).first()
+                    if data_gathering == None:
+                        data_gathering = ITSRestAPIORMExtensions.SecurityDataGathering()
+                        data_gathering.ID = uuid.uuid4()
+                    data_gathering.CompanyID = company_id
+                    data_gathering.SessionID = json_obj['SessionID']
+                    data_gathering.TestID = json_obj['TestID']
+                    tempPersonData['Sex'] = json_person_obj['Sex']
+                    tempPersonData['DateOfLastTest'] = json_person_obj['DateOfLastTest']
+                    tempPersonData['BirthDate'] = json_person_obj['BirthDate']
+                    tempPersonData['Age'] = json_person_obj['Age']
+                    tempPersonData['UserDefinedFields'] = json_person_obj['UserDefinedFields']
+                    data_gathering.PersonData = json.dumps(tempPersonData)
+                    data_gathering.PluginData = "{}"
+                    data_gathering.GroupData = json.dumps(json_group_obj)
+                    data_gathering.SessionData = json.dumps(json_session_obj)
+                    data_gathering.TestData = json.dumps(json_obj)
 
-                        data_gathering.SessionDescription = json_session_obj['Description']
-                        data_gathering.TestDescription = temp_testdef.Description
-                        data_gathering.CompanyDescription = temp_company.CompanyName
-                        try:
-                         data_gathering.GroupDescription = json_group_obj['Description']
-                        except:
-                         pass
-                        data_gathering.SessionEndData = json_session_obj['EndedAt']
+                    data_gathering.SessionDescription = json_session_obj['Description']
+                    data_gathering.TestDescription = temp_testdef.Description
+                    data_gathering.CompanyDescription = temp_company.CompanyName
+                    try:
+                        data_gathering.GroupDescription = json_group_obj['Description']
+                    except:
+                        pass
+                    data_gathering.SessionEndData = json_session_obj['EndedAt']
 
-                        qry_session.add(data_gathering)
+                    qry_session.add(data_gathering)
 
                 with ITSRestAPIDB.session_scope(company_id) as qry_session:
                     # save to the local master database
@@ -1138,7 +1194,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 # to do
 
         # invoice the test
-        if int(json_obj["Status"]) == 30 :
+        if int(json_obj["Status"]) == 30:
             with ITSRestAPIDB.session_scope("") as mastersession:
                 with ITSRestAPIDB.session_scope(company_id) as clientsession:
                     # loop through all tests
@@ -1146,12 +1202,12 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                     creditunits_low = False
                     totalCosts = 0
                     clientsessiontest = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
-                            ITSRestAPIORMExtensions.ClientSessionTest.ID == json_obj["ID"] ).first()
+                        ITSRestAPIORMExtensions.ClientSessionTest.ID == json_obj["ID"]).first()
 
-                    if not clientsessiontest.Billed :
+                    if not clientsessiontest.Billed:
                         # if this is a system local test then invoice the test in credit units
                         localtest = clientsession.query(ITSRestAPIORMExtensions.Test).filter(
-                            ITSRestAPIORMExtensions.Test.ID == clientsessiontest.TestID ).first()
+                            ITSRestAPIORMExtensions.Test.ID == clientsessiontest.TestID).first()
                         if localtest == None:
                             localtest = mastersession.query(ITSRestAPIORMExtensions.Test).filter(
                                 ITSRestAPIORMExtensions.Test.ID == clientsessiontest.TestID).first()
@@ -1175,13 +1231,13 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                             if localcompany.TestTakingDiscount > 0:
                                 if localcompany.TestTakingDiscount > 100:
                                     localcompany.TestTakingDiscount = 100
-                                totalCosts = int(totalCosts * ( localcompany.TestTakingDiscount / 100 ))
-                            if totalCosts < 0 :
+                                totalCosts = int(totalCosts * (localcompany.TestTakingDiscount / 100))
+                            if totalCosts < 0:
                                 totalCosts = 0
 
                             # check if the current user has a personal credit pool
                             consultant = clientsession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                                ITSRestAPIORMExtensions.SecurityUser.ID == json_session_obj['ManagedByUserID'] ).first()
+                                ITSRestAPIORMExtensions.SecurityUser.ID == json_session_obj['ManagedByUserID']).first()
 
                             # check if we need invoicing
                             invoicing_ok = localtest.Costs == 0
@@ -1201,8 +1257,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                 invoicing_ok = localcompany.AllowNegativeCredits
                             if invoicing_ok and totalCosts > 0:
                                 # create the records for invoice logging
-                                if localtest.InvoiceCode == "" or localtest.InvoiceCode is None :
-                                 localtest.InvoiceCode = localtest.TestName
+                                if localtest.InvoiceCode == "" or localtest.InvoiceCode is None:
+                                    localtest.InvoiceCode = localtest.TestName
                                 newinvoicelog = ITSRestAPIORMExtensions.SecurityCreditUsage()
                                 newinvoicelog.ID = uuid.uuid4()
                                 newinvoicelog.UserID = id_of_user
@@ -1234,27 +1290,29 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
 
                                 # now execute the query to deduct the CurrentCreditLevel directly in the database (avoiding concurrency issues)
                                 masterengine = ITSRestAPIDB.get_db_engine_connection_master()
-                                qryCredit = 'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" - '+str(totalCosts)+' where "ID" = \''+str(company_id)+'\' '
+                                qryCredit = 'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" - ' + str(
+                                    totalCosts) + ' where "ID" = \'' + str(company_id) + '\' '
                                 masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryCredit)
                                 app_log.info('Invoicing credits %s', qryCredit)
                                 # and deduct if from the personal credit pool
                                 try:
                                     if consultant.HasPersonalCreditPool:
                                         consultant.CurrentPersonalCreditLevel = consultant.CurrentPersonalCreditLevel - totalCosts
-                                        app_log.info('Invoicing credits %s from personal credit pool of %s', qryCredit, consultant.Email)
+                                        app_log.info('Invoicing credits %s from personal credit pool of %s', qryCredit,
+                                                     consultant.Email)
                                 except:
                                     pass
 
                                 # check if we need to send a credits low email later
                                 if not creditunits_low:
-                                    creditunits_low = localcompany.CurrentCreditLevel > localcompany.LowCreditWarningLevel and (localcompany.CurrentCreditLevel - totalCosts <= localcompany.LowCreditWarningLevel)
+                                    creditunits_low = localcompany.CurrentCreditLevel > localcompany.LowCreditWarningLevel and (
+                                                localcompany.CurrentCreditLevel - totalCosts <= localcompany.LowCreditWarningLevel)
 
                             if invoicing_ok:
                                 clientsessiontest.Billed = True
 
                     # if this is a commercial test then invoice in currency using the invoice server
                     # TO DO
-
 
                 # score and norm the test if invoicing was successfull
                 # this is done on the client. For commercial tests the complete definition is downloaded from the suppliers server.
@@ -1289,18 +1347,20 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
             new_audit_trail.UserID = id_of_user
             new_audit_trail.ObjectType = 2  # 2 = sessiontest
             new_audit_trail.OldData = ""
-            new_audit_trail.NewData = '{ "CurrentPage": '+ str(json_obj["CurrentPage"]) + ', "TestID" : "'+ str(json_obj["TestID"]) +'" }'
+            new_audit_trail.NewData = '{ "CurrentPage": ' + str(json_obj["CurrentPage"]) + ', "TestID" : "' + str(
+                json_obj["TestID"]) + '" }'
             new_audit_trail.AuditMessage = "Session test updated for test %%TestID%% for page %%CurrentPage%%"
-            new_audit_trail.MessageID = 2 #2 = sessiontest updated
+            new_audit_trail.MessageID = 2  # 2 = sessiontest updated
             new_audit_trail.CreateDate = datetime.now(timezone.utc)
             qry_session.add(new_audit_trail)
+
 
 @app.route('/sessionteststaking/<sessionid>', methods=['GET'])
 # copy of sessiontests point only for test taking users
 def sessionteststaking_get(sessionid):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
-    additional_where_clause = 'PersID=\'' + str(id_of_user) +"',SessionID='" + str(sessionid) + "'"
+    additional_where_clause = 'PersID=\'' + str(id_of_user) + "',SessionID='" + str(sessionid) + "'"
     return ITSRestAPIORMExtensions.ClientSessionTest().common_paginated_read_request(request,
                                                                                      ITR_minimum_access_levels.test_taking_user,
                                                                                      additional_where_clause)
@@ -1318,8 +1378,8 @@ def sessionteststaking_get_id(sessionid, identity):
 
     if request.method == 'GET':
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
-                                                                                ITR_minimum_access_levels.test_taking_user,
-                                                                                identity)
+                                                                                     ITR_minimum_access_levels.test_taking_user,
+                                                                                     identity)
         try:
             if str(to_return["PersID"]) != str(id_of_user):
                 return 404, "Session cannot be accessed as test taking user"
@@ -1327,29 +1387,29 @@ def sessionteststaking_get_id(sessionid, identity):
             pass
         return to_return
     elif request.method == 'POST':
-        #check if the request is for this person
+        # check if the request is for this person
         request.get_data()
         data = request.data
         data_dict = json.loads(data)
         if str(data_dict["PersID"]) != str(id_of_user):
             return 404, "Session cannot be updated as test taking user"
-        #check if the session in the database is also for this person
+        # check if the session in the database is also for this person
         to_check = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
-                                                                                 ITR_minimum_access_levels.test_taking_user,
-                                                                                 identity)
+                                                                                    ITR_minimum_access_levels.test_taking_user,
+                                                                                    identity)
         jsonObj = json.loads(to_check.data)
         if str(jsonObj["PersID"]) != str(id_of_user) or str(jsonObj["SessionID"]) != str(sessionid):
             return 404, "Session cannot be updated as test taking user"
 
-
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().change_single_object(request,
-                                                                                ITR_minimum_access_levels.test_taking_user,
-                                                                                identity,
-                                                                                'Results,Scores,TestStart,TestEnd,PercentageOfQuestionsAnswered,TotalTestTime,Status,CurrentPage,TotalPages,PluginData')
+                                                                                     ITR_minimum_access_levels.test_taking_user,
+                                                                                     identity,
+                                                                                     'Results,Scores,TestStart,TestEnd,PercentageOfQuestionsAnswered,TotalTestTime,Status,CurrentPage,TotalPages,PluginData')
 
         sessionTestPostTrigger(company_id, id_of_user, identity, langcode)
 
         return to_return
+
 
 @app.route('/sessions', methods=['GET'])
 def sessions_get():
@@ -1357,10 +1417,10 @@ def sessions_get():
         request)
 
     additional_where_clause = ""
-    if test_taking_user and not office_user :
+    if test_taking_user and not office_user:
         additional_where_clause = 'PersonID=\'' + str(id_of_user) + '\''
     return ITSRestAPIORMExtensions.ClientSession().common_paginated_read_request(request,
-                                                                          ITR_minimum_access_levels.test_taking_user,
+                                                                                 ITR_minimum_access_levels.test_taking_user,
                                                                                  additional_where_clause)
 
 
@@ -1368,8 +1428,8 @@ def sessions_get():
 def sessions_groupmembers(identity):
     additional_where_clause = 'parentsessionid=\'' + str(identity) + '\''
     return ITSRestAPIORMExtensions.ViewClientGroupSessionCandidates().common_paginated_read_request(request,
-                                                                     ITR_minimum_access_levels.regular_office_user,
-                                                                                 additional_where_clause)
+                                                                                                    ITR_minimum_access_levels.regular_office_user,
+                                                                                                    additional_where_clause)
 
 
 @app.route('/sessions/<identity>/deletealltests', methods=['DELETE'])
@@ -1416,8 +1476,8 @@ def sessions_get_id(identity):
     if request.method == 'GET':
         # test taking user may read their own data (to do : make sure they can only read their own data!)
         to_return = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
-                                                                            ITR_minimum_access_levels.test_taking_user,
-                                                                            identity)
+                                                                                 ITR_minimum_access_levels.test_taking_user,
+                                                                                 identity)
         if test_taking_user and not office_user:
             try:
                 if str(to_return["PersonID"]) != str(id_of_user):
@@ -1436,16 +1496,16 @@ def sessions_get_id(identity):
         data_dict = json.loads(data)
 
         if test_taking_user and not office_user:
-            #check if the offered session is for this person
-            if str(data_dict["PersonID"]) != str(id_of_user) :
+            # check if the offered session is for this person
+            if str(data_dict["PersonID"]) != str(id_of_user):
                 return 404, "Session cannot be updated as test taking user"
-            #check if the session in the database is also for this person
+            # check if the session in the database is also for this person
             to_return = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
                                                                                      ITR_minimum_access_levels.test_taking_user,
                                                                                      identity)
 
             try:
-                if to_return["PersonID"] != id_of_user or to_return["ID"] !=  data_dict["ID"]:
+                if to_return["PersonID"] != id_of_user or to_return["ID"] != data_dict["ID"]:
                     return 404, "Session cannot be updated as test taking user"
             except:
                 pass
@@ -1453,8 +1513,8 @@ def sessions_get_id(identity):
             allowed_fields_to_update = 'Status,SessionState,AllowedStartDateTime,AllowedEndDateTime,StartedAt,EndedAt,PluginData'
 
         to_return = ITSRestAPIORMExtensions.ClientSession().change_single_object(request,
-                                                                            ITR_minimum_access_levels.test_taking_user,
-                                                                            identity, allowed_fields_to_update)
+                                                                                 ITR_minimum_access_levels.test_taking_user,
+                                                                                 identity, allowed_fields_to_update)
 
         # perform the session post trigger
         sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, langcode)
@@ -1468,21 +1528,22 @@ def sessions_get_id(identity):
 
             # then delete it
             to_return = ITSRestAPIORMExtensions.ClientSession().delete_single_object(request,
-                                                                                ITR_minimum_access_levels.regular_office_user,
-                                                                                identity)
+                                                                                     ITR_minimum_access_levels.regular_office_user,
+                                                                                     identity)
 
             sessionPostTriggerDelete(identity, company_id, sess.PersonID)
 
             return to_return
+
 
 def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, langcode):
     # send the end session e-mail
     if int(data_dict["Status"]) == 30:
         with ITSRestAPIDB.session_scope(company_id) as clientsession:
             temp_session = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
-                        ITSRestAPIORMExtensions.ClientSession.ID == data_dict["ID"] ).first()
+                ITSRestAPIORMExtensions.ClientSession.ID == data_dict["ID"]).first()
 
-            temp_session.Status=31
+            temp_session.Status = 31
 
             url_to_click = request.url_root
             url_to_click = url_to_click.split("api/")[0] + "default.htm"
@@ -1495,10 +1556,10 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
                                                                               "The following session has completed : \r\n%s",
                                                                               app_instance_path(), True)
 
-            ITSMailer.send_mail(company_id,translatedSubject % temp_session.Description,
-                            translatedMail % temp_session.Description +
-                            "\r\n\r\n%s" % url_to_click,
-                            temp_session.EMailNotificationAdresses)
+            ITSMailer.send_mail(company_id, translatedSubject % temp_session.Description,
+                                translatedMail % temp_session.Description +
+                                "\r\n\r\n%s" % url_to_click,
+                                temp_session.EMailNotificationAdresses)
 
             removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
 
@@ -1540,16 +1601,18 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
             if sess:
                 removeUnnecessaryUserLogins(company_id, sess.PersonID)
 
+
 def sessionPostTriggerDelete(session_id, company_id, id_of_user):
     removeUnnecessaryUserLogins(company_id, id_of_user)
     # remove linked stored reports
     with ITSRestAPIDB.session_scope(company_id) as clientsession:
         clientsession.query(ITSRestAPIORMExtensions.ClientGeneratedReport).filter(
             ITSRestAPIORMExtensions.ClientGeneratedReport.LinkedObjectID == session_id
-         ).delete()
+        ).delete()
         clientsession.query(ITSRestAPIORMExtensions.ClientAuditLog).filter(
             ITSRestAPIORMExtensions.ClientAuditLog.SessionID == session_id
-         ).delete()
+        ).delete()
+
 
 def removeUnnecessaryUserLogins(company_id, id_of_user):
     with ITSRestAPIDB.session_scope(company_id) as clientsession:
@@ -1580,26 +1643,29 @@ def reportdefinition_get():
 @app.route('/reportdefinitions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def reportdefinition_get_id(identity):
     basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache'))
-    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
+    pathname = os.path.dirname(
+        os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
     include_master = False
     try:
         include_master = request.headers['IncludeMaster'] == "Y"
     except:
         pass
-    cachedfilename = os.path.join(os.sep, pathname, "master_report.json") if include_master else os.path.join(os.sep, pathname, "report.json")
+    cachedfilename = os.path.join(os.sep, pathname, "master_report.json") if include_master else os.path.join(os.sep,
+                                                                                                              pathname,
+                                                                                                              "report.json")
 
     if request.method == 'GET':
         if os.path.isfile(cachedfilename):
-             return (open(cachedfilename, 'r').read()), 200
+            return (open(cachedfilename, 'r').read()), 200
         else:
             to_return = ITSRestAPIORMExtensions.Report().return_single_object(request,
-                                                                         ITR_minimum_access_levels.regular_office_user,
-                                                                         identity)
+                                                                              ITR_minimum_access_levels.regular_office_user,
+                                                                              identity)
             try:
                 if to_return[1] == 404:
                     to_return = ITSRestAPIORMExtensions.Report().return_single_object(request,
-                                                                            ITR_minimum_access_levels.test_taking_user,
-                                                                            identity, True)
+                                                                                      ITR_minimum_access_levels.test_taking_user,
+                                                                                      identity, True)
             except:
                 pass
 
@@ -1627,11 +1693,12 @@ def reportdefinition_get_id(identity):
                                                                      ITR_minimum_access_levels.report_author,
                                                                      identity)
 
+
 @app.route('/companies', methods=['GET'])
 def companies_get():
     return ITSRestAPIORMExtensions.SecurityCompany().common_paginated_read_request(request,
                                                                                    ITR_minimum_access_levels.master_user,
-                                                                                   "","",
+                                                                                   "", "",
                                                                                    True)
 
 
@@ -1649,13 +1716,13 @@ def companies_get_id(identity):
     if request.method == 'GET':
         if allowTestTakingUser:
             return ITSRestAPIORMExtensions.SecurityCompany().return_single_object(request,
-                                                                              ITR_minimum_access_levels.test_taking_user,
-                                                                              identity, True)
+                                                                                  ITR_minimum_access_levels.test_taking_user,
+                                                                                  identity, True)
         else:
             if identity == company_id and not master_user:
                 return ITSRestAPIORMExtensions.SecurityCompany().return_single_object(request,
-                                                                              ITR_minimum_access_levels.regular_office_user,
-                                                                              identity, True)
+                                                                                      ITR_minimum_access_levels.regular_office_user,
+                                                                                      identity, True)
             if master_user:
                 return ITSRestAPIORMExtensions.SecurityCompany().return_single_object(request,
                                                                                       ITR_minimum_access_levels.regular_office_user,
@@ -1687,7 +1754,7 @@ def companies_get_id(identity):
                 ITSRestAPIORMExtensions.SecurityCreditUsage.CompanyID == identity).delete()
 
         # delete any stored files
-        folder_to_delete = os.path.join(os.sep, app_instance_path(), 'media', str(identity) )
+        folder_to_delete = os.path.join(os.sep, app_instance_path(), 'media', str(identity))
         shutil.rmtree(folder_to_delete, ignore_errors=True)
 
         return ITSRestAPIORMExtensions.SecurityCompany().delete_single_object(request,
@@ -1695,6 +1762,7 @@ def companies_get_id(identity):
                                                                               identity, True)
 
     return "You need to be master user to make this call with these parameters", 403
+
 
 @app.route('/creditgrants', methods=['GET'])
 def creditgrants_get():
@@ -1705,15 +1773,17 @@ def creditgrants_get():
 
     if master_user:
         return ITSRestAPIORMExtensions.SecurityCreditGrant().common_paginated_read_request(request,
-                                                                                       ITR_minimum_access_levels.master_user,
-                                                                                       "", "", True)
+                                                                                           ITR_minimum_access_levels.master_user,
+                                                                                           "", "", True)
     else:
         additional_where_clause = "CompanyID='" + str(company_id) + "'"
         return ITSRestAPIORMExtensions.SecurityCreditGrant().common_paginated_read_request(request,
-                                                                                       ITR_minimum_access_levels.regular_office_user,
-                                                                                       additional_where_clause, "", True)
+                                                                                           ITR_minimum_access_levels.regular_office_user,
+                                                                                           additional_where_clause, "",
+                                                                                           True)
 
     return "You need to be master user, or query the grants for your own organisation", 403
+
 
 @app.route('/creditgrants/<identity>', methods=['GET', 'POST', 'DELETE'])
 def creditgrants_get_id(identity):
@@ -1734,13 +1804,14 @@ def creditgrants_get_id(identity):
             data_dict = json.loads(data)
 
             masterengine = ITSRestAPIDB.get_db_engine_connection_master()
-            qryToAdd = 'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" + ' + str(data_dict["CreditsGranted"]) + ' where "ID" = \'' + str(data_dict["CompanyID"]) + '\' '
+            qryToAdd = 'UPDATE "SecurityCompanies" SET "CurrentCreditLevel" = "CurrentCreditLevel" + ' + str(
+                data_dict["CreditsGranted"]) + ' where "ID" = \'' + str(data_dict["CompanyID"]) + '\' '
             app_log.info('Adding credits ' + qryToAdd)
             masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryToAdd)
 
         return ITSRestAPIORMExtensions.SecurityCreditGrant().change_single_object(request,
                                                                                   ITR_minimum_access_levels.master_user,
-                                                                                  identity,"",True)
+                                                                                  identity, "", True)
     elif request.method == 'DELETE':
         return ITSRestAPIORMExtensions.SecurityCreditGrant().delete_single_object(request,
                                                                                   ITR_minimum_access_levels.master_user,
@@ -1790,15 +1861,15 @@ def creditusagespermonthforall_get(year):
         qry_session = ITSRestAPIDB.get_db_engine_connection_master()
         try:
             yearfilter = ''
-            if int(year) > 0 :
-               yearfilter = 'where "UsageDateTime" >= make_date(CAST('+year+' AS INT), 1, 1) and "UsageDateTime" <= make_date(CAST('+year+' AS INT), 12, 31) '
+            if int(year) > 0:
+                yearfilter = 'where "UsageDateTime" >= make_date(CAST(' + year + ' AS INT), 1, 1) and "UsageDateTime" <= make_date(CAST(' + year + ' AS INT), 12, 31) '
             query = ''' select date_part( 'year', "UsageDateTime") as Year, date_part( 'month', "UsageDateTime") as Month, sum("TotalTicks") as Ticks, sum("DiscountedTicks") as DiscountedTicks, "InvoiceCode", B."CompanyName"
                     from "SecurityCreditUsage" A left join "SecurityCompanies" B on A."CompanyID" = B."ID" ''' + yearfilter + '''
                     group by date_part( 'year', "UsageDateTime"), date_part( 'month', "UsageDateTime"), "InvoiceCode", B."CompanyName"
                     order by date_part( 'year', "UsageDateTime") desc, date_part( 'month', "UsageDateTime") desc, "InvoiceCode", B."CompanyName" '''
 
             a = []
-            a = qry_session.execute( query ).fetchall()
+            a = qry_session.execute(query).fetchall()
             if a == []:
                 a.append({'Year': '2000', 'Month': '1', 'Ticks': '0', 'DiscountedTicks': '0'})
         finally:
@@ -1806,6 +1877,7 @@ def creditusagespermonthforall_get(year):
         return ITSRestAPIDB.query_array_to_jsonify(a)
     else:
         return "404", "No valid session token"
+
 
 @app.route('/creditusages/<identity>', methods=['GET', 'POST', 'DELETE'])
 def creditusage_get_id(identity):
@@ -1826,23 +1898,23 @@ def creditusage_get_id(identity):
 @app.route('/datagathering', methods=['GET'])
 def datagathering_get():
     return ITSRestAPIORMExtensions.SecurityDataGathering().common_paginated_read_request(request,
-                                                                                       ITR_minimum_access_levels.data_researcher)
+                                                                                         ITR_minimum_access_levels.data_researcher)
 
 
 @app.route('/datagathering/<identity>', methods=['GET', 'POST', 'DELETE'])
 def datagathering_get_id(identity):
     if request.method == 'GET':
         return ITSRestAPIORMExtensions.SecurityDataGathering().return_single_object(request,
-                                                                                  ITR_minimum_access_levels.data_researcher,
-                                                                                  identity)
+                                                                                    ITR_minimum_access_levels.data_researcher,
+                                                                                    identity)
     elif request.method == 'POST':
         return ITSRestAPIORMExtensions.SecurityDataGathering().change_single_object(request,
-                                                                                  ITR_minimum_access_levels.data_researcher,
-                                                                                  identity)
+                                                                                    ITR_minimum_access_levels.data_researcher,
+                                                                                    identity)
     elif request.method == 'DELETE':
         return ITSRestAPIORMExtensions.SecurityDataGathering().delete_single_object(request,
-                                                                                  ITR_minimum_access_levels.data_researcher,
-                                                                                  identity)
+                                                                                    ITR_minimum_access_levels.data_researcher,
+                                                                                    identity)
 
 
 @app.route('/rightstemplates', methods=['GET'])
@@ -1883,47 +1955,48 @@ def logins_get_id(identity):
         user_id, company_id)
     if identity == 'currentuser':
         identity = id_of_user
-        #master_db_query = True
+        # master_db_query = True
     else:
         if not organisation_supervisor_user and not master_user:
             return "You are not allowed to change other users settings", 403
 
     if request.method == 'GET':
         to_return = ITSRestAPIORMExtensions.SecurityUser().return_single_object(request,
-                                                                           ITR_minimum_access_levels.test_taking_user,
-                                                                           identity)
-        #if not found then try the master database as well, candidates will NOT be created in the local company database
+                                                                                ITR_minimum_access_levels.test_taking_user,
+                                                                                identity)
+        # if not found then try the master database as well, candidates will NOT be created in the local company database
         try:
             if to_return[1] == 404:
                 to_return = ITSRestAPIORMExtensions.SecurityUser().return_single_object(request,
                                                                                         ITR_minimum_access_levels.test_taking_user,
-                                                                                    identity, True)
+                                                                                        identity, True)
         except:
             pass
 
-        #decrypt the API key if present
+        # decrypt the API key if present
         if is_password_manager:
-         temp_return = json.loads(to_return.data)
-         try:
-          temp_return['APIKey'] = ITSEncrypt.decrypt_string(temp_return['APIKey'])
-          to_return = json.dumps(temp_return)
-         except:
-          pass
+            temp_return = json.loads(to_return.data)
+            try:
+                temp_return['APIKey'] = ITSEncrypt.decrypt_string(temp_return['APIKey'])
+                to_return = json.dumps(temp_return)
+            except:
+                pass
 
         return to_return
     elif request.method == 'POST':
         with ITSRestAPIDB.session_scope(company_id) as clientsession:
-            #clientsession = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client(company_id))()
+            # clientsession = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_client(company_id))()
             # make sure that a new account cannot be added when the system is already at the maximum amount of consultants
-            max_number_of_consultants = ITSRestAPISettings.get_setting_for_customer(company_id, 'MAXNUMBEROFCONSULTANTS', True, "")
+            max_number_of_consultants = ITSRestAPISettings.get_setting_for_customer(company_id,
+                                                                                    'MAXNUMBEROFCONSULTANTS', True, "")
             if max_number_of_consultants != "":
                 max_number_of_consultants = int(max_number_of_consultants)
                 if max_number_of_consultants >= 0:
                     consultant_count = clientsession.query(ITSRestAPIORMExtensions.SecurityUser).count()
                     if (consultant_count >= max_number_of_consultants):
                         # check if this is a new account, in that case abort
-                        consultant_to_add_check =  clientsession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                                    ITSRestAPIORMExtensions.SecurityUser.ID == identity ).count()
+                        consultant_to_add_check = clientsession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                            ITSRestAPIORMExtensions.SecurityUser.ID == identity).count()
                         if (consultant_to_add_check == 0):
                             return "Maximum number of consultants reached", 404
             # make sure the current user cannot grant more rights than the user itself owns
@@ -1932,31 +2005,31 @@ def logins_get_id(identity):
             AllowedFieldsToChange = [col.name for col in ITSRestAPIORMExtensions.SecurityUser.__table__.columns]
             if not consultant.IsMasterUser and not consultant.IsOrganisationSupervisor:
                 AllowedFieldsToChange.remove('IsMasterUser')
-                if not consultant.IsTestTakingUser :
+                if not consultant.IsTestTakingUser:
                     AllowedFieldsToChange.remove('IsTestTakingUser')
-                if not consultant.IsOfficeUser :
+                if not consultant.IsOfficeUser:
                     AllowedFieldsToChange.remove('IsOfficeUser')
-                if not consultant.IsOrganisationSupervisor :
+                if not consultant.IsOrganisationSupervisor:
                     AllowedFieldsToChange.remove('IsOrganisationSupervisor')
-                if not consultant.IsTestAuthor :
+                if not consultant.IsTestAuthor:
                     AllowedFieldsToChange.remove('IsTestAuthor')
-                if not consultant.IsReportAuthor :
+                if not consultant.IsReportAuthor:
                     AllowedFieldsToChange.remove('IsReportAuthor')
-                if not consultant.IsTestScreenTemplateAuthor :
+                if not consultant.IsTestScreenTemplateAuthor:
                     AllowedFieldsToChange.remove('IsTestScreenTemplateAuthor')
                 if not consultant.IsPasswordManager:
                     AllowedFieldsToChange.remove('IsPasswordManager')
-                if not consultant.IsResearcher :
+                if not consultant.IsResearcher:
                     AllowedFieldsToChange.remove('IsResearcher')
-                if not consultant.IsTranslator :
+                if not consultant.IsTranslator:
                     AllowedFieldsToChange.remove('IsTranslator')
-                if not consultant.MayOrderCredits :
+                if not consultant.MayOrderCredits:
                     AllowedFieldsToChange.remove('MayOrderCredits')
-                if consultant.MayWorkWithBatteriesOnly :
+                if consultant.MayWorkWithBatteriesOnly:
                     AllowedFieldsToChange.remove('MayWorkWithBatteriesOnly')
             if consultant.IsOrganisationSupervisor:
                 AllowedFieldsToChange.remove('IsMasterUser')
-                
+
             # encrypt the API key if present
             request.get_data()
             if is_password_manager:
@@ -1985,7 +2058,7 @@ def logins_get_id(identity):
             if len(password) >= 10:
                 ITSRestAPILogin.update_user_password(temp_param["Email"], password)
 
-            #never save the password in the clients database
+            # never save the password in the clients database
             try:
                 AllowedFieldsToChange.remove('Password')
             except:
@@ -1993,8 +2066,9 @@ def logins_get_id(identity):
 
             # save the user to the clients database
             return ITSRestAPIORMExtensions.SecurityUser().change_single_object(request,
-                                                                           ITR_minimum_access_levels.regular_office_user,
-                                                                           identity, ",".join(AllowedFieldsToChange))
+                                                                               ITR_minimum_access_levels.regular_office_user,
+                                                                               identity,
+                                                                               ",".join(AllowedFieldsToChange))
     elif request.method == 'DELETE':
         ITSRestAPIORMExtensions.SecurityUser().delete_single_object(request,
                                                                     ITR_minimum_access_levels.regular_office_user,
@@ -2017,10 +2091,11 @@ def logins_get_companies_memberships():
         return ITSRestAPIORMExtensions.SecurityCompany().common_paginated_read_request(request,
                                                                                        ITR_minimum_access_levels.test_taking_user,
                                                                                        additional_unchecked_where_clause=
-                                                                                       'a."ID" in (select distinct b."CompanyID" from "SecurityUsers" as b where b."Email" = \''+ user_id + '\')',
+                                                                                       'a."ID" in (select distinct b."CompanyID" from "SecurityUsers" as b where b."Email" = \'' + user_id + '\')',
                                                                                        force_masterdb=True)
     else:
         return "User not found or no known token linked to this user", 404
+
 
 @app.route('/logins/currentuser/changepassword', methods=['POST'])
 def login_change_password():
@@ -2045,13 +2120,15 @@ def login_change_password():
             newPW = temp_param["new_password"]
 
             login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, oldPW, company_id)
-            if login_result in (ITSRestAPILogin.LoginUserResult.ok, ITSRestAPILogin.LoginUserResult.multiple_companies_found):
+            if login_result in (
+            ITSRestAPILogin.LoginUserResult.ok, ITSRestAPILogin.LoginUserResult.multiple_companies_found):
                 ITSRestAPILogin.update_user_password(user_id, newPW)
                 return "The password has been changed", 200
             else:
                 return "Your old password is not correct, please retry", 404
     else:
         return "User not found or no known token linked to this user", 404
+
 
 @app.route('/tokens', methods=['GET'])
 def tokens_get():
@@ -2061,11 +2138,12 @@ def tokens_get():
 
     if master_user:
         return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
-                                                                                           ITR_minimum_access_levels.master_user)
+                                                                                               ITR_minimum_access_levels.master_user)
     else:
         return ITSRestAPIORMExtensions.SecurityWebSessionToken().common_paginated_read_request(request,
-                                                                                           ITR_minimum_access_levels.regular_office_user,
-                                                                                               additional_unchecked_where_clause="\"CompanyID\" = '" + str(company_id) + "'" ,
+                                                                                               ITR_minimum_access_levels.regular_office_user,
+                                                                                               additional_unchecked_where_clause="\"CompanyID\" = '" + str(
+                                                                                                   company_id) + "'",
                                                                                                force_masterdb=True)
 
 
@@ -2084,6 +2162,7 @@ def tokens_get_id(identity):
                                                                                       ITR_minimum_access_levels.master_user,
                                                                                       identity)
 
+
 @app.route('/tokens/<identity>/<newcompany>', methods=['POST'])
 def token_change_company(identity, newcompany):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
@@ -2094,6 +2173,8 @@ def token_change_company(identity, newcompany):
             token = request.headers['SessionID']
             company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
 
+            #invalidate all caching of users here
+            reset_cache()
             ITSRestAPILogin.change_token_company(identity, newcompany)
 
             # create a login for this company if it does not exist yet
@@ -2105,7 +2186,8 @@ def token_change_company(identity, newcompany):
             return "An error occured during the switch", 404
         return "switch OK", 200
     else:
-        return "You are not authorised to make this call ",404
+        return "You are not authorised to make this call ", 404
+
 
 @app.route('/systemsettings', methods=['GET'])
 def systemsettings_get():
@@ -2156,10 +2238,10 @@ def systemsettings_get_id(identity):
                     if param.ParProtected and (organisation_supervisor_user or master_user):
                         return param.ParValue
                     else:
-                     if not param.ParProtected:
-                        return param.ParValue
-                     else:
-                        return "You do not have sufficient rights to make this call", 404
+                        if not param.ParProtected:
+                            return param.ParValue
+                        else:
+                            return "You do not have sufficient rights to make this call", 404
         elif request.method == 'POST':
             request.get_data()
             if identity == "CC_ADDRESS":
@@ -2177,7 +2259,7 @@ def systemsettings_get_id(identity):
                     param2 = ITSRestAPIORMExtensions.SystemParam()
                     param2.ParameterName = identity
                     param2.ParValue = request.data.decode('utf-8')
-                    #check if this parameter is protected
+                    # check if this parameter is protected
                     param2.ParProtected = False
                     try:
                         temp_param = ITSHelpers.Empty()
@@ -2201,6 +2283,7 @@ def systemsettings_get_id(identity):
             session.commit()
             return "Parameter deleted", 200
 
+
 @app.route('/screentemplates', methods=['GET'])
 def screentemplates_get():
     return ITSRestAPIORMExtensions.TestScreenTemplate().common_paginated_read_request(request,
@@ -2210,26 +2293,29 @@ def screentemplates_get():
 @app.route('/screentemplates/<identity>', methods=['GET', 'POST', 'DELETE'])
 def screentemplates_get_id(identity):
     basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache'))
-    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
+    pathname = os.path.dirname(
+        os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
     try:
         include_master = request.headers['IncludeMaster'] == "Y"
     except:
         pass
-    cachedfilename = os.path.join(os.sep, pathname, "master_template.json") if include_master else os.path.join(os.sep, pathname, "template.json")
+    cachedfilename = os.path.join(os.sep, pathname, "master_template.json") if include_master else os.path.join(os.sep,
+                                                                                                                pathname,
+                                                                                                                "template.json")
 
     if request.method == 'GET':
         # test taking users may request all screen templates since that is needed for test taking
         if os.path.isfile(cachedfilename):
-             return (open(cachedfilename, 'r').read()), 200
+            return (open(cachedfilename, 'r').read()), 200
         else:
             to_return = ITSRestAPIORMExtensions.TestScreenTemplate().return_single_object(request,
-                                                                                     ITR_minimum_access_levels.test_taking_user,
-                                                                                     identity)
+                                                                                          ITR_minimum_access_levels.test_taking_user,
+                                                                                          identity)
             try:
                 if to_return[1] == 404:
                     to_return = ITSRestAPIORMExtensions.TestScreenTemplate().return_single_object(request,
-                                                                            ITR_minimum_access_levels.test_taking_user,
-                                                                            identity, True)
+                                                                                                  ITR_minimum_access_levels.test_taking_user,
+                                                                                                  identity, True)
             except:
                 pass
 
@@ -2268,7 +2354,8 @@ def tests_get():
 @app.route('/tests/<identity>', methods=['GET', 'POST', 'DELETE'])
 def tests_get_id(identity):
     basepathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache'))
-    pathname = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
+    pathname = os.path.dirname(
+        os.path.join(os.sep, app_instance_path(), 'cache', ITSHelpers.string_split_to_filepath(identity)))
     if request.method == 'GET':
         cachefilename = "test.json"
         # test taking users may request all test definitions since they need them for test taking, but will get limited fields back to protect scoring and norming rules
@@ -2285,18 +2372,19 @@ def tests_get_id(identity):
             include_master = request.headers['IncludeMaster'] == "Y"
         except:
             pass
-        cachedfilefull = os.path.join(os.sep, pathname, "master_" + cachefilename) if include_master else os.path.join(os.sep, pathname, cachefilename)
+        cachedfilefull = os.path.join(os.sep, pathname, "master_" + cachefilename) if include_master else os.path.join(
+            os.sep, pathname, cachefilename)
         if os.path.isfile(cachedfilefull):
-             return (open(cachedfilefull, 'r').read()), 200
+            return (open(cachedfilefull, 'r').read()), 200
         else:
             to_return = ITSRestAPIORMExtensions.Test().return_single_object(request,
-                                                                       ITR_minimum_access_levels.test_taking_user,
-                                                                       identity)
+                                                                            ITR_minimum_access_levels.test_taking_user,
+                                                                            identity)
             try:
                 if to_return[1] == 404:
                     to_return = ITSRestAPIORMExtensions.Test().return_single_object(request,
-                                                                            ITR_minimum_access_levels.test_taking_user,
-                                                                            identity, True)
+                                                                                    ITR_minimum_access_levels.test_taking_user,
+                                                                                    identity, True)
             except:
                 pass
 
@@ -2349,7 +2437,7 @@ def tests_get_id(identity):
 
 
 @app.route('/files/<company_id>/<maintainingObjectIdentity>/<fileType>', methods=['GET', 'DELETE'])
-def files_get_id(company_id, maintainingObjectIdentity,fileType):
+def files_get_id(company_id, maintainingObjectIdentity, fileType):
     masterFiles = False
     if company_id == "master":
         masterFiles = True
@@ -2366,7 +2454,7 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
     if (not os.path.isdir(pathname)) or masterFiles:
         pathname = os.path.dirname(
             os.path.join(os.sep, app_instance_path(), 'media', 'master',
-                     ITSHelpers.string_split_to_filepath(maintainingObjectIdentity)))
+                         ITSHelpers.string_split_to_filepath(maintainingObjectIdentity)))
         basepathname = os.path.dirname(
             os.path.join(os.sep, app_instance_path(), 'media', 'master'))
     fileType = fileType.upper()
@@ -2386,6 +2474,7 @@ def files_get_id(company_id, maintainingObjectIdentity,fileType):
     else:
         return "You need to be master user, organisation supervisor or test author to use the files/<maintainingObjectId> endpoint", 403
 
+
 @app.route('/filecopy/<maintainingObjectIdentity_src>/<maintainingObjectIdentity_dst>', methods=['POST'])
 def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_dst):
     token = request.headers['SessionID']
@@ -2397,11 +2486,11 @@ def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_d
                      ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_src)))
     if maintainingObjectIdentity_dst.upper() == "MASTER":
         pathname_dst = os.path.dirname(os.path.join(os.sep, app_instance_path(), 'media', 'master',
-                         ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_src) ))
+                                                    ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_src)))
     else:
         pathname_dst = os.path.dirname(
             os.path.join(os.sep, app_instance_path(), 'media', str(company_id),
-                     ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_dst)))
+                         ITSHelpers.string_split_to_filepath(maintainingObjectIdentity_dst)))
 
     if master_user or organisation_supervisor_user or author_user:
         # make sure to remove any files in the target dir before copying
@@ -2415,6 +2504,7 @@ def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_d
     else:
         return "You need to be master user, organisation supervisor or test author to use the files/<maintainingObjectId> endpoint", 403
 
+
 @app.route('/files/<company_id>/<maintainingObjectIdentity>/<fileType>/<fileId>', methods=['GET', 'POST', 'DELETE'])
 def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
     if request.method != 'GET':
@@ -2426,7 +2516,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
         # get the company id from the token instead of the api
         company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
-                user_id, company_id)
+            user_id, company_id)
     fileType = fileType.upper()
     pathname = os.path.dirname(
         os.path.join(os.sep, app_instance_path(), 'media', str(company_id),
@@ -2460,13 +2550,13 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
                 os.makedirs(pathname)
             request.get_data()
 
-            f = open(filename,"wb")
-            try :
+            f = open(filename, "wb")
+            try:
                 tempStr = request.data
                 f.write(tempStr)
             except Exception as e:
-                app_log.error('File uploading failed %s',str(e))
-                return "File uploading failed" , 500
+                app_log.error('File uploading failed %s', str(e))
+                return "File uploading failed", 500
             f.close()
             app_log.info('File written to %s', filename)
             return "File uploaded OK", 200
@@ -2488,7 +2578,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
 def list_available_translations():
     pathname = os.path.dirname(os.path.join(app_instance_path(), 'translations/'))
     # check for master database existence. if not init the system for a smoother first time user experience
-    #session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_master())()
+    # session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_master())()
     with ITSRestAPIDB.session_scope("") as session:
         if os.path.isdir(pathname):
             onlyfiles = [f for f in os.listdir(pathname) if
@@ -2541,7 +2631,9 @@ def translations(langcode):
                     newTranslation = True
                     translatedText = new_data[line]['value']
                 else:
-                    translatedText, newTranslation = ITSTranslate.get_translation_if_needed(langcode, line, new_data[line]['value'], old_data)
+                    translatedText, newTranslation = ITSTranslate.get_translation_if_needed(langcode, line,
+                                                                                            new_data[line]['value'],
+                                                                                            old_data)
                 if translatedText is not None and newTranslation:
                     old_data[line] = new_data[line]
                     old_data[line]['originalValue'] = new_data[line]['value']
@@ -2555,7 +2647,7 @@ def translations(langcode):
                     linesChanged = linesChanged + 1
 
                     if linesChanged > 0 and linesChanged % 25 == 0:
-                        with open(filename, 'w') as translationFile: # make sure to save every 25 translations
+                        with open(filename, 'w') as translationFile:  # make sure to save every 25 translations
                             translationFile.write(json.dumps(old_data, indent=1, sort_keys=True))
                             translationFile.close()
             # and now save the file
@@ -2566,6 +2658,7 @@ def translations(langcode):
             return "OK", 200
         else:
             return "no master user or no translation key set", 404
+
 
 @app.route('/translate/<sourcelangcode>/<targetlangcode>', methods=['GET'])
 def translate_string(sourcelangcode, targetlangcode):
@@ -2579,10 +2672,12 @@ def translate_string(sourcelangcode, targetlangcode):
         x = request.headers['ToTranslate']
         text_to_translate = urllib.parse.unquote(x)
 
-        translated_text = ITSTranslate.get_translation_with_source_language(sourcelangcode, targetlangcode, text_to_translate)
+        translated_text = ITSTranslate.get_translation_with_source_language(sourcelangcode, targetlangcode,
+                                                                            text_to_translate)
         return translated_text, 200
     else:
         return "Translations not available, check the azure translate string and the user's rights", 404
+
 
 @app.route('/sendmail', methods=['POST'])
 def send_mail():
@@ -2597,18 +2692,19 @@ def send_mail():
         # and now sent an email to the user
         try:
             ITSMailer.send_mail(company_id, data_dict["Subject"],
-                            data_dict["Body"],
-                            data_dict["To"],
-                            data_dict["CC"],
-                            data_dict["BCC"],
-                            data_dict["From"], [] ,
-                            data_dict["ReplyTo"])
+                                data_dict["Body"],
+                                data_dict["To"],
+                                data_dict["CC"],
+                                data_dict["BCC"],
+                                data_dict["From"], [],
+                                data_dict["ReplyTo"])
 
             return "An email is sent", 200
         except Exception as e:
             return str(e), 500
     else:
-        return "You are not authorised to sent emails",404
+        return "You are not authorised to sent emails", 404
+
 
 @app.route('/refreshpublics', methods=['POST'])
 def refresh_publics():
@@ -2621,13 +2717,13 @@ def refresh_publics():
         lastrefreshday = 0
         with ITSRestAPIDB.session_scope("") as session:
             param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                 ITSRestAPIORMExtensions.SystemParam.ParameterName == "LASTREPOREFRESH").first()
+                ITSRestAPIORMExtensions.SystemParam.ParameterName == "LASTREPOREFRESH").first()
             newinstall = False
             if param is None:
-              param = ITSRestAPIORMExtensions.SystemParam()
-              param.ParameterName  = "LASTREPOREFRESH"
-              session.add(param)
-              newinstall = True
+                param = ITSRestAPIORMExtensions.SystemParam()
+                param.ParameterName = "LASTREPOREFRESH"
+                session.add(param)
+                newinstall = True
             else:
                 lastrefreshday = int(param.ParValue)
             if lastrefreshday != currentrefreshday:
@@ -2635,25 +2731,27 @@ def refresh_publics():
                 clone_needed = True
 
         if clone_needed:
-            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-reporttemplates')
-            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-testtemplates')
-            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-testscreentemplates')
-            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-plugins')
-            ITSGit.clone_or_refresh_repo(app_instance_path(),'https://github.com/Quopt/itr-translations')
+            ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/itr-reporttemplates')
+            ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/itr-testtemplates')
+            ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/itr-testscreentemplates')
+            ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/itr-plugins')
+            ITSGit.clone_or_refresh_repo(app_instance_path(), 'https://github.com/Quopt/itr-translations')
 
         return "OK", 200
 
     else:
         return "You are not authorised to refresh the public repositories", 404
 
+
 @app.route('/listpublics/<reponame>', methods=['GET'])
 def list_publics(reponame):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
     if master_user:
-        #app_log.info("List publics %s %s", str(app_instance_path()), str(reponame))
+        # app_log.info("List publics %s %s", str(app_instance_path()), str(reponame))
         tempfile = ITSGit.list_repo_files(app_instance_path(), reponame)
-        return tempfile , 200
+        return tempfile, 200
+
 
 @app.route('/listpublics/<reponame>/<filename>', methods=['GET'])
 def list_publics_file(reponame, filename):
@@ -2674,7 +2772,8 @@ def list_publics_file(reponame, filename):
         else:
             return 'File not found', 404
 
-@app.route('/installpublics/itr-translations/<filename>', methods=['POST','DELETE'])
+
+@app.route('/installpublics/itr-translations/<filename>', methods=['POST', 'DELETE'])
 def install_publics_file(filename):
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)
@@ -2696,6 +2795,7 @@ def install_publics_file(filename):
                 app_log.error('Install publicsls API failed %s', str(e))
                 return "File delete failed. Maybe you do not have sufficient rights on the file system", 404
 
+
 @app.route('/installpublics/itr-api', methods=['POST'])
 def install_publics_itr_api():
     global APIRequiresRestart
@@ -2709,7 +2809,7 @@ def install_publics_itr_api():
         srcfoldername = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'ITR-API')
         newfoldername = os.path.join(os.sep, app.root_path)
         if request.method == "POST":
-            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
+            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername)
             ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername, True)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
@@ -2729,6 +2829,7 @@ def install_publics_itr_api():
             return "OK", 200
     return "You are not authorised to install public repositories", 403
 
+
 @app.route('/installpublics/itr-webclient', methods=['POST'])
 def install_publics_itr_webclient():
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
@@ -2740,7 +2841,7 @@ def install_publics_itr_webclient():
         srcfoldername = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'ITR-webclient')
         newfoldername = ITSRestAPISettings.get_setting('WEBFOLDER')
         if request.method == "POST":
-            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
+            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername)
             ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
 
         return "OK", 200
@@ -2758,7 +2859,7 @@ def install_publics_itr_public_api():
         srcfoldername = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'ITR-Public-API')
         newfoldername = ITSRestAPISettings.get_setting('EXTERNALAPIFOLDER')
         if request.method == "POST":
-            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername )
+            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername)
             ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername)
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
@@ -2766,6 +2867,7 @@ def install_publics_itr_public_api():
                 file_write.write(str(datetime.now()))
             return "OK", 200
     return "You are not authorised to install public repositories", 403
+
 
 @app.route('/installpublics/itr-stop', methods=['POST'])
 def install_publics_itr_restart():
@@ -2775,7 +2877,8 @@ def install_publics_itr_restart():
         try:
             os.chdir(app.root_path)
             app_log.info(app.root_path)
-            output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
+            output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
+                                         stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
             app_log.info(output_text.stdout)
         except Exception as err:
             app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
@@ -2785,9 +2888,11 @@ def install_publics_itr_restart():
 
     return "You are not authorised to stop the server", 403
 
+
 @app.route('/version', methods=['GET'])
 def version():
-    return "ITR API 8-mar-2020", 200
+    return "ITR API 2-may-2020", 200
+
 
 @app.route('/log/<logid>/<startlogdatetime>', methods=['GET'])
 def log(logid, startlogdatetime):
@@ -2806,18 +2911,19 @@ def log(logid, startlogdatetime):
 
             if start_datetime == "LAST":
                 # retrieve last 100 lines in the log
-                return jsonify(open(log_filename,"r").readlines()[-100:]), 200
+                return jsonify(open(log_filename, "r").readlines()[-100:]), 200
             elif start_datetime == "ALL":
                 # retrieve all log lines
-                return jsonify(open(log_filename,"r").readlines()), 200
+                return jsonify(open(log_filename, "r").readlines()), 200
             else:
-                lines_to_scan = open(log_filename,"r").readlines()
-                scan_index = len(lines_to_scan)-1
+                lines_to_scan = open(log_filename, "r").readlines()
+                scan_index = len(lines_to_scan) - 1
                 border = datetime.strptime(start_datetime, log_formatter.default_time_format)
                 line_found = False
                 while scan_index > 0 and not line_found:
                     try:
-                        line_border = datetime.strptime(lines_to_scan[scan_index][4:23], log_formatter.default_time_format)
+                        line_border = datetime.strptime(lines_to_scan[scan_index][4:23],
+                                                        log_formatter.default_time_format)
                         if line_border < border:
                             line_found = True
                         else:
@@ -2825,19 +2931,22 @@ def log(logid, startlogdatetime):
                     except:
                         scan_index -= 1
                 scan_index += 1
-                return jsonify(lines_to_scan[-(len(lines_to_scan)-scan_index):]), 200
+                return jsonify(lines_to_scan[-(len(lines_to_scan) - scan_index):]), 200
 
         except:
             return "You are not authorised to retrieve server log files using these parameters. It may also be that the log file is not present yet", 403
 
     return "You are not authorised to retrieve server log files", 403
 
+
 @app.errorhandler(500)
 def internal_error(error):
     app_log.error("Internal server error 500 : %s", error)
     return "500 error"
 
+
 waitress_thread = ""
+
 
 def start_waitress():
     global waitress_thread
@@ -2867,8 +2976,10 @@ def start_waitress():
     except:
         pass
 
-    app_log.info("Starting waitress server on port %s with %s threads and queue size of %s and connection limit %s.", itrport, itrthreads, itrqueue, connection_limit)
-    serve(app.wsgi_app, threads = itrthreads, listen="*:" + itrport, backlog=itrqueue, connection_limit=connection_limit)
+    app_log.info("Starting waitress server on port %s with %s threads and queue size of %s and connection limit %s.",
+                 itrport, itrthreads, itrqueue, connection_limit)
+    serve(app.wsgi_app, threads=itrthreads, listen="*:" + itrport, backlog=itrqueue, connection_limit=connection_limit)
+
 
 if __name__ == '__main__':
     # app.debug = True

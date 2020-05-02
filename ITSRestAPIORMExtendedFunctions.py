@@ -16,6 +16,7 @@ import ITSRestAPIDB
 import ITSRestAPILogin
 import ITSRestAPIORMExtensions
 from ITSLogging import *
+from ITSCache import check_in_cache, add_to_cache
 
 from sqlalchemy import *
 from sqlalchemy.orm import *
@@ -358,59 +359,63 @@ class ORMExtendedFunctions:
           user_object = ITSRestAPIORMExtensions.SecurityUser()
           # qry_session = sessionmaker(bind=ITSRestAPIDB.get_db_engine_connection_master())()
           if company_id != "":
-              with ITSRestAPIDB.session_scope("") as qry_session:
-                  user_object = qry_session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                      ITSRestAPIORMExtensions.SecurityUser.Email == user_id).filter(
-                      ITSRestAPIORMExtensions.SecurityUser.CompanyID == company_id).order_by(
-                      ITSRestAPIORMExtensions.SecurityUser.IsTestTakingUser).first()
+              user_object = check_in_cache("check_and_parse_request_parameters."+str(user_id) + str(company_id))
+              if user_object is None:
+                  with ITSRestAPIDB.session_scope("") as qry_session:
+                      user_object = qry_session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                          ITSRestAPIORMExtensions.SecurityUser.Email == user_id).filter(
+                          ITSRestAPIORMExtensions.SecurityUser.CompanyID == company_id).order_by(
+                          ITSRestAPIORMExtensions.SecurityUser.IsTestTakingUser).first()
+                      qry_session.expunge(user_object)
+                      add_to_cache("check_and_parse_request_parameters."+str(user_id) + str(company_id), user_object)
 
-                  # now check if this call can proceed
-                  proceed = True
-                  if required_minimum_access_level == ITR_minimum_access_levels.master_user:
-                      proceed = user_object.IsMasterUser == True
-                  if required_minimum_access_level == ITR_minimum_access_levels.test_taking_user:
-                      pass  # accessible to any logged in user
-                  if required_minimum_access_level == ITR_minimum_access_levels.regular_office_user:
-                      proceed = not user_object.IsTestTakingUser == True  # accessible to anybody that is no test taking user
-                  if required_minimum_access_level == ITR_minimum_access_levels.organisation_supervisor:
-                      proceed = user_object.IsOrganisationSupervisor == True
-                  if required_minimum_access_level == ITR_minimum_access_levels.test_author:
-                      proceed = user_object.IsTestAuthor == True
-                  if required_minimum_access_level == ITR_minimum_access_levels.password_manager:
-                      proceed = user_object.IsPasswordManager == True
-                  if required_minimum_access_level == ITR_minimum_access_levels.report_author:
-                      proceed = user_object.IsReportAuthor == True
-                  if required_minimum_access_level == ITR_minimum_access_levels.data_researcher:
-                      proceed = user_object.IsResearcher == True
-                  if required_minimum_access_level == ITR_minimum_access_levels.test_screen_template_author:
-                      proceed = user_object.IsTestScreenTemplateAuthor == True
-                  if required_minimum_access_level == ITR_minimum_access_levels.translator:
-                      proceed = user_object.IsTranslator == True
-                  if master_only:
-                      master_only = user_object.IsMasterUser == True  # master database can only be queried directly by master users
-                  limit_by_user_id = ""
-                  if user_object.MayWorkWithOwnObjectsOnly == True and object_to_query.may_work_with_own_objects_field != "":
-                      limit_by_user_id = str(user_object.ID)
+              # now check if this call can proceed
+              proceed = True
+              if required_minimum_access_level == ITR_minimum_access_levels.master_user:
+                  proceed = user_object.IsMasterUser == True
+              if required_minimum_access_level == ITR_minimum_access_levels.test_taking_user:
+                  pass  # accessible to any logged in user
+              if required_minimum_access_level == ITR_minimum_access_levels.regular_office_user:
+                  proceed = not user_object.IsTestTakingUser == True  # accessible to anybody that is no test taking user
+              if required_minimum_access_level == ITR_minimum_access_levels.organisation_supervisor:
+                  proceed = user_object.IsOrganisationSupervisor == True
+              if required_minimum_access_level == ITR_minimum_access_levels.test_author:
+                  proceed = user_object.IsTestAuthor == True
+              if required_minimum_access_level == ITR_minimum_access_levels.password_manager:
+                  proceed = user_object.IsPasswordManager == True
+              if required_minimum_access_level == ITR_minimum_access_levels.report_author:
+                  proceed = user_object.IsReportAuthor == True
+              if required_minimum_access_level == ITR_minimum_access_levels.data_researcher:
+                  proceed = user_object.IsResearcher == True
+              if required_minimum_access_level == ITR_minimum_access_levels.test_screen_template_author:
+                  proceed = user_object.IsTestScreenTemplateAuthor == True
+              if required_minimum_access_level == ITR_minimum_access_levels.translator:
+                  proceed = user_object.IsTranslator == True
+              if master_only:
+                  master_only = user_object.IsMasterUser == True  # master database can only be queried directly by master users
+              limit_by_user_id = ""
+              if user_object.MayWorkWithOwnObjectsOnly == True and object_to_query.may_work_with_own_objects_field != "":
+                  limit_by_user_id = str(user_object.ID)
 
-                  # and now check if the master of client db is requested and if this is actually allowed
-                  if proceed:
-                      if include_master:
-                          if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_nobody :
-                              include_master = false
-                              if not force_master_db:
-                                  app_log.error("MASTER database requested but revoked from security point of view. No rights.")
-                          if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_master_users :
-                              include_master = user_object.IsMasterUser
-                              if not include_master and not force_master_db:
-                                app_log.error("MASTER database requested but revoked from security point of view. No rights.")
-                          if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_all_regular_office_users :
-                              include_master = user_object.IsOfficeUser
-                              if not include_master and not force_master_db:
-                                app_log.error("MASTER database requested but revoked from security point of view. No rights.")
+              # and now check if the master of client db is requested and if this is actually allowed
+              if proceed:
+                  if include_master:
+                      if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_nobody :
+                          include_master = false
+                          if not force_master_db:
+                              app_log.error("MASTER database requested but revoked from security point of view. No rights.")
+                      if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_master_users :
+                          include_master = user_object.IsMasterUser
+                          if not include_master and not force_master_db:
+                            app_log.error("MASTER database requested but revoked from security point of view. No rights.")
+                      if self.master_db_accessible == ITSRestAPIORMExtensions.ITR_master_db_accessible.for_all_regular_office_users :
+                          include_master = user_object.IsOfficeUser
+                          if not include_master and not force_master_db:
+                            app_log.error("MASTER database requested but revoked from security point of view. No rights.")
 
-                  return company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, \
-                         page_size, proceed, record_filter, sort_fields, start_page, include_client, \
-                         user_object.IsTestTakingUser and not user_object.IsOfficeUser, user_object.ID
+              return company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, \
+                     page_size, proceed, record_filter, sort_fields, start_page, include_client, \
+                     user_object.IsTestTakingUser and not user_object.IsOfficeUser, user_object.ID
           else:
                   pass
                   # invalid session token. Just ignore and return.

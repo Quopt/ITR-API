@@ -27,7 +27,7 @@ import string
 import pyotp
 
 from ITSLogging import *
-
+from ITSCache import check_in_cache, add_to_cache
 
 class LoginUserResult(Enum):
     ok = 1
@@ -187,27 +187,31 @@ def create_session_token(user_id, company_id, login_token_type):
 
     return token
 
-
 def check_session_token(token_id):
     # Please note that the company id may change once on a token. This is currently not validated.
     # We only validate the combination of user_id and token_id for this token. IP addresses et cetera are ignored as well
     # this function returns True if the token is present and false if it is not
-    connection = ITSRestAPIDB.get_db_engine_connection()
-    number_of_tokens = 0
-    try:
-        check_for_dead_tokens(connection)
-        for recs in connection.execute(
-                'select count(*) from "SecurityWebSessionTokens" where "Token" = %s and "TokenValidated" > now() - interval \'10 minutes\' ',
-                token_id):
-            number_of_tokens = recs[0]
+    last_token_check = check_in_cache("check_session_token."+str(token_id))
+    if last_token_check is None:
+        connection = ITSRestAPIDB.get_db_engine_connection()
+        number_of_tokens = 0
+        try:
+            check_for_dead_tokens(connection)
+            for recs in connection.execute(
+                    'select count(*) from "SecurityWebSessionTokens" where "Token" = %s and "TokenValidated" > now() - interval \'10 minutes\' ',
+                    token_id):
+                number_of_tokens = recs[0]
 
-        if number_of_tokens == 1:
-            connection.execution_options(isolation_level="AUTOCOMMIT").execute(
-                'update "SecurityWebSessionTokens" set "TokenValidated" = now() where "Token" = %s and "TokenValidated"::time < ( now()::time - INTERVAL \'59 secs\' )',
-                token_id)
-    finally:
-        connection.dispose()
-    return number_of_tokens == 1
+            if number_of_tokens == 1:
+                connection.execution_options(isolation_level="AUTOCOMMIT").execute(
+                    'update "SecurityWebSessionTokens" set "TokenValidated" = now() where "Token" = %s and "TokenValidated"::time < ( now()::time - INTERVAL \'59 secs\' )',
+                    token_id)
+        finally:
+            connection.dispose()
+        add_to_cache("check_session_token."+str(token_id), { "number_of_tokens": number_of_tokens})
+        return number_of_tokens == 1
+    else:
+        return last_token_check["number_of_tokens"] == 1
 
 def delete_session_token(token_id):
     connection = ITSRestAPIDB.get_db_engine_connection()
@@ -216,39 +220,52 @@ def delete_session_token(token_id):
     finally:
         connection.dispose()
 
+check_for_dead_tokens_last_check = datetime.datetime.now().strftime("%H:%M")
 def check_for_dead_tokens(connection):
-    connection.execute(
-        'delete from "SecurityWebSessionTokens" where "TokenValidated" < now() - interval \'10 minutes\' ');
+    global check_for_dead_tokens_last_check
+    datecheck = datetime.datetime.now().strftime("%H:%M")
+    if check_for_dead_tokens_last_check != datecheck:
+        check_for_dead_tokens_last_check = datecheck
+
+        connection.execute(
+            'delete from "SecurityWebSessionTokens" where "TokenValidated" < now() - interval \'10 minutes\' ');
 
 
 def get_company_with_session_token(token_id):
     # Please note that the company id may change once on a token. This is currently not validated.
     # We only validate the combination of user_id and token_id for this token. IP addresses et cetera are ignored as well
     # this function returns True if the token is present and false if it is not
-    connection = ITSRestAPIDB.get_db_engine_connection()
-    number_of_tokens = 0
-    company_id = ""
+    comp_cache = check_in_cache("get_company_with_session_token."+str(token_id))
+    if comp_cache is None:
+        connection = ITSRestAPIDB.get_db_engine_connection()
+        number_of_tokens = 0
+        company_id = ""
 
-    try:
-        check_for_dead_tokens(connection)
-        for recs in connection.execute(
-                'select "CompanyID", "UserID" from "SecurityWebSessionTokens" where "Token" = %s and "TokenValidated" > now() - interval \'10 minutes\' ',
-                token_id):
-            company_id = recs[0]
-            user_id = recs[1]
+        try:
+            check_for_dead_tokens(connection)
+            for recs in connection.execute(
+                    'select "CompanyID", "UserID" from "SecurityWebSessionTokens" where "Token" = %s and "TokenValidated" > now() - interval \'10 minutes\' ',
+                    token_id):
+                company_id = recs[0]
+                user_id = recs[1]
 
-        if company_id != "":
-            connection.execution_options(isolation_level="AUTOCOMMIT").execute(
-                'update "SecurityWebSessionTokens" set "TokenValidated" = now() where "Token" = %s and "UserID" = %s',
-                token_id,
-                user_id)
-    finally:
-        connection.dispose()
-
-    return company_id
-
+            if company_id != "":
+                connection.execution_options(isolation_level="AUTOCOMMIT").execute(
+                    'update "SecurityWebSessionTokens" set "TokenValidated" = now() where "Token" = %s and "UserID" = %s',
+                    token_id,
+                    user_id)
+        finally:
+            connection.dispose()
+        add_to_cache("get_company_with_session_token."+str(token_id), {"company_id": company_id })
+        return company_id
+    else:
+        return comp_cache["company_id"]
 
 def get_info_with_session_token(token_id):
+    curkey = check_in_cache( 'get_info_with_session_token.' + token_id)
+    if curkey is not None:
+        return curkey["company_id"], curkey["user_id"], curkey["token_validated"]
+
     # get the user name as stored with the session token
     connection = ITSRestAPIDB.get_db_engine_connection()
     company_id = ""
@@ -266,10 +283,29 @@ def get_info_with_session_token(token_id):
     finally:
         connection.dispose()
 
+    add_to_cache('get_info_with_session_token.' + token_id, {
+        "company_id": company_id,
+        "user_id": user_id,
+        "token_validated": token_validated
+    })
     return company_id, user_id, token_validated
 
 
 def get_id_of_user_with_token_and_company_id(user_id, company_id):
+    curkey = check_in_cache('get_id_of_user_with_token_and_company_id.' + str(user_id) + str(company_id))
+    if curkey is not None:
+        return curkey["id_of_user"], \
+               curkey["master_user"], \
+               curkey["test_taking_user"], \
+               curkey["organisation_supervisor_user"], \
+               curkey["author_user"], \
+               curkey["author_report_user"], \
+               curkey["author_test_screen_templates_user"], \
+               curkey["translator_user"], \
+               curkey["office_user"], \
+               curkey["is_password_manager"], \
+               curkey["is_researcher"]
+
     # get the id of the user name with the company id and the user id
     connection = ITSRestAPIDB.get_db_engine_connection()
     id_of_user = ""
@@ -304,6 +340,19 @@ def get_id_of_user_with_token_and_company_id(user_id, company_id):
         except:
          pass
 
+    add_to_cache('get_id_of_user_with_token_and_company_id.' + str(user_id) + str(company_id), {
+        "id_of_user": id_of_user,
+        "master_user": master_user,
+        "test_taking_user": test_taking_user,
+        "organisation_supervisor_user": organisation_supervisor_user,
+        "author_user": author_user,
+        "author_report_user": author_report_user,
+        "author_test_screen_templates_user": author_test_screen_templates_user,
+        "translator_user": translator_user,
+        "office_user": office_user,
+        "is_password_manager": is_password_manager,
+        "is_researcher": is_researcher
+    })
     return id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher
 
 
@@ -376,7 +425,6 @@ def update_user_password(user_id, new_password, user_guid = ""):
                 clientconnection.dispose()
     finally:
         connection.dispose()
-
 
 def delete_session_token(token_id):
     connection = ITSRestAPIDB.get_db_engine_connection()
