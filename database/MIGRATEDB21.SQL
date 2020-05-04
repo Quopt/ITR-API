@@ -1,5 +1,5 @@
 alter table "SecurityWebSessionTokens"
-add column "TokenSessionID" uuid NOT NULL
+add column "TokenSessionID" uuid NULL
 
 update "SystemParam"
 set "ParValue" = '22'
