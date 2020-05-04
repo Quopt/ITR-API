@@ -181,7 +181,7 @@ def check_master_header(request):
             master_header = "Y"
 
         token = request.headers['SessionID']
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+        company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
@@ -568,23 +568,6 @@ def send_reset_password():
                                                                           'You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : ',
                                                                           app_instance_path(), True)
 
-        # filename = os.path.join(app_instance_path(), 'translations/', langcode + '.json')
-        # current_translation = json.load(open(filename, 'r'))
-        # translatedSubject, newTranslationSubject = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Subject', 'Password reset mail', current_translation)
-        # translatedMail, newTranslationMail = ITSTranslate.get_translation_if_needed(langcode, 'PasswordResetMail.Body', "You have requested a password reset. This link is valid for 5 minutes. Please copy & paste the following link in your browser window to reset your password : " , current_translation)
-        #
-        # if newTranslationMail or newTranslationSubject:
-        #     # write the translations into the file
-        #     current_translation['PasswordResetMail.Subject'] = {}
-        #     current_translation['PasswordResetMail.Subject']['value'] = translatedSubject
-        #     current_translation['PasswordResetMail.Body'] = {}
-        #     current_translation['PasswordResetMail.Body']['value'] = translatedMail
-        #     try:
-        #         with open(filename, 'w') as translationFile:
-        #             translationFile.write(json.dumps(current_translation, indent=1, sort_keys=True))
-        #             translationFile.close()
-        #     except:
-        #         pass
 
         ITSMailer.send_mail('Master', translatedSubject,
                             translatedMail + "\r\n" +
@@ -1479,12 +1462,26 @@ def sessions_get_id(identity):
                                                                                  ITR_minimum_access_levels.test_taking_user,
                                                                                  identity)
         if test_taking_user and not office_user:
+            temp_return = json.loads(to_return.data)
             try:
-                if str(to_return["PersonID"]) != str(id_of_user):
+                if str(temp_return["PersonID"]) != str(id_of_user):
                     return 404, "Session cannot be accessed as test taking user"
             except:
                 pass
-            return to_return
+
+            # now check if this is a public session. If so the clone the public session and return the new one
+            if str(temp_return["SessionType"]) == "200":
+                token = request.headers['SessionID']
+                company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(
+                    token)
+                new_session_id = token_session_id
+                ORMExtendedFunctions.clone_session(company_id, identity, new_session_id, 1, " " + datetime.now().strftime("%d-%b-%Y %H:%M"))
+
+                return ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
+                                                                                 ITR_minimum_access_levels.test_taking_user,
+                                                                                 new_session_id)
+            else:
+                return to_return
         else:
             return to_return
     elif request.method == 'POST':
@@ -1521,19 +1518,7 @@ def sessions_get_id(identity):
 
         return to_return
     elif request.method == 'DELETE':
-        # get the person id for this session first
-        with ITSRestAPIDB.session_scope(company_id) as qry_session:
-            sess = qry_session.query(ITSRestAPIORMExtensions.ClientSession).filter(
-                ITSRestAPIORMExtensions.ClientSession.ID == identity).first()
-
-            # then delete it
-            to_return = ITSRestAPIORMExtensions.ClientSession().delete_single_object(request,
-                                                                                     ITR_minimum_access_levels.regular_office_user,
-                                                                                     identity)
-
-            sessionPostTriggerDelete(identity, company_id, sess.PersonID)
-
-            return to_return
+        return ORMExtendedFunctions.delete_session(request, company_id, identity)
 
 
 def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, langcode):
@@ -1553,15 +1538,16 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
                                                                                  'Session %s is ready for reporting',
                                                                                  app_instance_path(), True)
             translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'SessionReadyMail.Body',
-                                                                              "The following session has completed : \r\n%s",
+                                                                              "The following session has completed : \r\n%s\r\n\r\n",
                                                                               app_instance_path(), True)
 
-            ITSMailer.send_mail(company_id, translatedSubject % temp_session.Description,
+            if (temp_session.SessionType != 1) or (temp_session.EMailNotificationAdresses != ''):
+                ITSMailer.send_mail(company_id, translatedSubject % temp_session.Description,
                                 translatedMail % temp_session.Description +
                                 "\r\n\r\n%s" % url_to_click,
                                 temp_session.EMailNotificationAdresses)
 
-            removeUnnecessaryUserLogins(company_id, temp_session.PersonID)
+            ORMExtendedFunctions.remove_unnecessary_user_logins(company_id, temp_session.PersonID)
 
             # Save an audit trail record
             new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
@@ -1599,39 +1585,7 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
             qry_session.add(new_audit_trail)
 
             if sess:
-                removeUnnecessaryUserLogins(company_id, sess.PersonID)
-
-
-def sessionPostTriggerDelete(session_id, company_id, id_of_user):
-    removeUnnecessaryUserLogins(company_id, id_of_user)
-    # remove linked stored reports
-    with ITSRestAPIDB.session_scope(company_id) as clientsession:
-        clientsession.query(ITSRestAPIORMExtensions.ClientGeneratedReport).filter(
-            ITSRestAPIORMExtensions.ClientGeneratedReport.LinkedObjectID == session_id
-        ).delete()
-        clientsession.query(ITSRestAPIORMExtensions.ClientAuditLog).filter(
-            ITSRestAPIORMExtensions.ClientAuditLog.SessionID == session_id
-        ).delete()
-
-
-def removeUnnecessaryUserLogins(company_id, id_of_user):
-    with ITSRestAPIDB.session_scope(company_id) as clientsession:
-        with ITSRestAPIDB.session_scope("") as mastersession:
-            temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
-                ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).filter(
-                ITSRestAPIORMExtensions.ClientSession.Active).count()
-            temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
-                ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
-                ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
-            if temp_session_tests == 0 or temp_sessions == 0:
-                # no tests to take for this person any more, remove the login
-                mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                    ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
-
-                person = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).filter(
-                    ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).first()
-                if person is not None:
-                    person.Active = False
+                ORMExtendedFunctions.remove_unnecessary_user_logins(company_id, sess.PersonID)
 
 
 @app.route('/reportdefinitions', methods=['GET'])
@@ -1732,7 +1686,7 @@ def companies_get_id(identity):
                                                                               ITR_minimum_access_levels.master_user,
                                                                               identity, "", True)
     elif request.method == 'DELETE' and master_user:
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+        company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
 
         # delete the database
         try:
@@ -1767,7 +1721,7 @@ def companies_get_id(identity):
 @app.route('/creditgrants', methods=['GET'])
 def creditgrants_get():
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
@@ -1794,7 +1748,7 @@ def creditgrants_get_id(identity):
     elif request.method == 'POST':
         # increase the companies credit level with the saved credit grant
         token = request.headers['SessionID']
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+        company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
@@ -1827,7 +1781,7 @@ def creditusage_get():
 @app.route('/creditusagespermonth', methods=['GET'])
 def creditusagespermonth_get():
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
@@ -1853,7 +1807,7 @@ def creditusagespermonth_get():
 @app.route('/creditusagespermonthforall/<year>', methods=['GET'])
 def creditusagespermonthforall_get(year):
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
@@ -1950,7 +1904,7 @@ def logins_get_id(identity):
     # get the session id and the user id from the token
     master_db_query = False
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     if identity == 'currentuser':
@@ -2083,7 +2037,7 @@ def logins_get_companies_memberships():
     # this is only available to the user him/herself
     # get the session id and the user id from the token
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
 
     if user_id != "":
         user_id = user_id.replace("'", "''")
@@ -2103,7 +2057,7 @@ def login_change_password():
     # get the session id and the user id from the token
     token = request.headers['SessionID']
     app_log.info('logins currentuser changepassword %s %s ', token, request.method)
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
@@ -2171,7 +2125,7 @@ def token_change_company(identity, newcompany):
     if master_user:
         try:
             token = request.headers['SessionID']
-            company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+            company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
 
             #invalidate all caching of users here
             reset_cache()
@@ -2360,7 +2314,7 @@ def tests_get_id(identity):
         cachefilename = "test.json"
         # test taking users may request all test definitions since they need them for test taking, but will get limited fields back to protect scoring and norming rules
         token = request.headers['SessionID']
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+        company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
         if (not office_user) and test_taking_user:
@@ -2442,7 +2396,7 @@ def files_get_id(company_id, maintainingObjectIdentity, fileType):
     if company_id == "master":
         masterFiles = True
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname = os.path.dirname(
@@ -2478,7 +2432,7 @@ def files_get_id(company_id, maintainingObjectIdentity, fileType):
 @app.route('/filecopy/<maintainingObjectIdentity_src>/<maintainingObjectIdentity_dst>', methods=['POST'])
 def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_dst):
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
     pathname_src = os.path.dirname(
@@ -2514,7 +2468,7 @@ def files_get_file(company_id, maintainingObjectIdentity, fileType, fileId):
             app_log.error('File API failed %s', str(e))
             return "File API failed", 500
         # get the company id from the token instead of the api
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+        company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
     fileType = fileType.upper()
@@ -2605,7 +2559,7 @@ def translations(langcode):
             return "[]", 200
     elif request.method == 'POST':
         token = request.headers['SessionID']
-        company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+        company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
@@ -2663,7 +2617,7 @@ def translations(langcode):
 @app.route('/translate/<sourcelangcode>/<targetlangcode>', methods=['GET'])
 def translate_string(sourcelangcode, targetlangcode):
     token = request.headers['SessionID']
-    company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 

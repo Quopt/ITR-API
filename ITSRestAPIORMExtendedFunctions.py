@@ -22,6 +22,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 from flask import *
 import traceback
+import uuid
 
 class ITR_minimum_access_levels(Enum):
     test_taking_user = 1
@@ -101,6 +102,9 @@ class ORMExtendedFunctions:
                     field_in_filter_line = field_in_filter_line[:-1]
                 if field_in_filter_line.endswith("%"):
                     separator = "like"
+                    field_in_filter_line = field_in_filter_line[:-1]
+                if field_in_filter_line.endswith("!"):
+                    separator = "<>"
                     field_in_filter_line = field_in_filter_line[:-1]
                 if field_in_filter_line in inspect(self).mapper.column_attrs:
                     if filter_where_single == "":
@@ -353,7 +357,7 @@ class ORMExtendedFunctions:
         # find out the user settings and if they may work with own objects only
         try:
           token = request.headers['SessionID']
-          company_id, user_id, token_validated = ITSRestAPILogin.get_info_with_session_token(token)
+          company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
           company_id = ITSRestAPILogin.get_company_with_session_token(token)
           # load the user via the ORM
           user_object = ITSRestAPIORMExtensions.SecurityUser()
@@ -638,3 +642,93 @@ class ORMExtendedFunctions:
                     return "OK", 200
         else:
             return "This action is not allowed", 403
+
+    @staticmethod
+    def clone_sqlalchemy_object(old, new):
+        for key in old.__table__.columns.keys():
+            setattr(new, key, getattr(old, key))
+
+    @staticmethod
+    def clone_session(company_id, oldid, newid, newsessiontype, add_stamp):
+        oldid = uuid.UUID(str(oldid))
+        newid = uuid.UUID(str(newid))
+        with ITSRestAPIDB.session_scope(company_id) as qry_session:
+            located_session = qry_session.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                ITSRestAPIORMExtensions.ClientSession.ID == oldid).first()
+
+            new_session = ITSRestAPIORMExtensions.ClientSession()
+            ORMExtendedFunctions.clone_sqlalchemy_object(located_session,new_session)
+            new_session.ID = newid
+            new_session.SessionType = newsessiontype
+            new_session.GroupSessionID = oldid
+            if add_stamp:
+                new_session.Description = new_session.Description + add_stamp
+            qry_session.add(new_session)
+
+            located_tests = qry_session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                ITSRestAPIORMExtensions.ClientSessionTest.SessionID == oldid)
+            for test in located_tests:
+                new_test = ITSRestAPIORMExtensions.ClientSessionTest()
+                ORMExtendedFunctions.clone_sqlalchemy_object(test, new_test)
+                new_test.ID = uuid.uuid4()
+                new_test.SessionID = newid
+                qry_session.add(new_test)
+
+    @staticmethod
+    def delete_session(request, company_id, sessionid, excluded_status_filter = [], included_session_types = []):
+        # get the person id for this session first
+        with ITSRestAPIDB.session_scope(company_id) as qry_session:
+            sess = qry_session.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                ITSRestAPIORMExtensions.ClientSession.ID == sessionid).first()
+
+            if sess is not None:
+                if (excluded_status_filter.__len__() == 0) or ((sess.Status not in excluded_status_filter) and (sess.SessionType in included_session_types)):
+                    # then delete it
+                    if (request is not None):
+                        to_return = ITSRestAPIORMExtensions.ClientSession().delete_single_object(request,
+                                                                                             ITR_minimum_access_levels.regular_office_user,
+                                                                                             sessionid)
+                    else:
+                        to_return = []
+                        qry_session.delete(sess)
+
+                    ORMExtendedFunctions.session_post_trigger_delete(sessionid, company_id, sess.PersonID)
+
+                    return to_return
+                else:
+                    return "[]"
+            else:
+                return "[]"
+
+    @staticmethod
+    def session_post_trigger_delete(session_id, company_id, id_of_user):
+        ORMExtendedFunctions.remove_unnecessary_user_logins(company_id, id_of_user)
+        # remove linked stored reports
+        with ITSRestAPIDB.session_scope(company_id) as clientsession:
+            clientsession.query(ITSRestAPIORMExtensions.ClientGeneratedReport).filter(
+                ITSRestAPIORMExtensions.ClientGeneratedReport.LinkedObjectID == session_id
+            ).delete()
+            clientsession.query(ITSRestAPIORMExtensions.ClientAuditLog).filter(
+                ITSRestAPIORMExtensions.ClientAuditLog.SessionID == session_id
+            ).delete()
+
+
+    @staticmethod
+    def remove_unnecessary_user_logins(company_id, id_of_user):
+        with ITSRestAPIDB.session_scope(company_id) as clientsession:
+            with ITSRestAPIDB.session_scope("") as mastersession:
+                temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                    ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).filter(
+                    ITSRestAPIORMExtensions.ClientSession.Active).count()
+                temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                    ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
+                    ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
+                if temp_session_tests == 0 or temp_sessions == 0:
+                    # no tests to take for this person any more, remove the login
+                    mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                        ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
+
+                    person = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                        ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).first()
+                    if person is not None:
+                        person.Active = False

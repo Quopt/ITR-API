@@ -81,7 +81,8 @@ def copy_folder_excluding_dot_folders(filepath_src, filepath_dst, alternatecopym
                    if os.path.isfile(d + ".old"):
                        os.remove(d + ".old")
                    shutil.copyfile(s, d + ".bkp")
-                   os.rename(d, d + ".old")
+                   if os.path.isfile(d):
+                       os.rename(d, d + ".old")
                    os.rename(d + ".bkp", d )
                   else:
                    shutil.copy2(s, d)

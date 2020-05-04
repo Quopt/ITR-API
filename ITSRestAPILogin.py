@@ -28,6 +28,7 @@ import pyotp
 
 from ITSLogging import *
 from ITSCache import check_in_cache, add_to_cache
+from ITSRestAPIORMExtendedFunctions import *
 
 class LoginUserResult(Enum):
     ok = 1
@@ -180,8 +181,9 @@ def create_session_token(user_id, company_id, login_token_type):
     connection = ITSRestAPIDB.get_db_engine_connection()
     check_for_dead_tokens(connection)
     try:
-        connection.execution_options(isolation_level="AUTOCOMMIT").execute('insert into "SecurityWebSessionTokens" ("Token", "UserID", "CompanyID", "IsTestTakingUser") values (%s,%s,%s,%s)',
-                       token, user_id, company_id, test_taking_user)
+        token_session_id = uuid.uuid4()
+        connection.execution_options(isolation_level="AUTOCOMMIT").execute('insert into "SecurityWebSessionTokens" ("Token", "UserID", "CompanyID", "IsTestTakingUser", "TokenSessionID") values (%s,%s,%s,%s,%s)',
+                       token, user_id, company_id, test_taking_user, token_session_id)
     finally:
         connection.dispose()
 
@@ -227,6 +229,13 @@ def check_for_dead_tokens(connection):
     if check_for_dead_tokens_last_check != datecheck:
         check_for_dead_tokens_last_check = datecheck
 
+        for recs in connection.execute(
+                'select "TokenSessionID", "CompanyID" from "SecurityWebSessionTokens" where "TokenValidated" < now() - interval \'9 minutes\' '):
+            try:
+                ORMExtendedFunctions.delete_session(None, recs[1], recs[0], [30,31], [1]);
+            except Exception as err:
+                app_log.info('Temp public session delete error %s', err)
+
         connection.execute(
             'delete from "SecurityWebSessionTokens" where "TokenValidated" < now() - interval \'10 minutes\' ');
 
@@ -264,31 +273,34 @@ def get_company_with_session_token(token_id):
 def get_info_with_session_token(token_id):
     curkey = check_in_cache( 'get_info_with_session_token.' + token_id)
     if curkey is not None:
-        return curkey["company_id"], curkey["user_id"], curkey["token_validated"]
+        return curkey["company_id"], curkey["user_id"], curkey["token_validated"], curkey["token_session_id"]
 
     # get the user name as stored with the session token
     connection = ITSRestAPIDB.get_db_engine_connection()
     company_id = ""
     user_id = ""
     token_validated = ""
+    token_session_id = ""
 
     try:
         check_for_dead_tokens(connection)
         for recs in connection.execute(
-                'select "CompanyID", "UserID", "TokenValidated" from "SecurityWebSessionTokens" where "Token" = %s ',
+                'select "CompanyID", "UserID", "TokenValidated", "TokenSessionID" from "SecurityWebSessionTokens" where "Token" = %s ',
                 token_id):
             company_id = recs[0]
             user_id = recs[1]
             token_validated = recs[2]
+            token_session_id = recs[3]
     finally:
         connection.dispose()
 
     add_to_cache('get_info_with_session_token.' + token_id, {
         "company_id": company_id,
         "user_id": user_id,
-        "token_validated": token_validated
+        "token_validated": token_validated,
+        "token_session_id": token_session_id
     })
-    return company_id, user_id, token_validated
+    return company_id, user_id, token_validated, token_session_id
 
 
 def get_id_of_user_with_token_and_company_id(user_id, company_id):
