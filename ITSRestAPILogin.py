@@ -179,7 +179,6 @@ def create_session_token(user_id, company_id, login_token_type):
     else:  # password reset token
         token = 'P' + uuid.uuid4().hex
     connection = ITSRestAPIDB.get_db_engine_connection()
-    check_for_dead_tokens(connection)
     try:
         token_session_id = uuid.uuid4()
         connection.execution_options(isolation_level="AUTOCOMMIT").execute('insert into "SecurityWebSessionTokens" ("Token", "UserID", "CompanyID", "IsTestTakingUser", "TokenSessionID") values (%s,%s,%s,%s,%s)',
@@ -251,7 +250,6 @@ def get_company_with_session_token(token_id):
         company_id = ""
 
         try:
-            check_for_dead_tokens(connection)
             for recs in connection.execute(
                     'select "CompanyID", "UserID" from "SecurityWebSessionTokens" where "Token" = %s and "TokenValidated" > now() - interval \'10 minutes\' ',
                     token_id):
@@ -283,7 +281,6 @@ def get_info_with_session_token(token_id):
     token_session_id = ""
 
     try:
-        check_for_dead_tokens(connection)
         for recs in connection.execute(
                 'select "CompanyID", "UserID", "TokenValidated", "TokenSessionID" from "SecurityWebSessionTokens" where "Token" = %s ',
                 token_id):

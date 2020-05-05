@@ -361,8 +361,6 @@ def active_sessions():
         server_amount_of_testrun_sessions = 0
 
         with ITSRestAPIDB.session_scope("") as session:
-            ITSRestAPILogin.check_for_dead_tokens(session)
-
             amount_of_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
                 ITSRestAPIORMExtensions.SecurityWebSessionToken.CompanyID == company_id).count()
             amount_of_testrun_sessions = session.query(ITSRestAPIORMExtensions.SecurityWebSessionToken).filter(
@@ -1446,6 +1444,50 @@ def sessions_delete_tests(identity):
         else:
             return 403, "you do not have the rights to delete tests from the session"
 
+@app.route('/sessions/group/<identity>', methods=['DELETE'])
+def group_session_delete(identity):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
+
+    if office_user:
+        # delete this by using queries. This might be a HUGE amount of data. Example queries :
+        # delete from "ClientAuditLog" where
+        # "SessionID" in (
+        # SELECT "ID" FROM public."ClientSessions"
+        # where "GroupSessionID" = '3a49058c-390b-476e-ea60-3564558644da' or "ID" = '3a49058c-390b-476e-ea60-3564558644da'
+        # 	)
+
+        # delete from "ClientSessionTests" where
+        # "SessionID" in (
+        # SELECT "ID" FROM public."ClientSessions"
+        # where "GroupSessionID" = '3a49058c-390b-476e-ea60-3564558644da' or "ID" = '3a49058c-390b-476e-ea60-3564558644da'
+        # 	)
+
+        # DELETE FROM public."ClientSessions"
+        # where "GroupSessionID" = '3a49058c-390b-476e-ea60-3564558644da' or "ID" = '3a49058c-390b-476e-ea60-3564558644da'
+        id = uuid.UUID(str(identity))
+        connection = ITSRestAPIDB.get_db_engine_connection_client(company_id)
+        try:
+            tempStr = """delete from "ClientAuditLog" where
+                        "SessionID" in (
+                         SELECT "ID" FROM public."ClientSessions"
+                        where "GroupSessionID" = '{id}' or "ID" = '{id}' ) """.format(id=id)
+            connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
+
+            tempStr = """delete from "ClientSessionTests" where
+                        "SessionID" in (
+                         SELECT "ID" FROM public."ClientSessions"
+                        where "GroupSessionID" = '{id}' or "ID" = '{id}' ) """.format(id=id)
+            connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
+
+            tempStr = """DELETE FROM public."ClientSessions"
+                        where "GroupSessionID" = '{id}' or "ID" = '{id}' """.format(id=id)
+            connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
+        finally:
+            connection.dispose()
+
+    else:
+        return 404, "Session cannot be deleted as test taking user"
 
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessions_get_id(identity):
@@ -1613,7 +1655,7 @@ def reportdefinition_get_id(identity):
             return (open(cachedfilename, 'r').read()), 200
         else:
             to_return = ITSRestAPIORMExtensions.Report().return_single_object(request,
-                                                                              ITR_minimum_access_levels.regular_office_user,
+                                                                              ITR_minimum_access_levels.test_taking_user,
                                                                               identity)
             try:
                 if to_return[1] == 404:
