@@ -71,7 +71,8 @@ def login_user(user_id, user_password, company_id=""):
         for recs in result:
             temp_user_guid = recs[1]
             temp_password = recs[2]
-            hashed_password = hashlib.sha512((user_password + str(temp_user_guid)).encode('utf-8')).hexdigest()
+            hashed_password = generate_hashed_password(user_password,temp_user_guid)
+                #hashlib.sha512((user_password + str(temp_user_guid)).encode('utf-8')).hexdigest()
             if hashed_password == temp_password or temp_password == user_password:
                 number_of_companies = number_of_companies + 1
                 last_logged_in_user_id = user_id
@@ -90,7 +91,7 @@ def login_user(user_id, user_password, company_id=""):
         password_ok = False
         if password == user_password:
             password_ok = True
-        hashed_password = hashlib.sha512((user_password + str(user_guid)).encode('utf-8')).hexdigest()
+        hashed_password = generate_hashed_password(user_password,user_guid)
         if hashed_password == password:
             password_ok = True
         if password_ok :
@@ -394,7 +395,7 @@ def create_or_update_testrun_user(user_guid, company_id, user_id, new_password, 
             new_user.Email = user_id
             new_user.UserName = user_id
             if new_password != "":
-                hashed_password = hashlib.sha512((new_password + str(user_guid)).encode('utf-8')).hexdigest()
+                hashed_password = generate_hashed_password(new_password,user_guid)
                 new_user.Password = hashed_password
             new_user.Active = active_status
             new_user.IsTestTakingUser = True
@@ -405,6 +406,9 @@ def create_or_update_testrun_user(user_guid, company_id, user_id, new_password, 
 def delete_login(user_guid):
     with ITSRestAPIDB.session_scope("") as session:
         session.query(ITSRestAPIORMExtensions.SecurityUser).filter(ITSRestAPIORMExtensions.SecurityUser.ID == user_guid).delete()
+
+def generate_hashed_password(new_password, user_guid):
+    return hashlib.sha512((new_password + str(user_guid)).encode('utf-8')).hexdigest()
 
 def update_user_password(user_id, new_password, user_guid = ""):
     connection = ITSRestAPIDB.get_db_engine_connection()
@@ -421,7 +425,7 @@ def update_user_password(user_id, new_password, user_guid = ""):
             company_id = recs[0]
             user_guid = recs[1]
 
-            hashed_password = hashlib.sha512((new_password + str(user_guid)).encode('utf-8')).hexdigest()
+            hashed_password = generate_hashed_password(new_password,user_guid)
             connection.execution_options(isolation_level="AUTOCOMMIT").execute('update "SecurityUsers" set "Password" = %s, "PasswordExpirationDate" = (NOW() + interval \'3 months\') where "Email" = %s and "ID" = %s',
                     hashed_password, user_id, user_guid)
 

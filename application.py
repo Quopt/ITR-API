@@ -814,6 +814,16 @@ def persons_get():
     return ITSRestAPIORMExtensions.ClientPerson().common_paginated_read_request(request,
                                                                                 ITR_minimum_access_levels.regular_office_user)
 
+@app.route('/persons/deleteunused', methods=['GET'])
+def persons_delete_unused():
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
+
+    if office_user:
+        ORMExtendedFunctions.remove_unused_user_logins(company_id)
+        return 200, "remove ok"
+    else:
+        return 404, "Users cannot be deleted with your rights"
 
 @app.route('/persons/<identity>', methods=['GET', 'POST', 'DELETE'])
 def persons_get_id(identity):
@@ -873,6 +883,7 @@ def persons_get_id(identity):
                 session.add(tempPerson)
 
         return to_return
+
 
     elif request.method == 'DELETE':
         # if the person is in the login table in the master database then delete the user and the related sessions
@@ -1450,44 +1461,104 @@ def group_session_delete(identity):
         request)
 
     if office_user:
-        # delete this by using queries. This might be a HUGE amount of data. Example queries :
-        # delete from "ClientAuditLog" where
-        # "SessionID" in (
-        # SELECT "ID" FROM public."ClientSessions"
-        # where "GroupSessionID" = '3a49058c-390b-476e-ea60-3564558644da' or "ID" = '3a49058c-390b-476e-ea60-3564558644da'
-        # 	)
-
-        # delete from "ClientSessionTests" where
-        # "SessionID" in (
-        # SELECT "ID" FROM public."ClientSessions"
-        # where "GroupSessionID" = '3a49058c-390b-476e-ea60-3564558644da' or "ID" = '3a49058c-390b-476e-ea60-3564558644da'
-        # 	)
-
-        # DELETE FROM public."ClientSessions"
-        # where "GroupSessionID" = '3a49058c-390b-476e-ea60-3564558644da' or "ID" = '3a49058c-390b-476e-ea60-3564558644da'
+        # delete this by using queries. This might be a HUGE amount of data.
         id = uuid.UUID(str(identity))
         connection = ITSRestAPIDB.get_db_engine_connection_client(company_id)
         try:
+            # TO DO check and delete all users
+            # select distinct "PersonID" FROM "ClientSessions"
+            #            where "GroupSessionID" = '3da74613-0113-41a0-d580-c2912be76368' or "ID" = '3da74613-0113-41a0-d580-c2912be76368'
+            # .filter((AddressBook.lastname == 'bulger') | (AddressBook.firstname == 'whitey'))
+            users_to_check = []
+            with ITSRestAPIDB.session_scope(company_id) as clientsession:
+                session_list = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                    (ITSRestAPIORMExtensions.ClientSession.ID == id) |
+                    (ITSRestAPIORMExtensions.ClientSession.GroupSessionID == id)).all()
+                for client_session in session_list:
+                    users_to_check.append(client_session.PersonID)
+
             tempStr = """delete from "ClientAuditLog" where
                         "SessionID" in (
-                         SELECT "ID" FROM public."ClientSessions"
+                         SELECT "ID" FROM "ClientSessions"
                         where "GroupSessionID" = '{id}' or "ID" = '{id}' ) """.format(id=id)
+            app_log.info('Bulk query %s ', tempStr)
             connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
 
             tempStr = """delete from "ClientSessionTests" where
                         "SessionID" in (
-                         SELECT "ID" FROM public."ClientSessions"
+                         SELECT "ID" FROM "ClientSessions"
                         where "GroupSessionID" = '{id}' or "ID" = '{id}' ) """.format(id=id)
+            app_log.info('Bulk query %s ', tempStr)
             connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
 
-            tempStr = """DELETE FROM public."ClientSessions"
-                        where "GroupSessionID" = '{id}' or "ID" = '{id}' """.format(id=id)
+            tempStr = """delete from "ClientGeneratedReports" where
+                        "LinkedObjectID" in (
+                         SELECT "ID" FROM "ClientSessions"
+                        where "GroupSessionID" = '{id}' or "ID" = '{id}' ) """.format(id=id)
+            app_log.info('Bulk query %s ', tempStr)
             connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
+
+            tempStr = """DELETE FROM "ClientSessions"
+                        where "GroupSessionID" = '{id}' or "ID" = '{id}' """.format(id=id)
+            app_log.info('Bulk query %s ', tempStr)
+            connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
+
+            for checkuser in users_to_check:
+                ORMExtendedFunctions.remove_unnecessary_user_logins(company_id, checkuser)
         finally:
             connection.dispose()
-
+        return "ok"
     else:
-        return 404, "Session cannot be deleted as test taking user"
+        return "Session cannot be deleted as test taking user"
+
+@app.route('/sessions/group/<identity>/archive', methods=['POST'])
+def archive_sessions_group_on(identity):
+    if archive_group_status_toggle(request, identity, False):
+        return 'OK'
+    else:
+        return "Archive status cannot be changed with your permissions"
+
+@app.route('/sessions/group/<identity>/unarchive', methods=['POST'])
+def archive_sessions_group_offch(identity):
+    if archive_group_status_toggle(request, identity, True):
+        return 'OK'
+    else:
+        return "Archive status cannot be changed with your permissions"
+
+
+def archive_group_status_toggle(request, session_id, archive_status):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
+
+    if office_user:
+        # delete this by using queries. This might be a HUGE amount of data.
+        id = uuid.UUID(str(session_id))
+        connection = ITSRestAPIDB.get_db_engine_connection_client(company_id)
+        try:
+            users_to_check = []
+            with ITSRestAPIDB.session_scope(company_id) as clientsession:
+                session_list = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                    (ITSRestAPIORMExtensions.ClientSession.ID == id) |
+                    (ITSRestAPIORMExtensions.ClientSession.GroupSessionID == id)).all()
+                for client_session in session_list:
+                    users_to_check.append(client_session.PersonID)
+
+            tempStr = """UPDATE "ClientSessions"
+                        set "Active" = {activeflag}
+                        where "GroupSessionID" = '{id}' or "ID" = '{id}' """.format(id=id, activeflag=archive_status)
+            app_log.info('Bulk query %s ', tempStr)
+            connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
+
+            for thisuser in users_to_check:
+                if archive_status:
+                    ORMExtendedFunctions.reactivate_archived_user_logins(company_id, thisuser)
+                else:
+                    ORMExtendedFunctions.remove_unnecessary_user_logins(company_id, thisuser)
+        finally:
+            connection.dispose()
+        return True
+    else:
+        return False
 
 @app.route('/sessions/<identity>', methods=['GET', 'POST', 'DELETE'])
 def sessions_get_id(identity):

@@ -16,6 +16,7 @@ import ITSRestAPIDB
 import ITSRestAPILogin
 import ITSRestAPIORMExtensions
 from ITSLogging import *
+import ITSEncrypt
 from ITSCache import check_in_cache, add_to_cache
 
 from sqlalchemy import *
@@ -691,6 +692,7 @@ class ORMExtendedFunctions:
                     else:
                         to_return = []
                         qry_session.delete(sess)
+                        app_log.info('Public session deleted %s %s', str(sess.ID), sess.Description)
 
                     ORMExtendedFunctions.session_post_trigger_delete(sessionid, company_id, sess.PersonID)
 
@@ -732,3 +734,46 @@ class ORMExtendedFunctions:
                         ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).first()
                     if person is not None:
                         person.Active = False
+
+    @staticmethod
+    def remove_unused_user_logins(company_id):
+        with ITSRestAPIDB.session_scope(company_id) as clientsession:
+            with ITSRestAPIDB.session_scope("") as mastersession:
+                # loop through all candidate users
+                all_users = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).fetchall()
+                for user in all_users:
+                    id_of_user = user.ID
+                    temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                        ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).count()
+                    temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                        ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).count()
+                    if temp_session_tests == 0 or temp_sessions == 0:
+                        # no tests to take for this person any more, remove the login
+                        mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                            ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
+
+                        person = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                            ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).delete()
+
+    # reactivate archived login ITSEncrypt.decrypt_string(user_found.Password)
+    def reactivate_archived_user_logins(company_id, id_of_user):
+        with ITSRestAPIDB.session_scope(company_id) as clientsession:
+            with ITSRestAPIDB.session_scope("") as mastersession:
+                temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                    ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).filter(
+                    ITSRestAPIORMExtensions.ClientSession.Active).count()
+                temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                    ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
+                    ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
+                if temp_session_tests > 0 or temp_sessions > 0:
+                    # no tests to take for this person any more, remove the login
+                    mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                        ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
+
+                    person = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                        ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).first()
+                    if person is not None:
+                        person.Active = True
+
+                        ITSRestAPILogin.create_or_update_testrun_user(id_of_user, company_id, person.EMail, ITSEncrypt.decrypt_string(person.Password),
+                                                      True, False)
