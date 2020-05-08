@@ -569,7 +569,7 @@ def send_reset_password():
 
         ITSMailer.send_mail('Master', translatedSubject,
                             translatedMail + "\r\n" +
-                            url_base + "/default.html?Token=" + token + "&Path=PasswordReset", user_id)
+                            url_base + "/?Token=" + token + "&Path=PasswordReset", user_id)
 
         return "An email is sent to the users known email address", 200
     else:
@@ -814,7 +814,7 @@ def persons_get():
     return ITSRestAPIORMExtensions.ClientPerson().common_paginated_read_request(request,
                                                                                 ITR_minimum_access_levels.regular_office_user)
 
-@app.route('/persons/deleteunused', methods=['GET'])
+@app.route('/persons/deleteunused', methods=['POST'])
 def persons_delete_unused():
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
         request)

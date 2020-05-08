@@ -725,7 +725,7 @@ class ORMExtendedFunctions:
                 temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
                     ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
                     ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
-                if temp_session_tests == 0 or temp_sessions == 0:
+                if temp_session_tests == 0 and temp_sessions == 0:
                     # no tests to take for this person any more, remove the login
                     mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
                         ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
@@ -740,14 +740,14 @@ class ORMExtendedFunctions:
         with ITSRestAPIDB.session_scope(company_id) as clientsession:
             with ITSRestAPIDB.session_scope("") as mastersession:
                 # loop through all candidate users
-                all_users = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).fetchall()
+                all_users = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).all()
                 for user in all_users:
                     id_of_user = user.ID
                     temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
                         ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).count()
                     temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
                         ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).count()
-                    if temp_session_tests == 0 or temp_sessions == 0:
+                    if temp_session_tests == 0 and temp_sessions == 0:
                         # no tests to take for this person any more, remove the login
                         mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
                             ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
