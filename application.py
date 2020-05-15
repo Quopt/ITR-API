@@ -1651,7 +1651,7 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
                                                                                  'Session %s is ready for reporting',
                                                                                  app_instance_path(), True)
             translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'SessionReadyMail.Body',
-                                                                              "The following session has completed : \r\n%s\r\n\r\n",
+                                                                              "The following session has completed : \r\n%s" + "\r\n\r\n",
                                                                               app_instance_path(), True)
 
             if (temp_session.SessionType != 1) or (temp_session.EMailNotificationAdresses != ''):
