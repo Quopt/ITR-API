@@ -844,47 +844,51 @@ def persons_get_id(identity):
         else:
             return to_return
     elif request.method == 'POST':
-        # if the person is in the login table in the master database then delete & recreate the user
-        tempPerson = ITSRestAPIORMExtensions.ClientPerson()
-        company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, page_size, proceed, record_filter, sort_fields, start_page, include_client, is_test_taking_user, user_id = tempPerson.check_and_parse_request_parameters(
-            "", tempPerson, request, ITR_minimum_access_levels.test_taking_user)
-        request.get_data()
-        data = request.data
-        data_dict = json.loads(data)
-        # save the password of the candidates in the database (NEVER save the password for consultants)
-        old_password = data_dict['Password']
-        new_password = ""
-        fix_password = False
-        allowed_fields_to_update = [col.name for col in ITSRestAPIORMExtensions.ClientPerson.__table__.columns]
-        if office_user:
-            new_password = ITSRestAPILogin.create_or_update_testrun_user(data_dict['ID'], company_id,
-                                                                         data_dict['EMail'], data_dict['Password'],
-                                                                         data_dict['Active'], False)
-            fix_password = (old_password != new_password and new_password != "") or old_password != ""
-        allowed_fields_to_update.remove("Password")
-        allowed_fields_to_update = ",".join(allowed_fields_to_update)
-        if test_taking_user and not office_user:
-            # check if the offered session is for this person
+        with ITSRestAPIDB.session_scope(company_id) as session:
+            # if the person is in the login table in the master database then delete & recreate the user
+            tempPerson = ITSRestAPIORMExtensions.ClientPerson()
+            company_id, filter_expression, include_archived, include_master, limit_by_user_id, master_only, page_size, proceed, record_filter, sort_fields, start_page, include_client, is_test_taking_user, user_id = tempPerson.check_and_parse_request_parameters(
+                "", tempPerson, request, ITR_minimum_access_levels.test_taking_user)
             request.get_data()
             data = request.data
             data_dict = json.loads(data)
-            if str(data_dict["ID"]) != str(id_of_user):
-                return "Person cannot be updated as test taking user", 404
-            allowed_fields_to_update = 'DateOfLastTest'
+            # save the password of the candidates in the database (NEVER save the password for consultants)
+            old_password = data_dict['Password']
+            new_password = ""
+            fix_password = False
+            allowed_fields_to_update = [col.name for col in ITSRestAPIORMExtensions.ClientPerson.__table__.columns]
+            if office_user:
+                if data_dict['Password'] == "":
+                    #no password is given but this might be an archived user with an old password in the user. Check that
+                    tempPerson = session.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                        ITSRestAPIORMExtensions.ClientPerson.ID == identity).first()
+                    if tempPerson is not None:
+                        data_dict['Password'] = ITSEncrypt.decrypt_string(tempPerson.Password)
+                new_password = ITSRestAPILogin.create_or_update_testrun_user(data_dict['ID'], company_id,
+                                                                             data_dict['EMail'], data_dict['Password'],
+                                                                             data_dict['Active'], False)
+                fix_password = (old_password != new_password and new_password != "") or old_password != ""
+            allowed_fields_to_update.remove("Password")
+            allowed_fields_to_update = ",".join(allowed_fields_to_update)
+            if test_taking_user and not office_user:
+                # check if the offered session is for this person
+                request.get_data()
+                data = request.data
+                data_dict = json.loads(data)
+                if str(data_dict["ID"]) != str(id_of_user):
+                    return "Person cannot be updated as test taking user", 404
+                allowed_fields_to_update = 'DateOfLastTest'
 
-        to_return = ITSRestAPIORMExtensions.ClientPerson().change_single_object(request,
-                                                                                ITR_minimum_access_levels.test_taking_user,
-                                                                                identity, allowed_fields_to_update)
-        if fix_password:
-            with ITSRestAPIDB.session_scope(company_id) as session:
+            to_return = ITSRestAPIORMExtensions.ClientPerson().change_single_object(request,
+                                                                                    ITR_minimum_access_levels.test_taking_user,
+                                                                                    identity, allowed_fields_to_update)
+            if fix_password:
                 tempPerson = session.query(ITSRestAPIORMExtensions.ClientPerson).filter(
                     ITSRestAPIORMExtensions.ClientPerson.ID == identity).first()
                 tempPerson.Password = ITSEncrypt.encrypt_string(new_password)
                 session.add(tempPerson)
 
-        return to_return
-
-
+            return to_return
     elif request.method == 'DELETE':
         # if the person is in the login table in the master database then delete the user and the related sessions
         if office_user:

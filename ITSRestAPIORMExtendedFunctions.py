@@ -766,7 +766,7 @@ class ORMExtendedFunctions:
                     ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
                     ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
                 if temp_session_tests > 0 or temp_sessions > 0:
-                    # no tests to take for this person any more, remove the login
+                    # there are tests to take for this person , reactivate the login
                     mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
                         ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
 
