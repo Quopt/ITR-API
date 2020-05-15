@@ -758,22 +758,18 @@ class ORMExtendedFunctions:
     # reactivate archived login ITSEncrypt.decrypt_string(user_found.Password)
     def reactivate_archived_user_logins(company_id, id_of_user):
         with ITSRestAPIDB.session_scope(company_id) as clientsession:
-            with ITSRestAPIDB.session_scope("") as mastersession:
-                temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
-                    ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).filter(
-                    ITSRestAPIORMExtensions.ClientSession.Active).count()
-                temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
-                    ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
-                    ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
-                if temp_session_tests > 0 or temp_sessions > 0:
-                    # there are tests to take for this person , reactivate the login
-                    mastersession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
-                        ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).delete()
+            temp_sessions = clientsession.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                ITSRestAPIORMExtensions.ClientSession.PersonID == id_of_user).filter(
+                ITSRestAPIORMExtensions.ClientSession.Active).count()
+            temp_session_tests = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                ITSRestAPIORMExtensions.ClientSessionTest.PersID == id_of_user).filter(
+                ITSRestAPIORMExtensions.ClientSessionTest.Status < 30).count()
+            if temp_session_tests > 0 or temp_sessions > 0:
+                # there are tests to take for this person , reactivate the login
+                person = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                    ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).first()
+                if person is not None:
+                    person.Active = True
 
-                    person = clientsession.query(ITSRestAPIORMExtensions.ClientPerson).filter(
-                        ITSRestAPIORMExtensions.ClientPerson.ID == id_of_user).first()
-                    if person is not None:
-                        person.Active = True
-
-                        ITSRestAPILogin.create_or_update_testrun_user(id_of_user, company_id, person.EMail, ITSEncrypt.decrypt_string(person.Password),
-                                                      True, False)
+                    ITSRestAPILogin.create_or_update_testrun_user(id_of_user, company_id, person.EMail, ITSEncrypt.decrypt_string(person.Password),
+                                                  True, False)
