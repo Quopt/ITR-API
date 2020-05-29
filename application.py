@@ -1065,7 +1065,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                 new_audit_trail.CompanyID = company_id
                 new_audit_trail.UserID = id_of_user
                 new_audit_trail.ObjectType = 2  # 2 = sessiontest
-                new_audit_trail.OldData = ""
+                new_audit_trail.OldData = str(json_obj["Results"])
                 new_audit_trail.NewData = '{ "CurrentPage": ' + str(json_obj["CurrentPage"]) + ', "TestID" : "' + str(
                     json_obj["TestID"]) + '" }'
                 new_audit_trail.AuditMessage = "Session test finished or viewed for test %%TestID%% at page %%CurrentPage%%"
