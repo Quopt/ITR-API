@@ -645,6 +645,30 @@ def clientauditlog_get_for_session(identity):
                                                                                   ITR_minimum_access_levels.regular_office_user,
                                                                                   additional_where_clause)
 
+global lastObjectTypeCleanUp
+lastObjectTypeCleanUp = ""
+@app.route('/audittrail/objecttype/<identity>', methods=['GET'])
+def clientauditlog_get_for_objecttype(identity):
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
+
+    global lastObjectTypeCleanUp
+
+    additional_where_clause = 'ObjectType = \'' + str(int(str(identity))) + '\''
+
+    # cleanup old object type logs
+    if lastObjectTypeCleanUp != date.today():
+        lastObjectTypeCleanUp = date.today()
+        with ITSRestAPIDB.session_scope(company_id) as clientsession:
+            clientsession.query(ITSRestAPIORMExtensions.ClientAuditLog).filter(
+                ITSRestAPIORMExtensions.ClientAuditLog.ObjectType > 1000 ).filter(
+                ITSRestAPIORMExtensions.ClientAuditLog.CreateDate <= date.today() - timedelta(days=90)
+            ).delete()
+
+    return ITSRestAPIORMExtensions.ClientAuditLog().common_paginated_read_request(request,
+                                                                                  ITR_minimum_access_levels.organisation_supervisor,
+                                                                                  additional_where_clause)
+
 
 @app.route('/audittrail/<identity>', methods=['GET', 'POST', 'DELETE'])
 def clientauditlog_get_id(identity):
@@ -1331,7 +1355,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
 
                     ITSMailer.send_mail('Master', translatedSubject % this_company.CurrentCreditLevel,
                                         translatedMail,
-                                        this_company.ContactEMail)
+                                        this_company.ContactEMail, consultant_id=id_of_user)
     else:
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
             # always save an audit trail record
@@ -1662,7 +1686,7 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
                 ITSMailer.send_mail(company_id, translatedSubject % temp_session.Description,
                                 translatedMail % temp_session.Description +
                                 "\r\n\r\n%s" % url_to_click,
-                                temp_session.EMailNotificationAdresses)
+                                temp_session.EMailNotificationAdresses, session_id=data_dict["ID"], consultant_id=id_of_user)
 
             ORMExtendedFunctions.remove_unnecessary_user_logins(company_id, temp_session.PersonID)
 
@@ -2768,7 +2792,7 @@ def send_mail():
                                 data_dict["CC"],
                                 data_dict["BCC"],
                                 data_dict["From"], [],
-                                data_dict["ReplyTo"])
+                                data_dict["ReplyTo"], consultant_id=id_of_user)
 
             return "An email is sent", 200
         except Exception as e:

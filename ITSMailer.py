@@ -19,6 +19,8 @@ import smtplib
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import uuid
+from datetime import datetime, timezone
 
 import ITSRestAPISettings
 import requests
@@ -27,7 +29,7 @@ import ITSRestAPIDB
 import ITSRestAPIORMExtensions
 
 def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver="", bcc_receiver="", from_sender="",
-              files_to_attach=[], reply_to = "", consultant_id="", post_payload="{}"):
+              files_to_attach=[], reply_to = "", consultant_id="", post_payload="{}", session_id=""):
     # check if there is a generic cc adress for this company
     temp_company = ""
     temp_cc_mail = ""
@@ -114,5 +116,30 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
         try:
             s.sendmail(from_sender, total_receiver.split(","), msg.as_string())
             app_log.info('Mail send to %s, cc %s, bcc %s. Subject %s, message content is hidden', to_receiver, cc_receiver, bcc_receiver ,mail_subject)
+
+            with ITSRestAPIDB.session_scope(customer_id) as qry_session:
+                # save an audit trail record
+                new_audit_trail = ITSRestAPIORMExtensions.ClientAuditLog()
+                new_audit_trail.ID = uuid.uuid4()
+                new_audit_trail.ObjectID = '00000000-0000-0000-0000-000000000000'
+                if session_id != "":
+                    new_audit_trail.SessionID = session_id
+                else:
+                    new_audit_trail.SessionID = '00000000-0000-0000-0000-000000000000'
+                if customer_id != "":
+                    new_audit_trail.CompanyID = customer_id
+                else:
+                    new_audit_trail.CompanyID = '00000000-0000-0000-0000-000000000000'
+                if consultant_id != "":
+                    new_audit_trail.UserID = consultant_id
+                else:
+                    new_audit_trail.UserID = '00000000-0000-0000-0000-000000000000'
+                new_audit_trail.ObjectType = 1001 # email
+                new_audit_trail.OldData = ""
+                new_audit_trail.NewData = '{ "To": "' + to_receiver+ '","CC": "' + cc_receiver+ '","BCC": "' + bcc_receiver+ '", "Subject" : "' + mail_subject+ '" }'
+                new_audit_trail.AuditMessage = "EMail sent to %%To%%, cc %%CC%%, bcc %%BCC%% with subject %%Subject%%"
+                new_audit_trail.MessageID = 1 # 1 email sent
+                new_audit_trail.CreateDate = datetime.now(timezone.utc)
+                qry_session.add(new_audit_trail)
         finally:
             s.quit()
