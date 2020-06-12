@@ -16,8 +16,6 @@ import http.client, urllib.parse, ITSRestAPISettings
 import json, uuid
 from ITSLogging import *
 
-#host = 'api.microsofttranslator.com'
-#path = '/V2/Http.svc/Translate'
 host = 'api.cognitive.microsofttranslator.com'
 path = '/translate'
 
@@ -59,6 +57,12 @@ def translation_available():
     return ITSRestAPISettings.get_setting_for_customer("",'TRANSLATE_AZURE_KEY', False, "") != ""
 
 def get_translation_with_source_language(source_language, target_language, text_to_translate):
+    if len(text_to_translate) < 5000:
+        return get_translation_with_source_language_part(source_language, target_language, text_to_translate)
+    else:
+        return text_to_translate # texts longer than 5000 characters cannot be translated
+
+def get_translation_with_source_language_part(source_language, target_language, text_to_translate):
     # Replace the subscriptionKey string value with your valid subscription key in the application.cfg file or environment variable TRANSLATE_AZURE_KEY
     subscriptionKey = ITSRestAPISettings.get_setting_for_customer("",'TRANSLATE_AZURE_KEY', False, "")
 
