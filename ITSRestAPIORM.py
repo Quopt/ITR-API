@@ -595,6 +595,7 @@ class TestScreenTemplate(Base):
     ScreenDefinitionIsReleased = Column(Boolean, nullable=False, server_default=text("False"))
     TemplateVariables = Column(UnicodeText, nullable=False, server_default=text("('')"))
     get_value_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    get_value_as_html_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     set_value_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     init_value_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     generator_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
