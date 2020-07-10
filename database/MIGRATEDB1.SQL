@@ -1282,7 +1282,6 @@ CREATE TABLE public."TestScreenTemplates"
     "ScreenDefinitionIsReleased" boolean NOT NULL DEFAULT false,
     "TemplateVariables" text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
     get_value_snippet text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
-    get_value_as_html_snippet text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
     set_value_snippet text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
     init_value_snippet text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
     generator_snippet text COLLATE pg_catalog."default" NOT NULL DEFAULT ''::text,
