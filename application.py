@@ -2122,6 +2122,8 @@ def logins_get_id(identity):
                     AllowedFieldsToChange.remove('MayOrderCredits')
                 if consultant.MayWorkWithBatteriesOnly:
                     AllowedFieldsToChange.remove('MayWorkWithBatteriesOnly')
+                AllowedFieldsToChange.remove('HasTestingOfficeAccess')
+                AllowedFieldsToChange.remove('HasEducationalOfficeAccess')
             if consultant.IsOrganisationSupervisor:
                 AllowedFieldsToChange.remove('IsMasterUser')
 
@@ -2704,7 +2706,8 @@ def translations(langcode):
         id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
             user_id, company_id)
 
-        if (master_user or translator_user) and ITSTranslate.translation_available():
+#        if (master_user or translator_user) and ITSTranslate.translation_available():
+        if ITSTranslate.translation_available():
             # get the request data into json
             linesChanged = 0
             request.get_data()

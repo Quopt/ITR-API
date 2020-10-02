@@ -473,7 +473,7 @@ class SecurityUser(ITSRestAPIORM.SecurityUser, ITSRestAPIORMExtendedFunctions.OR
                      "IsTestScreenTemplateAuthor", "IsResearcher",
                      "IsTranslator", "IsPasswordManager", "MayOrderCredits", "MayWorkWithBatteriesOnly", "DoNotRenewLicense",
                      "Active", "UserCulture", "SessionPool", "MayWorkWithOwnObjectsOnly",
-                     "SecurityTemplateID", "HasPersonalCreditPool", "CurrentPersonalCreditLevel"}
+                     "SecurityTemplateID", "HasPersonalCreditPool", "HasTestingOfficeAccess","HasEducationalOfficeAccess", "CurrentPersonalCreditLevel"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Email", "UserName", "MailAddress", "VisitingAddress", "InvoiceAddress",

@@ -36,6 +36,8 @@ class ITR_minimum_access_levels(Enum):
     test_screen_template_author = 8
     password_manager = 9
     data_researcher = 10
+    office_for_testing = 11
+    office_for_education = 12
 
 
 class ORMExtendedFunctions:

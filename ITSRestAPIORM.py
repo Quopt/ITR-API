@@ -531,6 +531,8 @@ class SecurityUser(Base):
     MayWorkWithOwnObjectsOnly = Column(Boolean, nullable=False, server_default=text("False"))
     SecurityTemplateID = Column(UUIDType(binary=False), server_default=text("'{00000000-0000-0000-0000-000000000000}'"))
     HasPersonalCreditPool = Column(Boolean, nullable=False, server_default=text("False"))
+    HasTestingOfficeAccess = Column(Boolean, nullable=False, server_default=text("True"))
+    HasEducationalOfficeAccess = Column(Boolean, nullable=False, server_default=text("False"))
     CurrentPersonalCreditLevel = Column(Integer, nullable=False, server_default=text("((0))"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
 
