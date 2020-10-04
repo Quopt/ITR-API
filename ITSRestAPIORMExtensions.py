@@ -94,7 +94,8 @@ class ClientEducation(ITSRestAPIORM.ClientEducation, ITSRestAPIORMExtendedFuncti
     select_fields = {"ID"
         , "Name"
         , "EducationGroup"
-        , "Active"}
+        , "Active"
+        , "EducationType" }
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Name", "EducationGroup", "Remarks"}
@@ -156,7 +157,8 @@ class ClientGroup(ITSRestAPIORM.ClientGroup, ITSRestAPIORMExtendedFunctions.ORME
         , "Description"
         , "UserDefinedFields"
         , "Active"
-        , "ManagedByUserID"}
+        , "ManagedByUserID"
+        , "GroupType"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Description", "UserDefinedFields", "Remarks"}
@@ -176,7 +178,8 @@ class ClientNationality(ITSRestAPIORM.ClientNationality, ITSRestAPIORMExtendedFu
     select_fields = {"ID"
         , "NationalityName"
         , "NationalityCode"
-        , "Translations"}
+        , "Translations"
+        , "NationalityType"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"NationalityName", "NationalityCode", "Translations", "Remarks"}
@@ -195,7 +198,12 @@ class ClientOrganisation(ITSRestAPIORM.ClientOrganisation, ITSRestAPIORMExtended
     select_fields = {"ID"
         , "Name"
         , "Address"
-        , "Logo", "ContactPerson", "ContactPhone", "ContactEMail", "Active"}
+        , "Logo"
+        , "ContactPerson"
+        , "ContactPhone"
+        , "ContactEMail"
+        , "Active"
+        , "OrganisationType"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"Name", "Address", "Logo", "ContactPerson", "ContactPhone", "ContactEMail", "Remarks"}
@@ -231,7 +239,8 @@ class ClientPerson(ITSRestAPIORM.ClientPerson, ITSRestAPIORMExtendedFunctions.OR
         , "Age"
         , "CompanyID"
         , "Active"
-        , "ManagedByUserID"}
+        , "ManagedByUserID"
+        , "PersonType"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"EMail", "FirstName"

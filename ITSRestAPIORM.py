@@ -83,6 +83,7 @@ class ClientEducation(Base):
     __tablename__ = 'ClientEducations'
     __table_args__ = (
         Index('IX_CE_Name', 'Name', unique=False),
+        Index('IX_CE_EducationType', 'EducationType', unique=False),
         #{'schema': 'ITR'}
     )
 
@@ -92,7 +93,7 @@ class ClientEducation(Base):
     Remarks = Column(UnicodeText, nullable=False, server_default=text("('')"))
     Active = Column(Boolean, nullable=False, server_default=text("True"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
-
+    EducationType = Column(SmallInteger, nullable=False, server_default=text("((0))"))
 
 class ClientGeneratedReport(Base):
     __tablename__ = 'ClientGeneratedReports'
@@ -135,7 +136,7 @@ class ClientGroup(Base):
     __table_args__ = (
         Index('IX_CG_Description', 'Description', unique=False),
         Index('IX_CG_ManagedByUserID', 'ManagedByUserID', unique=False),
-        Index('IX_CG_ReportType', 'ReportType', unique=False),
+        Index('IX_CG_GroupType', 'GroupType', unique=False),
         #{'schema': 'ITR'}
     )
 
@@ -147,7 +148,7 @@ class ClientGroup(Base):
     Active = Column(Boolean, nullable=False, server_default=text("True"))
     ManagedByUserID = Column(UUIDType(binary=False), nullable=False,
                              server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
-    ReportType = Column(SmallInteger, nullable=False, server_default=text("((10))"))
+    GroupType = Column(SmallInteger, nullable=False, server_default=text("((0))"))
 
 
 class ClientNationality(Base):
@@ -155,6 +156,7 @@ class ClientNationality(Base):
     __table_args__ = (
         Index('IX_CN_NationalityName', 'NationalityName', unique=False),
         Index('IX_CN_NationalityCode', 'NationalityCode', unique=False),
+        Index('IX_CN_NationalityType', 'NationalityType', unique=False),
         #{'schema': 'ITR'}
     )
 
@@ -164,12 +166,13 @@ class ClientNationality(Base):
     Translations = Column(UnicodeText, nullable=False, server_default=text("('')"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
     Remarks = Column(UnicodeText, nullable=False, server_default=text("('')"))
-
+    NationalityType = Column(SmallInteger, nullable=False, server_default=text("((0))"))
 
 class ClientOrganisation(Base):
     __tablename__ = 'ClientOrganisations'
     __table_args__ = (
         Index('IX_CO_Name', 'Name', unique=False),
+        Index('IX_CO_OrganisationType', 'OrganisationType', unique=False),
         #{'schema': 'ITR'}
     )
 
@@ -183,6 +186,7 @@ class ClientOrganisation(Base):
     Remarks = Column(UnicodeText, nullable=False)
     Active = Column(Boolean, nullable=False, server_default=text("True"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
+    OrganisationType = Column(SmallInteger, nullable=False, server_default=text("((0))"))
 
 class ClientPerson(Base):
     __tablename__ = 'ClientPersons'
@@ -197,6 +201,7 @@ class ClientPerson(Base):
         Index('IX_CP_BirthDate', 'BirthDate', unique=False),
         Index('IX_CP_CompanyID', 'CompanyID', unique=False),
         Index('IX_CP_ManagedByUserID', 'ManagedByUserID', unique=False),
+        Index('IX_CP_PersonType', 'PersonType', unique=False),
         #{'schema': 'ITR'}
     )
 
@@ -227,6 +232,7 @@ class ClientPerson(Base):
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
     ManagedByUserID = Column(UUIDType(binary=False), nullable=False,
                              server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
+    PersonType = Column(SmallInteger, nullable=False, server_default=text("((0))"))
 
 
 class ClientSessionTest(Base):
