@@ -14,6 +14,7 @@
 
 import http.client, urllib.parse, ITSRestAPISettings
 import json, uuid
+import ssl
 from ITSLogging import *
 
 host = 'api.cognitive.microsofttranslator.com'
@@ -76,14 +77,15 @@ def get_translation_with_source_language_part(source_language, target_language, 
          tempbody["Text"] = text_to_translate
          body = '['+ json.dumps(tempbody) + ']' 
          #body = ('[{"Text": "%s"}]' % str(text_to_translate).replace('"','\"'))
-         conn = http.client.HTTPSConnection(host)
+         conn = http.client.HTTPSConnection(host, context = ssl._create_unverified_context())
          conn.request("POST", path + params, body, headers)
          response = conn.getresponse()
          json_string = response.read()
          root = json.loads(json_string)
 
          return root[0]['translations'][0]['text']
-        except:
-         return None
+        except Exception as e:
+            app_log.error("%s", e)
+            return None
     else:
         return None
