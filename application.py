@@ -748,7 +748,7 @@ def generatedreports_get(sourceid):
                     ITSRestAPIORMExtensions.ClientGeneratedReport.LinkedObjectID == sourceid
                 ).delete()
         else:
-            return 403, "You do not have the rights to remove generated session reports"
+            return "You do not have the rights to remove generated session reports", 403
 
 
 @app.route('/generatedreports/<sourceid>/<identity>', methods=['GET', 'POST', 'DELETE'])
@@ -845,9 +845,9 @@ def persons_delete_unused():
 
     if office_user:
         ORMExtendedFunctions.remove_unused_user_logins(company_id)
-        return 200, "remove ok"
+        return "remove ok", 200
     else:
-        return 404, "Users cannot be deleted with your rights"
+        return "Users cannot be deleted with your rights", 404
 
 @app.route('/persons/<identity>', methods=['GET', 'POST', 'DELETE'])
 def persons_get_id(identity):
@@ -940,7 +940,7 @@ def persons_get_id_password(identity):
                 ITSRestAPIORMExtensions.ClientPerson.ID == identity).first()
             return '{"Password":"' + ITSEncrypt.decrypt_string(user_found.Password) + '"}'
     else:
-        return 403, "You do not have the right to view a candidate password"
+        return "You do not have the right to view a candidate password", 403
 
 
 @app.route('/sessiontests', methods=['GET'])
@@ -1388,8 +1388,11 @@ def sessionteststaking_get(sessionid):
 
 @app.route('/sessionteststaking/<sessionid>/<identity>', methods=['GET', 'POST'])
 def sessionteststaking_get_id(sessionid, identity):
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
-        request)
+    try:
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+          request)
+    except:
+        return "Session expired", 403
 
     try:
         langcode = request.headers['ITRLang']
@@ -1402,7 +1405,7 @@ def sessionteststaking_get_id(sessionid, identity):
                                                                                      identity)
         try:
             if str(to_return["PersID"]) != str(id_of_user):
-                return 404, "Session cannot be accessed as test taking user"
+                return "Session cannot be accessed as test taking user", 404
         except:
             pass
         return to_return
@@ -1412,14 +1415,14 @@ def sessionteststaking_get_id(sessionid, identity):
         data = request.data
         data_dict = json.loads(data)
         if str(data_dict["PersID"]) != str(id_of_user):
-            return 404, "Session cannot be updated as test taking user"
+            return  "Session cannot be updated as test taking user", 404
         # check if the session in the database is also for this person
         to_check = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                     ITR_minimum_access_levels.test_taking_user,
                                                                                     identity)
         jsonObj = json.loads(to_check.data)
         if str(jsonObj["PersID"]) != str(id_of_user) or str(jsonObj["SessionID"]) != str(sessionid):
-            return 404, "Session cannot be updated as test taking user"
+            return  "Session cannot be updated as test taking user", 404
 
         to_return = ITSRestAPIORMExtensions.ClientSessionTest().change_single_object(request,
                                                                                      ITR_minimum_access_levels.test_taking_user,
@@ -1481,7 +1484,7 @@ def sessions_delete_tests(identity):
 
             return "OK", 200
         else:
-            return 403, "you do not have the rights to delete tests from the session"
+            return "you do not have the rights to delete tests from the session", 403
 
 @app.route('/sessions/group/<identity>', methods=['DELETE'])
 def group_session_delete(identity):
@@ -1606,7 +1609,7 @@ def sessions_get_id(identity):
             temp_return = json.loads(to_return.data)
             try:
                 if str(temp_return["PersonID"]) != str(id_of_user):
-                    return 404, "Session cannot be accessed as test taking user"
+                    return "Session cannot be accessed as test taking user", 404
             except:
                 pass
 
@@ -1636,7 +1639,7 @@ def sessions_get_id(identity):
         if test_taking_user and not office_user:
             # check if the offered session is for this person
             if str(data_dict["PersonID"]) != str(id_of_user):
-                return 404, "Session cannot be updated as test taking user"
+                return "Session cannot be updated as test taking user", 404
             # check if the session in the database is also for this person
             to_return = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
                                                                                      ITR_minimum_access_levels.test_taking_user,
@@ -1644,7 +1647,7 @@ def sessions_get_id(identity):
 
             try:
                 if to_return["PersonID"] != id_of_user or to_return["ID"] != data_dict["ID"]:
-                    return 404, "Session cannot be updated as test taking user"
+                    return "Session cannot be updated as test taking user", 404
             except:
                 pass
 
