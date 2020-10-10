@@ -2210,22 +2210,19 @@ def login_change_password():
     if user_id != "":
         user_id = user_id.replace("'", "''")
 
-        if not office_user:
-            return "You do not have sufficient rights to change your password", 404
-        else:
-            request.get_data()
-            temp_param = ITSHelpers.Empty()
-            temp_param = json.loads(request.data)
-            oldPW = temp_param["old_password"]
-            newPW = temp_param["new_password"]
+        request.get_data()
+        temp_param = ITSHelpers.Empty()
+        temp_param = json.loads(request.data)
+        oldPW = temp_param["old_password"]
+        newPW = temp_param["new_password"]
 
-            login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, oldPW, company_id)
-            if login_result in (
-            ITSRestAPILogin.LoginUserResult.ok, ITSRestAPILogin.LoginUserResult.multiple_companies_found):
-                ITSRestAPILogin.update_user_password(user_id, newPW)
-                return "The password has been changed", 200
-            else:
-                return "Your old password is not correct, please retry", 404
+        login_result, found_company_id, is_test_taking_user = ITSRestAPILogin.login_user(user_id, oldPW, company_id)
+        if login_result in (
+        ITSRestAPILogin.LoginUserResult.ok, ITSRestAPILogin.LoginUserResult.multiple_companies_found):
+            ITSRestAPILogin.update_user_password(user_id, newPW)
+            return "The password has been changed", 200
+        else:
+            return "Your old password is not correct, please retry", 404
     else:
         return "User not found or no known token linked to this user", 404
 
