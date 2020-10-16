@@ -384,9 +384,39 @@ def active_sessions():
 
 @app.route('/login', methods=['GET'])
 def login():
+    user_id = ""
+    user_password = ""
+    poll = ""
+
+    # first check if there is a polling code in the headers
+    try:
+        poll = request.headers['Poll']
+    except:
+        pass
+    try:
+        if poll != "":
+            # try to locate the customer and sessions this poll is for
+            with ITSRestAPIDB.session_scope("") as session:
+                tempSession = session.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                    ITSRestAPIORMExtensions.ClientSession.ShortLoginCode == poll).first()
+                tempUser = session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                    ITSRestAPIORMExtensions.SecurityUser.ID == tempSession.PersonID)\
+                    .filter(ITSRestAPIORMExtensions.SecurityUser.IsTestTakingUser == True)\
+                    .filter(ITSRestAPIORMExtensions.SecurityUser.IsOfficeUser == False).first()
+
+                with ITSRestAPIDB.session_scope(tempUser.CompanyID) as session_customer:
+                    tempCustomerUser = session_customer.query(ITSRestAPIORMExtensions.ClientPerson).filter(
+                    ITSRestAPIORMExtensions.ClientPerson.ID == tempSession.PersonID).first()
+
+                    user_id = tempUser.Email
+                    user_password = ITSEncrypt.decrypt_string(tempCustomerUser.Password)
+    except:
+        return 'Poll code not found', 401
     # get the user id and password from the header
-    user_id = request.headers['UserID']
-    user_password = request.headers['Password']
+    if user_id == "":
+        user_id = request.headers['UserID']
+    if user_password == "":
+        user_password = request.headers['Password']
     user_company = ""
     ip_address = getIP(request)  # we need to check for ip in the future
     www = getWWW(request)
@@ -1538,6 +1568,16 @@ def group_session_delete(identity):
                 ORMExtendedFunctions.remove_unnecessary_user_logins(company_id, checkuser)
         finally:
             connection.dispose()
+
+        connection = ITSRestAPIDB.get_db_engine_connection_master()
+        try:
+            tempStr = """DELETE FROM "ClientSessions"
+                        where "GroupSessionID" = '{id}' or "ID" = '{id}' """.format(id=id)
+            app_log.info('Bulk query %s ', tempStr)
+            connection.execution_options(isolation_level="AUTOCOMMIT").execute(tempStr)
+        finally:
+            connection.dispose()
+
         return "ok"
     else:
         return "Session cannot be deleted as test taking user"
@@ -1613,8 +1653,8 @@ def sessions_get_id(identity):
             except:
                 pass
 
-            # now check if this is a public session. If so the clone the public session and return the new one
-            if str(temp_return["SessionType"]) == "200":
+            # now check if this is a public session. If so then clone the public session and return the new one
+            if str(temp_return["SessionType"]) == "200" or str(temp_return["SessionType"]) == "1200" :
                 token = request.headers['SessionID']
                 company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(
                     token)
@@ -1651,7 +1691,14 @@ def sessions_get_id(identity):
             except:
                 pass
 
-            allowed_fields_to_update = 'Status,SessionState,AllowedStartDateTime,AllowedEndDateTime,StartedAt,EndedAt,PluginData'
+            allowed_fields_to_update = 'Status,SessionState,StartedAt,EndedAt,PluginData'
+
+        if office_user:
+            # check if there is a short login code. If so AND this is a group session type (200 or 1200) then save the session in the master database as well.
+            if ( str(data_dict["SessionType"]) == "200" or str(data_dict["SessionType"]) == "1200" ) and (str(data_dict["ShortLoginCode"]) != ""):
+                ITSRestAPIORMExtensions.ClientSession().change_single_object(request,
+                                                                             ITR_minimum_access_levels.test_taking_user,
+                                                                             identity, "", True)
 
         to_return = ITSRestAPIORMExtensions.ClientSession().change_single_object(request,
                                                                                  ITR_minimum_access_levels.test_taking_user,

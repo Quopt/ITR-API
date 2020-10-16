@@ -291,6 +291,7 @@ class ClientSession(Base):
         Index('IX_CS_AllowedEndDateTime', 'AllowedEndDateTime', unique=False),
         Index('IX_CS_Status', 'Status', unique=False),
         Index('IX_CS_ManagedByUserID', 'ManagedByUserID', unique=False),
+        Index('IX_CS_ShortLoginCode', 'ShortLoginCode', unique=False)
         #{'schema': 'ITR'}
     )
 
@@ -313,6 +314,7 @@ class ClientSession(Base):
     Status = Column(Integer, nullable=False, server_default=text("((1))"))
     Active = Column(Boolean, nullable=False, server_default=text("True"))
     EMailNotificationAdresses = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    ShortLoginCode = Column(Unicode(40), nullable=False, server_default=text("('')"))
     EnforceSessionEndDateTime = Column(Boolean, nullable=False, server_default=text("False"))
     ManagedByUserID = Column(UUIDType(binary=False), nullable=False,
                              server_default=text("('{00000000-0000-0000-0000-000000000000}')"))
