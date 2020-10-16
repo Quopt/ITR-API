@@ -24,6 +24,10 @@ app_log = logging.getLogger('root')
 log_file = 'instance/log/ITR_API.log'
 log_handler_backup_count = 10
 filemode = 'a' if os.path.exists(log_file) else 'w'
+# create log folder
+if not os.path.isdir('instance/log'):
+    os.makedirs ('instance/log')
+
 ttylog = logging.StreamHandler(sys.stdout)
 its_logging_initialised = False
 
