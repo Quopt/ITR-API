@@ -2927,6 +2927,7 @@ def install_publics_file(filename):
         newfilename = os.path.join(os.sep, app_instance_path(), 'translations', filename)
         if request.method == "POST":
             try:
+                os.makedirs(os.path.dirname(newfilename), exist_ok=True)
                 shutil.copyfile(srcfilename, newfilename)
                 return "OK", 200
             except Exception as e:
