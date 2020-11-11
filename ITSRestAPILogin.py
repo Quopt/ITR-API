@@ -302,7 +302,7 @@ def get_info_with_session_token(token_id):
 
 
 def get_id_of_user_with_token_and_company_id(user_id, company_id):
-    curkey = check_in_cache('get_id_of_user_with_token_and_company_id.' + str(user_id) + str(company_id))
+    curkey = check_in_cache('get_id_of_user_with_token_and_company_id.' + str(user_id) + '.' + str(company_id))
     if curkey is not None:
         return curkey["id_of_user"], \
                curkey["master_user"], \
@@ -350,7 +350,7 @@ def get_id_of_user_with_token_and_company_id(user_id, company_id):
         except:
          pass
 
-    add_to_cache('get_id_of_user_with_token_and_company_id.' + str(user_id) + str(company_id), {
+    add_to_cache('get_id_of_user_with_token_and_company_id.' + str(user_id) + '.' + str(company_id), {
         "id_of_user": id_of_user,
         "master_user": master_user,
         "test_taking_user": test_taking_user,

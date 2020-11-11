@@ -46,7 +46,7 @@ import ITSTranslate
 import ITSHelpers
 import ITSGit
 import ITSEncrypt
-from ITSCache import check_in_cache, add_to_cache, reset_cache
+from ITSCache import check_in_cache, add_to_cache, reset_cache, add_to_cache_with_timeout, remove_from_cache
 
 app = Flask(__name__, instance_relative_config=True)
 app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/api')
@@ -276,7 +276,7 @@ def route_copyright():
                 if param is not None:
                     parValue = param.ParValue
 
-        add_to_cache("copyright."+wwwid, parValue)
+        add_to_cache_with_timeout("copyright."+wwwid, 10, parValue)
         return parValue, 200
     else:
         return return_obj, 200
@@ -312,7 +312,7 @@ def route_companyname():
                 if param is not None:
                     parValue = param.ParValue
 
-        add_to_cache("companyname." + wwwid, parValue)
+        add_to_cache_with_timeout("companyname." + wwwid, 10, parValue)
         return parValue, 200
     else:
         return return_obj, 200
@@ -343,7 +343,7 @@ def route_companylogo():
         except:
             pass
 
-        add_to_cache("companylogo." + wwwid, parValue)
+        add_to_cache_with_timeout("companylogo." + wwwid, 10, parValue)
         return parValue, 200
     else:
         return return_obj, 200
@@ -2369,13 +2369,27 @@ def systemsettings_get_id(identity):
     with ITSRestAPIDB.session_scope(sessionid) as session:
         if request.method == 'GET':
             if identity == "CC_ADDRESS":
+                cached = check_in_cache('systemsettings.' + str(company_id) + "." + identity)
+                if cached is not None:
+                    return cached
+
                 with ITSRestAPIDB.session_scope("") as master_session:
                     comp = master_session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
                         ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
+
+                    add_to_cache_with_timeout('systemsettings.' + str(company_id) + "." + identity, 60, comp.CCEMail)
+
                     return comp.CCEMail
             else:
-                param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
-                    ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).first()
+                param = check_in_cache('systemsettings.' + str(company_id) + "." + identity)
+
+                if param is None:
+                    param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
+                        ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).first()
+                    if param is not None:
+                        session.expunge(param)
+                        add_to_cache_with_timeout('systemsettings.' + str(company_id) + "." + identity, 60, param)
+
                 if param is None:
                     return "Parameter not found", 404
                 else:
@@ -2387,6 +2401,8 @@ def systemsettings_get_id(identity):
                         else:
                             return "You do not have sufficient rights to make this call", 404
         elif request.method == 'POST':
+            remove_from_cache('systemsettings.' + str(company_id) + "." + identity)
+
             request.get_data()
             if identity == "CC_ADDRESS":
                 with ITSRestAPIDB.session_scope("") as master_session:
@@ -2421,6 +2437,8 @@ def systemsettings_get_id(identity):
         elif request.method == 'DELETE':
             if not master_user:
                 return "You do not have sufficient rights to make this call", 404
+
+            remove_from_cache('systemsettings.' + str(company_id) + "." + identity)
 
             session.query(ITSRestAPIORMExtensions.SystemParam).filter(
                 ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).delete()

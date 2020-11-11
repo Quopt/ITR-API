@@ -17,15 +17,21 @@ import datetime
 global_cache = {}
 global_cache_timekey = ""
 
+
 def check_in_cache(key):
     global global_cache, global_cache_timekey
     now = datetime.datetime.now()
-    if global_cache_timekey != now.strftime("%H:%M") or global_cache_timekey == "":
+    if global_cache_timekey != now.strftime("%H:00") or global_cache_timekey == "":
+        # clear the cache every hour completely
         global_cache = {}
-        global_cache_timekey = now.strftime("%H:%M")
+        global_cache_timekey = now.strftime("%H:00")
 
         return None
     else:
+        timeout = global_cache.get('timeout.' + key)
+        if timeout is not None:
+            if timeout < now:
+                return None
         return global_cache.get(key)
 
 
@@ -33,6 +39,19 @@ def add_to_cache(key, value):
     global global_cache
 
     global_cache[key] = value
+    global_cache['timeout.' + key] = datetime.datetime.now() + datetime.timedelta(minutes=1)  # 1 min default timeout
+
+
+def add_to_cache_with_timeout(key, timeout, value):
+    global global_cache
+
+    timeoutcalc = datetime.datetime.now() + datetime.timedelta(minutes=timeout)
+    global_cache[key] = value
+    global_cache['timeout.' + key] = timeoutcalc
+
+def remove_from_cache(key):
+    del global_cache[key]
+    del global_cache['timeout.' + key]
 
 def reset_cache():
     global global_cache
