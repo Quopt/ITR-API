@@ -613,6 +613,7 @@ class TestScreenTemplate(Base):
     generator_summary_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     validation_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
     isanswered_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    custom_template_actions_snippet = Column(UnicodeText, nullable=False, server_default=text("('')"))
 
 
 class Test(Base):
