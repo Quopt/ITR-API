@@ -12,7 +12,7 @@ alembic == 1.4.2
 flask-compress == 1.4.0
 waitress == 1.4.3
 requests == 2.23.0
-cryptography == 2.8
+cryptography == 3.2
 dirsync==2.2.4
 psutil==5.7.0
 pyotp==2.3.0
