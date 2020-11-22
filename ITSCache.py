@@ -50,8 +50,12 @@ def add_to_cache_with_timeout(key, timeout, value):
     global_cache['timeout.' + key] = timeoutcalc
 
 def remove_from_cache(key):
-    del global_cache[key]
-    del global_cache['timeout.' + key]
+   try:
+    global_cache[key] = None
+   except Exception as e: print(e)
+   try:
+    global_cache['timeout.' + key] = None
+   except Exception as e: print(e)
 
 def reset_cache():
     global global_cache
