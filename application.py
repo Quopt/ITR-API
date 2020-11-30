@@ -545,7 +545,7 @@ def process_mfa_code():
 
         user_secret_valid, user_secret = ITSRestAPILogin.get_user_secret(user_id, user_company, True)
         totp = pyotp.TOTP(user_secret)
-        token_ok = totp.verify(user_mfa_code)
+        token_ok = totp.verify(user_mfa_code, valid_window=1)
 
         if token_ok and user_secret != "":
             app_log.info('MFA token assigned to %s %s %s %s %s', user_id, ip_address, www, request.host, token)
