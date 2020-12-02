@@ -29,7 +29,7 @@ import ITSRestAPIDB
 import ITSRestAPIORMExtensions
 
 def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver="", bcc_receiver="", from_sender="",
-              files_to_attach=[], reply_to = "", consultant_id="", post_payload="{}", session_id=""):
+              files_to_attach=[], reply_to = "", consultant_id="", post_payload="{}", session_id="", data_to_attach=""):
     # check if there is a generic cc adress for this company
     temp_company = ""
     temp_cc_mail = ""
@@ -89,6 +89,12 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
             with open(file, 'rb') as fp:
                 img = MIMEImage(fp.read())
             msg.attach(img)
+
+        if data_to_attach != "":
+            # attach the string as data.json file
+            attachment = MIMEText(data_to_attach)
+            attachment.add_header('Content-Disposition', 'attachment', filename='data.json')
+            msg.attach(attachment)
 
         # Send the email via our own SMTP server.
         smtp_server = ITSRestAPISettings.get_setting_for_customer(customer_id,'SMTP_SERVER',True, consultant_id)

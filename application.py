@@ -2868,6 +2868,49 @@ def send_mail():
     else:
         return "You are not authorised to sent emails", 404
 
+@app.route('/sendmailconsultant/<sessionid>', methods=['POST'])
+def send_mail_consultant(sessionid):
+    # and now sent an email to a registered consultant
+    try:
+        id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+            request)
+
+        request.get_data()
+        data = request.data
+        data_dict = json.loads(data)
+
+        consultantmail = data_dict["To"]
+
+        # check if the consultant is known
+        with ITSRestAPIDB.session_scope(company_id) as session:
+            consultant = session.query(ITSRestAPIORMExtensions.SecurityUser).filter(
+                ITSRestAPIORMExtensions.SecurityUser.Email == consultantmail).first()
+
+            if (consultant is not None) and (consultant.EndDateLicense > datetime.now().replace(tzinfo=timezone.utc).astimezone(tz=None)):
+                # get the session results data
+                this_session = session.query(ITSRestAPIORMExtensions.ClientSession).filter(
+                    ITSRestAPIORMExtensions.ClientSession.ID == sessionid).first()
+                this_session_tests = session.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                    ITSRestAPIORMExtensions.ClientSessionTest.SessionID == sessionid).all()
+                json_results = {}
+
+                for this_test_result in this_session_tests:
+                    json_results['Scores'] = this_test_result.Scores
+                    json_results['Results'] = this_test_result.Results
+                    json_results[str(this_test_result.TestID)+'.Scores'] = this_test_result.Scores
+                    json_results[str(this_test_result.TestID)+'.Results'] = this_test_result.Results
+
+                    this_session.ManagedByUserID = consultant.ID
+
+                    # send the mail with the session results attached
+                    ITSMailer.send_mail(company_id, data_dict["Subject"],
+                                data_dict["Body"],
+                                data_dict["To"],
+                                data_to_attach=json.dumps(json_results))
+
+        return "An email is sent when the session id and the consultant mail were valid", 200
+    except Exception as e:
+        return str(e), 500
 
 @app.route('/refreshpublics', methods=['POST'])
 def refresh_publics():

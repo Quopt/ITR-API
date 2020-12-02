@@ -61,12 +61,12 @@ def login_user(user_id, user_password, company_id=""):
         if company_id != "":
             app_log.info('Verifying company ids for  %s', user_id)
             result = connection.execute(
-                'select "CompanyID", "ID", "Password", "IsTestTakingUser" from "SecurityUsers" where "Email" = %s and "CompanyID" = %s and "EndDateLicense" > now()',
+                'select "CompanyID", "ID", "Password", "IsTestTakingUser" from "SecurityUsers" where "Active" and "Email" = %s and "CompanyID" = %s and "EndDateLicense" > now()',
                 user_id, company_id)
         else:
             app_log.info('Fetching company ids for  %s', user_id)
             result = connection.execute(
-                'select "CompanyID", "ID", "Password", "IsTestTakingUser"  from "SecurityUsers" where "Email" = %s and "EndDateLicense" > now()',
+                'select "CompanyID", "ID", "Password", "IsTestTakingUser"  from "SecurityUsers" where "Active" and "Email" = %s and "EndDateLicense" > now()',
                 user_id)
         for recs in result:
             temp_user_guid = recs[1]
