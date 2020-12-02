@@ -2895,10 +2895,10 @@ def send_mail_consultant(sessionid):
                 json_results = {}
 
                 for this_test_result in this_session_tests:
-                    json_results['Scores'] = this_test_result.Scores
-                    json_results['Results'] = this_test_result.Results
-                    json_results[str(this_test_result.TestID)+'.Scores'] = this_test_result.Scores
-                    json_results[str(this_test_result.TestID)+'.Results'] = this_test_result.Results
+                    json_results['Scores'] = json.loads(this_test_result.Scores)
+                    json_results['Results'] = json.loads(this_test_result.Results)
+                    json_results[str(this_test_result.TestID)+'.Scores'] = json.loads(this_test_result.Scores)
+                    json_results[str(this_test_result.TestID)+'.Results'] = json.loads(this_test_result.Results)
 
                     this_session.ManagedByUserID = consultant.ID
 
@@ -2910,6 +2910,7 @@ def send_mail_consultant(sessionid):
 
         return "An email is sent when the session id and the consultant mail were valid", 200
     except Exception as e:
+        app_log.info('Error sending mail to consulant %s ', e)
         return str(e), 500
 
 @app.route('/refreshpublics', methods=['POST'])
