@@ -67,7 +67,7 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
         # Create the container (outer) email message.
         if len(files_to_attach) > 0 or data_to_attach != "":
             msg = MIMEMultipart()
-            msg.preamble = mail_content
+            msg.attach(MIMEText(mail_content,'html'))
         else:
             msg = MIMEText(mail_content,'html')
         msg['Subject'] = mail_subject
