@@ -2906,6 +2906,7 @@ def send_mail_consultant(sessionid):
                     ITSMailer.send_mail(company_id, data_dict["Subject"],
                                 data_dict["Body"],
                                 data_dict["To"],
+                                from_sender=data_dict["To"],
                                 data_to_attach=json.dumps(json_results))
 
         return "An email is sent when the session id and the consultant mail were valid", 200
