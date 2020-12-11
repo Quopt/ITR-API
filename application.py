@@ -3150,6 +3150,7 @@ def log(logid, startlogdatetime):
 @app.errorhandler(500)
 def internal_error(error):
     app_log.error("Internal server error 500 : %s", error)
+    app_log.error(traceback.format_exc())
     return "500 error"
 
 
