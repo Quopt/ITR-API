@@ -3049,14 +3049,21 @@ def install_publics_itr_api():
         srcfoldername = os.path.join(os.sep, app_instance_path(), 'cache', 'git', 'ITR-API')
         newfoldername = os.path.join(os.sep, app.root_path)
         if request.method == "POST":
-            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername)
-            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername, True)
+            # Copy only requirements.txt
+            srcfilename = os.path.join(os.sep, srcfoldername, 'requirements.txt')
+            newfilename = os.path.join(os.sep, newfoldername, 'requirements.txt')
+            app_log.info("Installing new requirements.txt  " + srcfilename + " - " + newfilename)
+            shutil.copyfile(srcfilename, newfilename)            # copy only requirements.txt
+
             # make sure to restart the API
             filename = os.path.join(newfoldername, 'api_refresh_date.txt')
             with open(filename, 'w') as file_write:
                 file_write.write(str(datetime.now()))
 
             pip_install()
+
+            app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername)
+            ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername, True)
 
             return "OK", 200
     return "You are not authorised to install public repositories", 403
@@ -3067,20 +3074,12 @@ def pip_install():
     try:
         os.chdir(app.root_path)
         app_log.info(app.root_path)
-        #output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
-        #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
-        #app_log.info(output_text.stdout)
-
-        #output_text = subprocess.run(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
-        #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
-        #app_log.info(output_text.stdout)
-
-        subprocess.Popen(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True,
-                         creationflags=subprocess.DETACHED_PROCESS)
-        subprocess.Popen(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True,
-                         creationflags=subprocess.DETACHED_PROCESS)
+        output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
+                                     stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
+        app_log.info(output_text.stdout)
+        output_text = subprocess.run(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
+                                     stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
+        app_log.info(output_text.stdout)
     except Exception as err:
         app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
 

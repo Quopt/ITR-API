@@ -95,7 +95,6 @@ def list_folder(filepath):
     for root, dirs, files in os.walk(filepath):
         for f in files:
             a.append( f )
-#            a.append({'type': os.path.basename(root), 'filename': f})
     return a
 
 class Empty:
