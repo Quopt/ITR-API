@@ -3077,8 +3077,7 @@ def pip_install():
         #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True, check=True)
         #app_log.info(output_text.stdout)
         return True
-    except subprocess.CalledProcessError as err:
-        app_log.error( "error code" + err.returncode + "  "+ err.output)
+    except Exception as err:
         app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
         return False
 
