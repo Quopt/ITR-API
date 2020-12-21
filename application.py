@@ -14,10 +14,15 @@
 #
 
 from flask import Flask, jsonify, request, url_for, render_template
+import os
+import subprocess
+
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
+
 import datetime
 import json
 import time
-import os
 import hashlib, uuid, urllib
 import types
 import traceback
@@ -29,7 +34,6 @@ from waitress import serve
 import time
 import threading
 import signal
-import subprocess
 import pyotp
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
