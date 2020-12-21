@@ -3070,8 +3070,8 @@ def pip_install():
     try:
         os.chdir(app.root_path)
         app_log.info(app.root_path)
-        output_text = subprocess.check_output(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
-                                     stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
+        output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE, stdin=subprocess.DEVNULL)
         app_log.info(output_text.stdout)
         #output_text = subprocess.run(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
         #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True, check=True)
