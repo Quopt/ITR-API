@@ -31,6 +31,8 @@ import threading
 import signal
 import subprocess
 import pyotp
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 import ITSRestAPILogin
 import ITSMailer
@@ -76,36 +78,45 @@ def teardown_request(exception=None):
     endRequestTimer = time.time()
     company_id = "x"
     user_id = "x"
+    browser_id = "x"
     ip_address = "x.x.x.x"
     try:
         ip_address = getIP(request)
-        user_id = request.headers['SessionID']
+    except:
+        pass
+
+    try:
         company_id = request.headers['CompanyID']
     except:
         pass
 
     try:
-        app_log.info('Method called %s %s %s %s %s Timing %s', request.path, request.method, company_id, user_id,
-                     ip_address, str(endRequestTimer - startRequestTimer[request.path]))
+        user_id = request.headers['SessionID']
+    except:
+        pass
+
+    try:
+        browser_id = request.headers['BrowserID']
+    except:
+        pass
+
+    try:
+        app_log.info('Method called %s, %s, %s, %s, %s, %s, Timing %s', request.path, request.method, company_id, user_id,
+                     ip_address, browser_id, str(endRequestTimer - startRequestTimer[request.path]))
         del startRequestTimer[request.path]
     except:
-        app_log.info('Method called %s %s %s %s %s', request.path, request.method, company_id, user_id, ip_address)
+        app_log.info('Method called %s, %s, %s, %s, %s, x, Timing x', request.path, request.method, company_id, user_id, ip_address)
 
-    # stop all open database connections
-    # try:
-    #  for key, dbengine in ITSRestAPIDB.db_engines_created.items():
-    #     try:
-    #         dbengine.dispose()
-    #         pass
-    #     except:
-    #         pass
-    # except:
-    #     pass
+def get_browser_id():
+    try:
+        return request.headers['BrowserID']
+    except:
+        app_log.error("Unknown browser ID found, %s returned", get_remote_address())
+        return get_remote_address()
 
-
-Compress(app)
+compress = Compress()
 if ITSRestAPISettings.get_setting('ENABLE_CORS') == 'Y':
-    CORS(app)
+    CORS(app, max_age=600)
 
 
 # process the API request
@@ -1446,6 +1457,20 @@ def sessionteststaking_get_id(sessionid, identity):
         data_dict = json.loads(data)
         if str(data_dict["PersID"]) != str(id_of_user):
             return  "Session cannot be updated as test taking user", 404
+        results_limit = int( ITSRestAPISettings.get_setting_for_customer("", "MAX_RESULTS_LIMIT", true, ""))
+        scores_limit = int( ITSRestAPISettings.get_setting_for_customer("", "MAX_SCORES_LIMIT", true, ""))
+        plugin_data_limit = int( ITSRestAPISettings.get_setting_for_customer("", "MAX_PLUGINDATA_LIMIT", true, ""))
+
+        if results_limit > 0 and len(str(data_dict["Results"])) > results_limit:
+            app_log.error('Results field limit exceeded')
+            return "Results field has exceeded maximum configured limit",429
+        if scores_limit > 0 and len(str(data_dict["Scores"])) > scores_limit:
+            app_log.error('Scores field limit exceeded')
+            return "Scores field has exceeded maximum configured limit",429
+        if plugin_data_limit > 0 and len(str(data_dict["PluginData"])) > plugin_data_limit:
+            app_log.error('PluginData field limit exceeded')
+            return "PluginData field has exceeded maximum configured limit",429
+
         # check if the session in the database is also for this person
         to_check = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
                                                                                     ITR_minimum_access_levels.test_taking_user,
@@ -1680,6 +1705,13 @@ def sessions_get_id(identity):
             # check if the offered session is for this person
             if str(data_dict["PersonID"]) != str(id_of_user):
                 return "Session cannot be updated as test taking user", 404
+
+            plugin_data_limit = int(ITSRestAPISettings.get_setting_for_customer("", "MAX_PLUGINDATA_LIMIT", true, ""))
+
+            if plugin_data_limit > 0 and len(str(data_dict["PluginData"])) > plugin_data_limit:
+                app_log.error('PluginData field limit exceeded')
+                return "PluginData field has exceeded maximum configured limit", 429
+
             # check if the session in the database is also for this person
             to_return = ITSRestAPIORMExtensions.ClientSession().return_single_object(request,
                                                                                      ITR_minimum_access_levels.test_taking_user,
@@ -3156,10 +3188,18 @@ def internal_error(error):
 
 waitress_thread = ""
 
-
 def start_waitress():
     global waitress_thread
     init_app_log()
+
+    # init compression for static files
+    compress.init_app(app)
+    # init rate limiter per browser id for 10 calls/sec
+    default_limit = ITSRestAPISettings.get_setting_for_customer( "", "MAX_CALL_LIMIT", true, "") + " per second"
+    app_log.info("Call rate limit set to %s", default_limit)
+    limiter = Limiter(app,
+                      key_func=get_browser_id,
+                      default_limits=[default_limit] )
 
     waitress_thread = threading.current_thread()
 
