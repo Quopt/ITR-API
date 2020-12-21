@@ -3056,18 +3056,33 @@ def install_publics_itr_api():
             with open(filename, 'w') as file_write:
                 file_write.write(str(datetime.now()))
 
-            # install new requirements if set
-            try:
-                os.chdir(app.root_path)
-                app_log.info(app.root_path)
-                output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
-                                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
-                app_log.info(output_text.stdout)
-            except Exception as err:
-                app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
+            pip_install()
 
             return "OK", 200
     return "You are not authorised to install public repositories", 403
+
+
+def pip_install():
+    # install new requirements if set
+    try:
+        os.chdir(app.root_path)
+        app_log.info(app.root_path)
+        #output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
+        #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
+        #app_log.info(output_text.stdout)
+
+        #output_text = subprocess.run(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
+        #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True)
+        #app_log.info(output_text.stdout)
+
+        subprocess.Popen(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True,
+                         creationflags=subprocess.DETACHED_PROCESS)
+        subprocess.Popen(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, shell=True,
+                         creationflags=subprocess.DETACHED_PROCESS)
+    except Exception as err:
+        app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
 
 
 @app.route('/installpublics/itr-webclient', methods=['POST'])
@@ -3234,4 +3249,5 @@ if __name__ == '__main__':
     # app.debug = True
     # MET FLASK app.run()
     # app.run(debug=True)
+    pip_install()
     start_waitress()
