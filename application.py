@@ -3056,9 +3056,9 @@ def install_publics_itr_api():
             shutil.copyfile(srcfilename, newfilename)            # copy only requirements.txt
 
             # make sure to restart the API
-            filename = os.path.join(newfoldername, 'api_refresh_date.txt')
-            with open(filename, 'w') as file_write:
-                file_write.write(str(datetime.now()))
+            #filename = os.path.join(newfoldername, 'api_refresh_date.txt')
+            #with open(filename, 'w') as file_write:
+            #    file_write.write(str(datetime.now()))
 
             pip_install()
 
@@ -3075,13 +3075,14 @@ def pip_install():
         os.chdir(app.root_path)
         app_log.info(app.root_path)
         output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
-                                     stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
+                                     stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True, check=True)
         app_log.info(output_text.stdout)
-        output_text = subprocess.run(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
-                                     stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
-        app_log.info(output_text.stdout)
+        #output_text = subprocess.run(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
+        #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True, check=True)
+        #app_log.info(output_text.stdout)
     except Exception as err:
         app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
+        return "PIP Install failed", 500
 
 
 @app.route('/installpublics/itr-webclient', methods=['POST'])
