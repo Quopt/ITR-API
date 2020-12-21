@@ -3055,7 +3055,8 @@ def install_publics_itr_api():
             app_log.info("Installing new requirements.txt  " + srcfilename + " - " + newfilename)
             shutil.copyfile(srcfilename, newfilename)
 
-            pip_install()
+            if not pip_install():
+                return "PIP Install failed", 500
 
             app_log.info("Syncing folders from " + srcfoldername + " to " + newfoldername)
             ITSHelpers.copy_folder_excluding_dot_folders(srcfoldername, newfoldername, True)
@@ -3069,15 +3070,13 @@ def pip_install():
     try:
         os.chdir(app.root_path)
         app_log.info(app.root_path)
-        output_text = subprocess.run(['pip', 'install', '-r', 'requirements.txt'], stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE, stdin=subprocess.DEVNULL)
+        output_text = subprocess.check_output(['pip', 'install', '-r', 'requirements.txt'])
         app_log.info(output_text.stdout)
-        #output_text = subprocess.run(['pip', 'install', '--upgrade', 'pip'], stdout=subprocess.PIPE,
-        #                             stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True, check=True)
-        #app_log.info(output_text.stdout)
-    except Exception as err:
+        return True
+    except subprocess.CalledProcessError as err:
+        app_log.error( "error code" + err.returncode + "  "+ err.output)
         app_log.error('pip -r install requirements.txt failed ' + "Error {}".format(err))
-        return "PIP Install failed", 500
+        return False
 
 
 @app.route('/installpublics/itr-webclient', methods=['POST'])
