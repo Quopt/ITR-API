@@ -13,13 +13,13 @@
 #  limitations under the License.
 #
 
-from flask import Flask, jsonify, request, url_for, render_template
 import os
 import subprocess
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 
+from flask import Flask, jsonify, request, url_for, render_template
 import datetime
 import json
 import time
