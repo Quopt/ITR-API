@@ -3216,6 +3216,7 @@ def start_waitress():
     limiter = Limiter(app,
                       key_func=get_browser_id,
                       default_limits=[default_limit] )
+    Limiter.limit(Limiter, limit_value=get_browser_id, methods=['GET', 'POST', 'DELETE'])
 
     waitress_thread = threading.current_thread()
 
@@ -3250,5 +3251,4 @@ if __name__ == '__main__':
     # app.debug = True
     # MET FLASK app.run()
     # app.run(debug=True)
-    pip_install()
     start_waitress()
