@@ -37,6 +37,7 @@ import signal
 import pyotp
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_limiter.wrappers import Limit, LimitGroup
 
 import ITSRestAPILogin
 import ITSMailer
@@ -113,14 +114,28 @@ def teardown_request(exception=None):
 
 def get_browser_id():
     try:
-        return request.headers['BrowserID']
+        try:
+            token = request.headers['SessionID']
+            company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
+            return token_session_id
+        except:
+            pass
+
+        remhost = "x"
+        try:
+            remhost = request.environ['REMOTE_HOST']
+        except:
+            pass
+
+        return getIP(request) + ":" + request.environ['REMOTE_PORT'] + "-" + remhost
     except:
-        app_log.error("Unknown browser ID found, %s returned", get_remote_address())
+        #app_log.error("Unknown browser ID found, %s returned", get_remote_address())
         return get_remote_address()
 
 compress = Compress()
 if ITSRestAPISettings.get_setting('ENABLE_CORS') == 'Y':
     CORS(app, max_age=600)
+limiter = Limiter(app, key_func=get_browser_id)
 
 
 # process the API request
@@ -247,16 +262,19 @@ def getWWWForToken(request):
 
 # API implementations
 @app.route('/')
+@limiter.limit("1/second")
 def hello_world():
     return current_app.send_static_file('default.html')
 
 
 @app.route('/test')
+@limiter.limit("1/second")
 def route_test():
     return render_template('APITestPage.html')
 
 
 @app.route('/test401')
+@limiter.limit("1/second")
 def route_test401():
     return 'Not authorised', 401
 
@@ -398,6 +416,7 @@ def active_sessions():
 
 
 @app.route('/login', methods=['GET'])
+@limiter.limit("1/second")
 def login():
     user_id = ""
     user_password = ""
@@ -507,6 +526,7 @@ def login():
 
 
 @app.route('/login/qrcode', methods=['GET'])
+@limiter.limit("1/second")
 def get_qr_code():
     # when the user is logged in a QR code for registering the shared secret can be requested
     user_id = request.headers['UserID']
@@ -535,6 +555,7 @@ def get_qr_code():
 
 
 @app.route('/login/mfacode', methods=['POST'])
+@limiter.limit("1/second")
 def process_mfa_code():
     # log the user in with the userid, password, mfa code, and company id
     # get the user id and password from the header
@@ -583,6 +604,7 @@ def process_mfa_code():
 
 
 @app.route('/sendresetpassword', methods=['POST'])
+@limiter.limit("1/second")
 def send_reset_password():
     # send a mail with the reset password to the known email adress. If there is no known email adress return an error 404
     # otherwise return a 200 and send an email
@@ -622,6 +644,7 @@ def send_reset_password():
 
 
 @app.route('/resetpassword', methods=['POST'])
+@limiter.limit("1/second")
 def reset_password():
     # get the user id and password from the header
     user_id = request.headers['Username']
@@ -2281,6 +2304,7 @@ def logins_get_companies_memberships():
 
 
 @app.route('/logins/currentuser/changepassword', methods=['POST'])
+@limiter.limit("1/second")
 def login_change_password():
     # this is only available to the user him/herself
     # get the session id and the user id from the token
@@ -2311,6 +2335,7 @@ def login_change_password():
 
 
 @app.route('/tokens', methods=['GET'])
+@limiter.limit("1/second")
 def tokens_get():
     app_log.warning('TOKEN LIST RETRIEVED')
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
@@ -2674,6 +2699,7 @@ def files_get_id(company_id, maintainingObjectIdentity, fileType):
 
 
 @app.route('/filecopy/<maintainingObjectIdentity_src>/<maintainingObjectIdentity_dst>', methods=['POST'])
+@limiter.limit("1/second")
 def files_copy_folder(maintainingObjectIdentity_src, maintainingObjectIdentity_dst):
     token = request.headers['SessionID']
     company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
@@ -2790,6 +2816,7 @@ def list_available_translations():
 
 
 @app.route('/translations/<langcode>', methods=['GET', 'POST'])
+@limiter.limit("1/second")
 def translations(langcode):
     if langcode == "":
         langcode = "en"
@@ -3147,7 +3174,7 @@ def install_publics_itr_restart():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return "ITR API 2-may-2020", 200
+    return "ITR API 22-dec-2020", 200
 
 
 @app.route('/log/<logid>/<startlogdatetime>', methods=['GET'])
@@ -3205,18 +3232,22 @@ def internal_error(error):
 waitress_thread = ""
 
 def start_waitress():
-    global waitress_thread
+    global waitress_thread, limiter
     init_app_log()
 
     # init compression for static files
     compress.init_app(app)
+
     # init rate limiter per browser id for 10 calls/sec
     default_limit = ITSRestAPISettings.get_setting_for_customer( "", "MAX_CALL_LIMIT", true, "") + " per second"
     app_log.info("Call rate limit set to %s", default_limit)
-    limiter = Limiter(app,
-                      key_func=get_browser_id,
-                      default_limits=[default_limit] )
-    Limiter.limit(Limiter, limit_value=get_browser_id, methods=['GET', 'POST', 'DELETE'])
+    # do NOT re-initialise the limiter object, instead use this hack to set the default limit. otherwise limits set on the decorator will not work
+    #limiter = Limiter.( app, key_func=get_browser_id, default_limits=[default_limit] )
+    limiter._default_limits.extend([ LimitGroup(default_limit,get_browser_id, None, False, None, None, None, None, None ) ])
+    # make sure OPTIONS requests are excluded
+    Limiter.limit(limiter, limit_value=get_browser_id, methods=['GET', 'POST', 'DELETE'])
+    # and init the app limiter
+    limiter.init_app(app)
 
     waitress_thread = threading.current_thread()
 
