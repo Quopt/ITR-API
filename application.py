@@ -476,7 +476,7 @@ def login():
     if login_result == ITSRestAPILogin.LoginUserResult.user_not_found:
         # sleep just a little while on failed login attempts to stop brute force attacks
         # this will block a thread. A better solution would be nicer off course
-        time.sleep(0.1)
+        # time.sleep(0.1)
         return 'User not found or password not valid', 401
 
     # the user is there so assign a session token
