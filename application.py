@@ -3184,7 +3184,7 @@ def install_publics_itr_restart():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return "ITR API 22-dec-2020", 200
+    return "ITR API " + time.ctime(os.path.getmtime('application.py')), 200
 
 
 @app.route('/log/<logid>/<startlogdatetime>', methods=['GET'])
