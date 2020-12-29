@@ -2415,6 +2415,11 @@ def systemsettings_get_id(identity):
         include_master_header = request.headers['IncludeMaster']
     except:
         pass
+    include_client_header = "N"
+    try:
+        include_client_header = request.headers['IncludeClient']
+    except:
+        pass
 
     if include_master_header == "Y":
         if not master_user and request.method != 'GET':
@@ -2427,10 +2432,15 @@ def systemsettings_get_id(identity):
             return "You do not have sufficient rights to make this call", 404
         sessionid = company_id
 
+    if include_master_header == "Y" and include_client_header == "N":
+        cache_key = "master"
+    else:
+        cache_key = str(company_id)
+
     with ITSRestAPIDB.session_scope(sessionid) as session:
         if request.method == 'GET':
             if identity == "CC_ADDRESS":
-                cached = check_in_cache('systemsettings.' + str(company_id) + "." + identity)
+                cached = check_in_cache('systemsettings.' + cache_key + "." + identity)
                 if cached is not None:
                     return cached
 
@@ -2438,18 +2448,18 @@ def systemsettings_get_id(identity):
                     comp = master_session.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
                         ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
 
-                    add_to_cache_with_timeout('systemsettings.' + str(company_id) + "." + identity, 60, comp.CCEMail)
+                    add_to_cache_with_timeout('systemsettings.' + cache_key + "." + identity, 60, comp.CCEMail)
 
                     return comp.CCEMail
             else:
-                param = check_in_cache('systemsettings.' + str(company_id) + "." + identity)
+                param = check_in_cache('systemsettings.' + cache_key + "." + identity)
 
                 if param is None:
                     param = session.query(ITSRestAPIORMExtensions.SystemParam).filter(
                         ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).first()
                     if param is not None:
                         session.expunge(param)
-                        add_to_cache_with_timeout('systemsettings.' + str(company_id) + "." + identity, 60, param)
+                        add_to_cache_with_timeout('systemsettings.' + cache_key + "." + identity, 60, param)
 
                 if param is None:
                     return "Parameter not found", 404
@@ -2462,7 +2472,7 @@ def systemsettings_get_id(identity):
                         else:
                             return "You do not have sufficient rights to make this call", 404
         elif request.method == 'POST':
-            remove_from_cache('systemsettings.' + str(company_id) + "." + identity)
+            remove_from_cache('systemsettings.' + cache_key + "." + identity)
 
             request.get_data()
             if identity == "CC_ADDRESS":
@@ -2499,7 +2509,7 @@ def systemsettings_get_id(identity):
             if not master_user:
                 return "You do not have sufficient rights to make this call", 404
 
-            remove_from_cache('systemsettings.' + str(company_id) + "." + identity)
+            remove_from_cache('systemsettings.' + cache_key + "." + identity)
 
             session.query(ITSRestAPIORMExtensions.SystemParam).filter(
                 ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).delete()
