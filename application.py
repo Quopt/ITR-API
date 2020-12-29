@@ -53,7 +53,7 @@ import ITSTranslate
 import ITSHelpers
 import ITSGit
 import ITSEncrypt
-from ITSCache import check_in_cache, add_to_cache, reset_cache, add_to_cache_with_timeout, remove_from_cache
+from ITSCache import check_in_cache, add_to_cache, reset_cache, add_to_cache_with_timeout, global_cache, global_cache_timekey
 
 app = Flask(__name__, instance_relative_config=True)
 app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/api')
@@ -2472,7 +2472,7 @@ def systemsettings_get_id(identity):
                         else:
                             return "You do not have sufficient rights to make this call", 404
         elif request.method == 'POST':
-            remove_from_cache('systemsettings.' + cache_key + "." + identity)
+            reset_cache()
 
             request.get_data()
             if identity == "CC_ADDRESS":
@@ -2509,7 +2509,7 @@ def systemsettings_get_id(identity):
             if not master_user:
                 return "You do not have sufficient rights to make this call", 404
 
-            remove_from_cache('systemsettings.' + cache_key + "." + identity)
+            reset_cache()
 
             session.query(ITSRestAPIORMExtensions.SystemParam).filter(
                 ITSRestAPIORMExtensions.SystemParam.ParameterName == identity).delete()
