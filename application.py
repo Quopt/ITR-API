@@ -2067,9 +2067,9 @@ def creditusagespermonthforall_get(year):
             yearfilter = ''
             if int(year) > 0:
                 yearfilter = 'where "UsageDateTime" >= make_date(CAST(' + year + ' AS INT), 1, 1) and "UsageDateTime" <= make_date(CAST(' + year + ' AS INT), 12, 31) '
-            query = ''' select date_part( 'year', "UsageDateTime") as Year, date_part( 'month', "UsageDateTime") as Month, sum("TotalTicks") as Ticks, sum("DiscountedTicks") as DiscountedTicks, "InvoiceCode", B."CompanyName"
+            query = ''' select date_part( 'year', "UsageDateTime") as Year, date_part( 'month', "UsageDateTime") as Month, sum("TotalTicks") as Ticks, sum("DiscountedTicks") as DiscountedTicks, "InvoiceCode", B."CompanyName", B."ID"
                     from "SecurityCreditUsage" A left join "SecurityCompanies" B on A."CompanyID" = B."ID" ''' + yearfilter + '''
-                    group by date_part( 'year', "UsageDateTime"), date_part( 'month', "UsageDateTime"), "InvoiceCode", B."CompanyName"
+                    group by date_part( 'year', "UsageDateTime"), date_part( 'month', "UsageDateTime"), "InvoiceCode", B."CompanyName", B."ID"
                     order by date_part( 'year', "UsageDateTime") desc, date_part( 'month', "UsageDateTime") desc, "InvoiceCode", B."CompanyName" '''
 
             a = []

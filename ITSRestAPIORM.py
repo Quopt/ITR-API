@@ -368,6 +368,7 @@ class SecurityCompany(Base):
     CompanyCountry = Column(Unicode(200), nullable=False)
     InternationalVATNr = Column(Unicode(200), nullable=False)
     VATPercentage = Column(Float(53), nullable=False, server_default=text("((0))"))
+    PricePerCreditUnit = Column(Float(53), nullable=False, server_default=text("((0))"))
     MailAddress = Column(UnicodeText, nullable=False, server_default=text("('')"))
     VisitingAddress = Column(UnicodeText, nullable=False, server_default=text("('')"))
     InvoiceAddress = Column(UnicodeText, nullable=False, server_default=text("('')"))

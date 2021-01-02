@@ -370,7 +370,7 @@ class SecurityCompany(ITSRestAPIORM.SecurityCompany, ITSRestAPIORMExtendedFuncti
         , "VATPercentage", "CompanyLogo", "ContactPerson", "ContactPhone", "ContactEMail"
         , "TestTakingDiscount", "CostsPerTestInUnits", "YearlyLicenseDiscount", "YearlyLicenseFee", "InvoiceCurrency"
         , "CurrentCreditLevel", "ConcurrentOpenSessions", "AllowNegativeCredits", "Active", "LicenseStartDate"
-        , "LicenseEndDate", "NoPublicTests", "ExitURL"}
+        , "LicenseEndDate", "NoPublicTests", "ExitURL", "PricePerCreditUnit"}
     sort_fields = {}
     order_fields = {}
     unified_search_fields = {"CompanyName"
