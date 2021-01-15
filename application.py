@@ -1790,8 +1790,12 @@ def sessionPostTrigger(company_id, id_of_user, identity, data_dict, request, lan
             translatedMail = ITSTranslate.get_translation_if_needed_from_file(langcode, 'SessionReadyMail.Body',
                                                                               "The following session has completed : \r\n%s" + "\r\n\r\n",
                                                                               app_instance_path(), True)
+            if translatedSubject is None:
+                translatedSubject = "Session %s is ready for reporting"
+            if translatedMail is None:
+                translatedMail = "The following session has completed : \r\n\r\n%s"
 
-            if (temp_session.SessionType != 1) or (temp_session.EMailNotificationAdresses != ''):
+            if (temp_session.SessionType != 1 or temp_session.EMailNotificationAdresses != '') and temp_session.Active:
                 ITSMailer.send_mail(company_id, translatedSubject % temp_session.Description,
                                 translatedMail % temp_session.Description +
                                 "\r\n\r\n%s" % url_to_click,
