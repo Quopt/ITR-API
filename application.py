@@ -1421,7 +1421,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                                                                       'The credit level has gone below the credit warning level that you have indicated. Please add more credits to your system.',
                                                                                       app_instance_path(), True)
 
-                    ITSMailer.send_mail('Master', translatedSubject % this_company.CurrentCreditLevel,
+                    ITSMailer.send_mail(company_id, translatedSubject % this_company.CurrentCreditLevel,
                                         translatedMail,
                                         this_company.ContactEMail, consultant_id=id_of_user)
     else:
