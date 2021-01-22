@@ -1370,7 +1370,7 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
                                 newinvoicelogM.UsageDateTime = datetime.now(timezone.utc)
                                 newinvoicelogM.SessionID = json_session_obj["ID"]
                                 newinvoicelogM.SessionName = json_session_obj["Description"]
-                                newinvoicelogM.UserName = json_person_obj["EMail"]
+                                newinvoicelogM.UserName = "*ANONIMISED*"
 
                                 # store in master and client db in case client messes it up by hand
                                 clientsession.add(newinvoicelog)
@@ -1972,8 +1972,10 @@ def companies_get_id(identity):
     return "You need to be master user to make this call with these parameters", 403
 
 
+creditgrants_checkdate = ""
 @app.route('/creditgrants', methods=['GET'])
 def creditgrants_get():
+    global creditgrants_checkdate
     token = request.headers['SessionID']
     company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
@@ -1984,6 +1986,15 @@ def creditgrants_get():
                                                                                            ITR_minimum_access_levels.master_user,
                                                                                            "", "", True)
     else:
+        if creditgrants_checkdate != datetime.now().strftime("%D"):
+            creditgrants_checkdate = datetime.now().strftime("%D")
+
+            qryDelete10Years = 'DELETE FROM "SecurityCreditGrants" where DATE_PART(\'year\', "GrantedWhen"::date) < date_part(\'year\', CURRENT_DATE)-10'
+            masterengine = ITSRestAPIDB.get_db_engine_connection_master()
+            masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryDelete10Years)
+            clientengine = ITSRestAPIDB.get_db_engine_connection_client(company_id)
+            clientengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryDelete10Years)
+
         additional_where_clause = "CompanyID='" + str(company_id) + "'"
         return ITSRestAPIORMExtensions.SecurityCreditGrant().common_paginated_read_request(request,
                                                                                            ITR_minimum_access_levels.regular_office_user,
@@ -2026,8 +2037,23 @@ def creditgrants_get_id(identity):
                                                                                   identity, True)
 
 
+creditusages_checkdate = ""
 @app.route('/creditusages', methods=['GET'])
 def creditusage_get():
+    global creditusages_checkdate
+    token = request.headers['SessionID']
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
+
+    if creditusages_checkdate != datetime.now().strftime("%D"):
+        creditusages_checkdate = datetime.now().strftime("%D")
+
+        qryDelete7Years = 'DELETE FROM "SecurityCreditUsage" where DATE_PART(\'year\', "UsageDateTime"::date) < date_part(\'year\', CURRENT_DATE)-7'
+        qryDelete3Years = 'DELETE FROM "SecurityCreditUsage" where DATE_PART(\'year\', "UsageDateTime"::date) < date_part(\'year\', CURRENT_DATE)-2'
+        masterengine = ITSRestAPIDB.get_db_engine_connection_master()
+        masterengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryDelete7Years)
+        clientengine = ITSRestAPIDB.get_db_engine_connection_client(company_id)
+        clientengine.execution_options(isolation_level="AUTOCOMMIT").execute(qryDelete3Years)
+
     return ITSRestAPIORMExtensions.SecurityCreditUsage().common_paginated_read_request(request,
                                                                                        ITR_minimum_access_levels.regular_office_user)
 
