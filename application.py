@@ -1409,8 +1409,8 @@ def sessionTestPostTrigger(company_id, id_of_user, identity, langcode):
 
                 # if credit units are low send the out of credits mail
                 if creditunits_low:
-                    this_company = mastersession.query(ITSRestAPIORMExtensions.SecurityCompany()).filter(
-                        ITSRestAPIORMExtensions.SecurityCompany().ID == company_id)
+                    this_company = mastersession.query(ITSRestAPIORMExtensions.SecurityCompany).filter(
+                        ITSRestAPIORMExtensions.SecurityCompany.ID == company_id).first()
 
                     translatedSubject = ITSTranslate.get_translation_if_needed_from_file(langcode,
                                                                                          'OutOfCreditsMail.Subject',
