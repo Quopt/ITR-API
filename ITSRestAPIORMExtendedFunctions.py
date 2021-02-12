@@ -516,6 +516,56 @@ class ORMExtendedFunctions:
         else:
             return "This action is not allowed", 403
 
+    def object_to_dict(self):
+        located_object = self
+        temp_dict = located_object.__dict__
+        for line in located_object.fields_to_be_removed:
+            try:
+                if line in temp_dict:
+                    del temp_dict[line]
+            except:
+                pass
+
+        # process pass through fields
+        temp_json = {}
+        try:
+            for line in located_object.pass_through_fields:
+                try:
+                    temp_json[line] = eval("located_object." + line)
+                except:
+                    pass
+        except:
+            pass
+
+        fields_with_additional_info = {
+            "_sa_instance_state",
+            "identity_field",
+            "default_order_by_field",
+            "select_fields",
+            "sort_fields",
+            "order_fields",
+            "unified_search_fields",
+            "archive_field",
+            "user_limit_select_field",
+            "may_work_with_own_objects_field",
+            "fields_to_be_removed",
+            "pass_through_fields"
+        }
+        for line in fields_with_additional_info:
+            try:
+                if line in temp_dict:
+                    del temp_dict[line]
+            except:
+                pass
+
+        for line in temp_json:
+            try:
+                temp_dict[line] = json.loads(temp_json[line])
+            except:
+                pass
+
+        return temp_dict
+
     def change_single_object(self, request, required_minimum_access_level, id_to_find, allowed_fields_to_change = "", force_master = False):
         # get the settings from the request header
         object_to_query = self
@@ -663,7 +713,10 @@ class ORMExtendedFunctions:
             ORMExtendedFunctions.clone_sqlalchemy_object(located_session,new_session)
             new_session.ID = newid
             new_session.SessionType = newsessiontype
-            new_session.GroupSessionID = oldid
+            if located_session.GroupSessionID != '00000000-0000-0000-0000-000000000000':
+                new_session.GroupSessionID = located_session.GroupSessionID
+            else:
+                new_session.GroupSessionID = oldid
             if add_stamp:
                 new_session.Description = new_session.Description + add_stamp
             qry_session.add(new_session)

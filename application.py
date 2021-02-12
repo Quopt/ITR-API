@@ -1536,6 +1536,32 @@ def sessions_groupmembers(identity):
                                                                                                     ITR_minimum_access_levels.regular_office_user,
                                                                                                     additional_where_clause)
 
+@app.route('/sessions/<identity>/<testid>/results', methods=['GET'])
+def sessions_groupresults(identity, testid):
+    # GroupSessionID on the session and TestID= on the session test
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, translator_user, office_user, company_id, is_password_manager, master_header = check_master_header(
+        request)
+    if request.method == 'GET':
+        # get all the sessions and tests
+        with ITSRestAPIDB.session_scope(company_id) as clientsession:
+            # loop through all sessions and locate the test
+            clientsessions = clientsession.query(ITSRestAPIORMExtensions.ClientSessionTest).filter(
+                ITSRestAPIORMExtensions.ClientSessionTest.TestID == testid).join(
+                ITSRestAPIORMExtensions.ClientSession, ITSRestAPIORMExtensions.ClientSessionTest.SessionID == ITSRestAPIORMExtensions.ClientSession.ID).filter(
+                ITSRestAPIORMExtensions.ClientSession.GroupSessionID == identity).filter(
+                ITSRestAPIORMExtensions.ClientSession.SessionType == 1).all()
+
+            init_json = '{ "tests" : ['
+            temp_json = init_json
+            for elem in clientsessions:
+                if temp_json != init_json:
+                    temp_json += ","
+                temp_json += json.dumps(elem.object_to_dict())
+            temp_json += "]}"
+
+            return temp_json, 200
+
+    return "No access allowed", 403
 
 @app.route('/sessions/<identity>/deletealltests', methods=['DELETE'])
 def sessions_delete_tests(identity):

@@ -818,7 +818,7 @@ class ViewClientGroupSessionCandidates(Base):
     sessiontype = Column(SmallInteger, nullable=False)
     sessionstatus = Column(Integer, nullable=False)
     EMail = Column(Unicode(200), nullable=False, server_default=text("('')"))
-    Password = Column(Unicode(200), nullable=False, server_default=text("('')"))
+    #Password = Column(Unicode(200), nullable=False, server_default=text("('')"))
     FirstName = Column(Unicode(200), nullable=False, server_default=text("('')"))
     Initials = Column(Unicode(200), nullable=False, server_default=text("('')"))
     LastName = Column(Unicode(200), nullable=False, server_default=text("('')"))
