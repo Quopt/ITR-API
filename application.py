@@ -2201,8 +2201,18 @@ def rightstemplates_get_id(identity):
 
 @app.route('/logins', methods=['GET'])
 def logins_get():
+    token = request.headers['SessionID']
+    company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
+    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+        user_id, company_id)
+
+    additional_where_clause = ""
+    if (not master_user) :
+        additional_where_clause = "IsMasterUser = false"
+
     return ITSRestAPIORMExtensions.SecurityUser().common_paginated_read_request(request,
-                                                                                ITR_minimum_access_levels.regular_office_user)
+                                                                                ITR_minimum_access_levels.regular_office_user,
+                                                                                additional_where_clause)
 
 
 @app.route('/logins/<identity>', methods=['GET', 'POST', 'DELETE'])
@@ -2263,6 +2273,10 @@ def logins_get_id(identity):
             consultant = clientsession.query(ITSRestAPIORMExtensions.SecurityUser).filter(
                 ITSRestAPIORMExtensions.SecurityUser.ID == id_of_user).first()
             AllowedFieldsToChange = [col.name for col in ITSRestAPIORMExtensions.SecurityUser.__table__.columns]
+
+            if (not master_user) and consultant.IsMasterUser:
+                return "You are not allowed to change a master user record", 403
+
             if not consultant.IsMasterUser and not consultant.IsOrganisationSupervisor:
                 AllowedFieldsToChange.remove('IsMasterUser')
                 if not consultant.IsTestTakingUser:
