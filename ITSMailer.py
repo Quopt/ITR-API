@@ -104,7 +104,7 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
         smtp_password = ITSRestAPISettings.get_setting_for_customer(customer_id,'SMTP_PASSWORD',True, consultant_id)
 
         if smtp_port != "":
-            s = q2(smtp_server + ":" + smtp_port)
+            s = smtplib.SMTP(smtp_server + ":" + smtp_port)
         else:
             s = smtplib.SMTP(smtp_server)
         if smtp_usetls:
