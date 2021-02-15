@@ -2088,7 +2088,8 @@ def creditusage_get():
 def creditusagespermonth_get():
     token = request.headers['SessionID']
     company_id, user_id, token_validated, token_session_id = ITSRestAPILogin.get_info_with_session_token(token)
-    id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
+    if company_id != "":
+     id_of_user, master_user, test_taking_user, organisation_supervisor_user, author_user, author_report_user, author_test_screen_templates_user, translator_user, office_user, is_password_manager, is_researcher = ITSRestAPILogin.get_id_of_user_with_token_and_company_id(
         user_id, company_id)
 
     if company_id != "" and office_user:
