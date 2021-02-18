@@ -43,6 +43,11 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
     except:
         pass
 
+    # de-duplicate the receiver arrays
+    to_receiver = ",".join(set(sum([k.split(";") for k in to_receiver.replace(" ", "").split(",")],[])))
+    cc_receiver = ",".join(set(sum([k.split(";") for k in cc_receiver.replace(" ", "").split(",")],[])))
+    bcc_receiver = ",".join(set(sum([k.split(";") for k in bcc_receiver.replace(" ", "").split(",")],[])))
+
     # check the to_receiver for http and https addresses to be called
     new_to_receiver = temp_cc_mail + to_receiver
     to_receiver_array = new_to_receiver.split(",")
@@ -61,9 +66,8 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
                     new_to_receiver = str
                 else:
                     new_to_receiver = new_to_receiver + ","  + str.strip()
-        to_receiver = temp_cc_mail + new_to_receiver
 
-    if to_receiver.strip() != "":
+    if to_receiver != "":
         # Create the container (outer) email message.
         if len(files_to_attach) > 0 or data_to_attach != "":
             msg = MIMEMultipart()
@@ -74,6 +78,8 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
         msg['To'] = to_receiver
         if cc_receiver != "":
             msg['CC'] = cc_receiver
+        if bcc_receiver != "":
+            msg['BCC'] = cc_receiver
         if from_sender == "":
             from_sender = ITSRestAPISettings.get_setting_for_customer(customer_id,'SMTP_SENDER',True, consultant_id)
         msg['From'] = from_sender
@@ -118,6 +124,7 @@ def send_mail(customer_id, mail_subject, mail_content, to_receiver, cc_receiver=
             total_receiver = total_receiver + "," + cc_receiver.strip().replace(" ", "")
         if bcc_receiver != "":
             total_receiver = total_receiver + "," + bcc_receiver.strip().replace(" ", "")
+        total_receiver = ",".join(set(sum([k.split(";") for k in total_receiver.replace(" ", "").split(",")], [])))
 
         try:
             s.sendmail(from_sender, total_receiver.split(","), msg.as_string())
