@@ -350,6 +350,7 @@ class Report(Base):
     ReportGraphs = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
     PluginData = Column(UnicodeText, nullable=False, server_default=text("('{}')"))
     TestIDs = Column(UnicodeText, nullable=False, server_default=text("('')"))
+    Generation = Column(Integer, nullable=False, server_default=text("((1))"))
 
     # note : relationship to test with testID is optional
     # to do : delete the reports linked to the test if the test is deleted since this is not done using referential integrity

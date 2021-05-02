@@ -1093,7 +1093,7 @@ def sessiontests_get_id(sessionid, identity):
     elif request.method == 'DELETE':
         with ITSRestAPIDB.session_scope(company_id) as qry_session:
             temp_test = ITSRestAPIORMExtensions.ClientSessionTest().return_single_object(request,
-                                                                                         ITR_minimum_access_levels.test_taking_user,
+                                                                                         ITR_minimum_access_levels.regular_office_user,
                                                                                          identity)
             json_obj = json.loads(temp_test.data)
 
