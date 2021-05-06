@@ -7,7 +7,7 @@ pyodbc == 4.0.30
 SQLAlchemy-Utils == 0.36.3
 psycopg2 == 2.8.6
 sqlalchemy-migrate == 0.13.0
-flask-cors == 3.0.8
+flask-cors == 3.0.9
 alembic == 1.4.3
 flask-compress == 1.8.0
 Flask-Limiter==1.4
